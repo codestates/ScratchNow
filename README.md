@@ -1,5 +1,6 @@
 # **Crayon Diary**
-코딩에 중독된 Team CodeCaine의 First Project
+##### 코딩에 중독된 Team CodeCaine의 First Project
+
 
 ⏩ Project Link    
 ⏩ Project Wiki [바로가기](https://github.com/codestates/crayondiary/wiki)
