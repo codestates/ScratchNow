@@ -9,10 +9,13 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       email: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING(30),
+        validate: {
+          isEmail: true
+        }
       },
       nickname: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING(10)
       },
       password: {
         type: Sequelize.STRING
@@ -20,14 +23,16 @@ module.exports = {
       profile_img: {
         type: Sequelize.BLOB
       },
-      status_message: {
-        type: Sequelize.STRING
+      status_msg: {
+        type: Sequelize.STRING(20)
       },
       total_follow: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        defaultValue: 0
       },
       total_follower: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        defaultValue: 0
       },
       createdAt: {
         allowNull: false,
