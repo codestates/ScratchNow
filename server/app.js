@@ -10,12 +10,13 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 // Router 연결
-const signRouter = require('./routes/SignRouter');
-const userinfoRouter = require('./routes/UserinfoRouter');
-const commentRouter = require('./routes/CommentRouter');
-const followRouter = require('./routes/FollowRouter');
-const postRouter = require('./routes/PostRouter');
-const feedsRouter = require('./routes/FeedsRouter');
+const SignRouter = require('./routes/SignRouter');
+const UserinfoRouter = require('./routes/UserinfoRouter');
+const CommentRouter = require('./routes/CommentRouter');
+const FollowRouter = require('./routes/FollowRouter');
+const PostRouter = require('./routes/PostRouter');
+const FeedsRouter = require('./routes/FeedsRouter');
+const LikesRouter = require('./routes/LikesRouter');
 
 // Middleware
 app.use(
@@ -30,12 +31,13 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-app.use('/api/sign', signRouter);
-app.use('/api/post', postRouter);
-app.use('/api/userinfo', userinfoRouter);
-app.use('/api/follow', followRouter);
-app.use('/api/comment', commentRouter);
-app.use('/api/feeds', feedsRouter);
+app.use('/api/sign', SignRouter);
+app.use('/api/post', PostRouter);
+app.use('/api/userinfo', UserinfoRouter);
+app.use('/api/follow', FollowRouter);
+app.use('/api/comment', CommentRouter);
+app.use('/api/feeds', FeedsRouter);
+app.use('/api/likes', LikesRouter);
 
 app.get('/', (req, res) => {
     res.send('The Crayon Diary Server Works!');

@@ -50,17 +50,26 @@ module.exports = {
     getFollowingFeeds: (req, res) => {
         // 내가 팔로우하는 사용자 id 도출
         // 그 사용자 id의 getUserFeeds 도출
-        const { userId } = req.body;
         try {
             db.follow.findAll({
-                where: { follower_id: userId }
+                where: { follower_id: req.params.userId },
             }).then((data) => {
-                console.log(data);
-            }).then((data) => {
-                res.json({ data: data, message: "Following Posts" })
+                const followingIds = [];
+                data.forEach((el) => {
+                    const id = el['dataValues'].user_id;
+                    if (!followingIds.includes(id)) followingIds.push(id);
+                })
+                console.log(followingIds)
+                db.post.findAll({
+                    where: { id: followingIds },
+                    attributes: ['painting', 'createdAt'],
+                    order: [['createdAt', 'DESC']]
+                }).then((data) => {
+                    res.json({ data: data, message: "Following Posts" })
+                })
             })
         } catch {
-            res.status(500).json({ message: "Could Not Bring Following Posts" })
+            res.status(500).json({ message: "Could Not Bring Following's Posts" })
         }
     }
 };

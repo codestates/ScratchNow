@@ -1,5 +1,5 @@
 require('dotenv').config();
-const db = require('./../models');
+const db = require('../models');
 
 // token function
 
@@ -7,45 +7,12 @@ const db = require('./../models');
 // 클라이언트 token 확인하는 컨트롤러 필요할지도
 module.exports = {
     getPostById: (req, res) => {
-        // 미구현
-        // post, post에 해당하는 comment, 댓 작성 nickname 갖고 와야 함.
         try {
             db.post.findOne({
-                where: { id: req.params.postId }
+                where: { id: req.params.postId },
+                include: [{ model: db.comment, include: [{ model: db.user, attributes: ['nickname'] }] }]
             }).then((data) => {
-                const postId = data['dataValues'].id;
-                // const userId = data['dataValues'].user_id;
-                console.log(data['dataValues'])
-                db.comment.findAll({
-                    where: { post_id: 0},// req.params.postId },
-                    attributes: ['id', 'user_id', 'text', 'updatedAt']
-                }).then((data) => {
-                    const comments = [];
-                    data.forEach((el) => {
-                        comments.push(el['dataValues']);
-                        })
-                    console.log(comments)
-                    // }).then((data) => {
-                    //     //console.log(data);
-                    const commentWriter = [];
-                    comments.forEach((el) => {
-                        const commentinfo = { id: el['id'], user_id: el['user_id']}
-                        commentWriter.push(commentinfo);
-                    })
-                    console.log(commentWriter);
-                    const writerId = 
-                    db.user.findOne({
-                        where: { id: 0},//userId },
-                        attributes: ['nickname', 'profile_img']
-                    }).then((data) => {
-                        const nickname = data;
-                        db.post.findOne({
-                            where: { id: postId }
-                        }).then((post) => {
-                            res.json({ data: {post, nickname, comments}, message: 'ok'});
-                        })
-                })
-            })
+                res.json({ data: data, message: "ok" })
             })
         } catch {
             res.status(500).json({ message: "Couldn't find post'"})

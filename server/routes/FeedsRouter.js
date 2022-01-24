@@ -4,7 +4,7 @@ const feedsController = require('../controllers/FeedsController');
 
 router.get('/byDate', feedsController.getAllFeedsByDate);
 router.get('/byLikes', feedsController.getAllFeedsByLikes);
-router.get('/follow', feedsController.getFollowingFeeds);
 router.get('/:userId', feedsController.getUserFeeds);
+router.get('/follow/:userId', feedsController.getFollowingFeeds);
 
 module.exports = router;
