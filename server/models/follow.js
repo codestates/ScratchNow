@@ -11,6 +11,18 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      follow.hasOne(
+        models.user,{
+          sourceKey: 'id',
+          foreignKey: 'user_id'
+        }
+      )
+      follow.hasOne(
+        models.user,{
+          sourceKey: 'id',
+          foreignKey: 'follower_id'
+        }
+      )
     }
   }
   follow.init({
