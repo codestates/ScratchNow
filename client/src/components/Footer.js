@@ -51,10 +51,7 @@ const DescWrapper = styled.div`
 const Wrapper = styled.div`
   flex: 1;
   list-style: none;
-<<<<<<< HEAD
-=======
   /* padding-top: 20px; */
->>>>>>> 1ea19294b12c4c615ea2010d413726aeb98372f4
 `;
 
 const FooterLogo = styled.img`
