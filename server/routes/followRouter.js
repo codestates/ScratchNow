@@ -1,10 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const followController = require('./../controllers/followController')
+const followController = require('../controllers/FollowController')
 
-router.get('follower', followController.getFollower);
-router.get('following', followController.getFollowing);
+router.get('/follower/:userId', followController.getFollower);
+router.get('/following/:userId', followController.getFollowing);
 router.post('/', followController.followUser);
-router.delete('/:followId', followController.unFollowUser);
+router.delete('/unfollow', followController.unfollowUser);
 
 module.exports = router;

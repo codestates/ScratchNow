@@ -14,6 +14,7 @@ export const Modal = styled.div`
   bottom: 0;
   left: 0;
   background: rgba(0, 0, 0, 0.6);
+  z-index: 3;
 `;
 
 export const LoginModal = styled.div`

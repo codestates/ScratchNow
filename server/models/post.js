@@ -14,9 +14,10 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   post.init({
+    painting: DataTypes.BLOB,
     text: DataTypes.STRING,
     user_id: DataTypes.INTEGER,
-    total_likes: DataTypes.INTEGER
+    total_likes: { type: DataTypes.INTEGER, defaultValue: 0 }
   }, {
     sequelize,
     modelName: 'post',
