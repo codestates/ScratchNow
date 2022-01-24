@@ -10,13 +10,11 @@ import styled from "styled-components";
 // 제목, 본문 | 깃헙 링크 | 멤버 깃헙 링크
 
 const StyledFooter = styled.footer`
-  min-height: 100%;
-  position: fixed; // 스크롤을 움직여도 위치가 고정된다.
   padding: 4rem 2rem;
   border-top: 1px solid var(--color-lightgray);
   font-family: Interop-Regular;
   /* width: 100%; */
-  /* bottom: 0; */
+  bottom: 0;
 `;
 
 const Container = styled.div`
@@ -32,7 +30,6 @@ const DescWrapper = styled.div`
 const Wrapper = styled.div`
   flex: 1;
   list-style: none;
-
 `;
 
 const Heading = styled.h1`
@@ -133,6 +130,3 @@ const Footer = () => {
 };
 
 export default Footer;
-
-
-

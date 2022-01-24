@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
-import LoginModalImg from "../image/LoginModalImg.png";
-import CrayonDiaryLogo from "../image/My_project.png";
+import LoginModalImg from "../images/LoginModalImg.png";
+import CrayonDiaryLogo from "../images/My_project.png";
 import { useNavigate } from "react-router-dom";
 
 axios.defaults.withCredentials = true;
@@ -118,8 +118,7 @@ export const TitleImg = styled.img`
   transform: translate(26%, 200%);
 `;
 
-const Signup = ({ isOpen, close }) => {
-  console.log(isOpen);
+const SignupModal = ({ isOpen, close }) => {
   const [userInfo, setuserInfo] = useState({
     email: "",
     nickname: "",
@@ -132,7 +131,7 @@ const Signup = ({ isOpen, close }) => {
   const loginHandler = (key) => (e) => {
     setuserInfo({ ...userInfo, [key]: e.target.value });
   };
-  const loginClickHandler = () => {
+  const signupClickHandler = () => {
     const { email, nickname, password, passwordCheck } = userInfo;
     if (email && nickname && password && passwordCheck) {
       axios
@@ -189,7 +188,7 @@ const Signup = ({ isOpen, close }) => {
                     onChange={loginHandler}
                   />
                   <ErrorForm>{errorMessage}</ErrorForm>
-                  <LoginBtn onClick={loginClickHandler}> 회원가입 </LoginBtn>
+                  <LoginBtn onClick={signupClickHandler}> 회원가입 </LoginBtn>
                 </ModalContents>
               </RightLogin>
             </LoginModal>
@@ -200,4 +199,4 @@ const Signup = ({ isOpen, close }) => {
   );
 };
 
-export default Signup;
+export default SignupModal;
