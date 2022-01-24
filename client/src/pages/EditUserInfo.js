@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import axios from "axios";
+import ImgUpload from "../components/ImgUpload";
+import { v4 as uuidv4 } from "uuid";
 
 export const EditForm = styled.div`
   display: flex;
@@ -82,7 +84,7 @@ export const Profile = styled.div`
   width: 100px;
   height: 100px;
   transform: translate(200%, 70%);
-  z-index: 1;
+  //z-index: 1;
 `;
 
 export const ProfileChange = styled.button`
@@ -191,15 +193,34 @@ export const PasswordBox = styled.div`
 `;
 
 const EditUserInfo = () => {
-  const [errorMessage, setErrorMessage] = useState("");
+  // const [errorMessage, setErrorMessage] = useState("");
+  // const [isPasswordCorrect, setIsPasswordCorrect] = useState(false);
+  // const isPasswordCorrectHandler = () => {
+  //   setIsPasswordCorrect(!isPasswordCorrect);
+  // };
+  // const config = {
+  //   headers: {
+  //     Authorization: `Bearer ${
+  //       JSON.parse(localStorage.getItem("userInfo")).token
+  //     }`,
+  //   },
+  // };
+
   return (
     <EditForm>
       <Top>
         <TopLeft>
-          <Profile></Profile>
-          <ProfileChange>
-            <i class="fas fa-camera fa-2x"></i>
-          </ProfileChange>
+          <Profile>
+            {/* <img
+              src={JSON.parse(localStorage.getItem("userInfo")).image}
+              alt="profile image"
+            /> */}
+          </Profile>
+          <ImgUpload>
+            {/* <ProfileChange>
+              <i class="fas fa-camera fa-2x"></i>
+            </ProfileChange> */}
+          </ImgUpload>
         </TopLeft>
         <TopRight>CrayonPop</TopRight>
       </Top>
@@ -221,7 +242,6 @@ const EditUserInfo = () => {
         </BottomRight>
       </Bottom>
     </EditForm>
-
   );
 };
 

@@ -14,16 +14,16 @@ import Logo from "../images/footerlogo.png";
 // column ㅡ
 //        ㅡ
 //        ㅡ
-// Footer 설정 point 
+// Footer 설정 point
 // bottom: 0이 기본이 되어야 함
 
 const FooterWrapper = styled.footer`
-  font-family: 'Noto Sans KR';
+  font-family: "Noto Sans KR";
   color: #424242;
 
   /* min-height: 100vh; */
   /* position: fixed; */
-  bottom: 0; 
+  bottom: 0;
   // 하씨... 이놈이 범인이었다.
   // 해당 태그 위치를 하단 기준으로 어느 높이에 위치시킬건지 지정.
   left: 0;
@@ -57,8 +57,7 @@ const Wrapper = styled.div`
 const FooterLogo = styled.img`
   width: 300px;
   height: 47px;
-`
-
+`;
 
 const Heading = styled.h1`
   font-size: 1.1rem;
@@ -66,7 +65,7 @@ const Heading = styled.h1`
 `;
 
 const Paragraph = styled.p`
-  font-family: 'Roboto';
+  font-family: "Roboto";
   word-break: keep-all;
   line-height: var(--lineHeight-relaxed);
   font-size: 1rem;
@@ -75,7 +74,6 @@ const Paragraph = styled.p`
 const Item = styled.li`
   margin-bottom: 0.5rem;
 `;
-
 
 const Href = styled.a`
   color: #424242;
@@ -90,14 +88,12 @@ const Copyright = styled.span`
   margin: 0 0 4rem 3rem;
 `;
 
-
-
 const Footer = () => {
   return (
     <FooterWrapper>
       <Container>
         <DescWrapper>
-          <FooterLogo src={Logo}/>
+          <FooterLogo src={Logo} />
           <Paragraph>
             Crayon Diary는 어렸을 때 그렸던 그림 일기처럼 일상을 그림으로
             기록하는 웹 서비스입니다. 일기장과 크레파스를 직접 구매하는 대신,
@@ -106,60 +102,54 @@ const Footer = () => {
           </Paragraph>
         </DescWrapper>
         <Wrapper>
-          
           <Heading>About Us</Heading>
-            <Item>
-              <Href
-                href="https://github.com/codestates/crayondiary"
-                target="_blank"
-              >
-                <></>
-                Github
-              </Href>
-            </Item>
-            <Item>
-              <Href
-                href="https://github.com/codestates/crayondiary/wiki"
-                target="_blank"
-              >
-                Wiki
-              </Href>
-            </Item>
+          <Item>
+            <Href
+              href="https://github.com/codestates/crayondiary"
+              target="_blank"
+            >
+              <></>
+              Github
+            </Href>
+          </Item>
+          <Item>
+            <Href
+              href="https://github.com/codestates/crayondiary/wiki"
+              target="_blank"
+            >
+              Wiki
+            </Href>
+          </Item>
         </Wrapper>
 
         <Wrapper>
           <Heading>Contact</Heading>
-            <Item>
-              <Href href="https://github.com/Jaekomplett" target="_blank">
-                {/* <img src={GithubLogo}></img> */}
-                김제완
-              </Href>
-            </Item>
-            <Item>
-              <Href href="https://github.com/alsrlqor" target="_blank">
-                백민기
-              </Href>
-            </Item>
-            <Item>
-              <Href href="https://github.com/leesangsuk-cloud" target="_blank">
-                이상석
-              </Href>
-            </Item>
-            <Item>
-              <Href href="https://github.com/sunwoong3" target="_blank">
-                정선우
-              </Href>
-            </Item>
+          <Item>
+            <Href href="https://github.com/Jaekomplett" target="_blank">
+              {/* <img src={GithubLogo}></img> */}
+              김제완
+            </Href>
+          </Item>
+          <Item>
+            <Href href="https://github.com/alsrlqor" target="_blank">
+              백민기
+            </Href>
+          </Item>
+          <Item>
+            <Href href="https://github.com/leesangsuk-cloud" target="_blank">
+              이상석
+            </Href>
+          </Item>
+          <Item>
+            <Href href="https://github.com/sunwoong3" target="_blank">
+              정선우
+            </Href>
+          </Item>
         </Wrapper>
-        
       </Container>
       <Copyright>© 2022 Crayondiary. All rights reserved.</Copyright>
-
     </FooterWrapper>
   );
 };
 
 export default Footer;
-
-
-
