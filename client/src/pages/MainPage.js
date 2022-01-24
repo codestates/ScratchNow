@@ -1,44 +1,27 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import Logo from "../images/titlelogo.png"
+import Logo from "../images/titlelogo.png";
+import { Link } from "react-router-dom";
 
 const TitleBoard = styled.main`
   width: 100%;
   height: 31.25rem;
-  background: #FFF1AD;
+  margin: auto;
+  background: #fff1ad;
 `;
 
 const TitleLogo = styled.img`
   display: flex;
-  padding-top: 8.5rem;
-  width: 630px;
-  height: 239px;
+  padding-top: 9rem;
+  width: 500px;
+  height: 190px;
   margin: auto;
-`
-
-const Container = styled.div`
-  min-height: 100vh;
-  display: flex;
-  margin: 0;
-  padding: 0;
-  /* height: 100vh; */
-  flex-direction: column;
-  
-  /* 
-  row  | | |
-
-  column |
-         |
-         |
-  */
 `;
 
-
-const FeedContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  /* gap: 1rem; */
-  `
+/* 
+  row  가로 정렬  
+  column 세로 정렬 
+  */
 
 // padding: 9.375 10.625 9.375 10.625rem;
 // padding: 150 170 150 170;
@@ -46,37 +29,51 @@ const FeedContainer = styled.div`
 const TapMenu = styled.ul`
   color: rgba(73, 73, 73, 0.5);
   display: flex; // flex-box 형태로 개별 단위로 나뉜다.
-  margin: 0 18.75rem; // 
-  font-size: 1.25rem;
+  margin: 2rem 19rem; //
+  font-family: "Noto Sans KR";
   font-weight: bold;
   list-style: none; // ul 포인트 삭제
-  gap: 3rem;
+  gap: 5rem;
 
   .submenu {
-    width: 100%;
-    margin: 2rem;
     cursor: pointer;
   }
 
   .selected {
-    color: black;
+    color: #421f0a;
     transition: 0.2s;
   }
 `;
 
-const FeedPhoto = styled.div` 
-  display: flex;
-  width: 26.25rem;
-  height: 28.125rem;
+const FeedCardContainer = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, 330px);
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 50px 10px;
+  padding: 0 0 7rem 5rem;
+`;
+
+const FeedPhoto = styled.div`
+  width: 300px; // rem 전환
+  height: 321px;
   background-color: #white;
-  box-shadow: 3px 3px 10px 0px rgba(0, 0, 0, 0.17);
-  border-radius: 1.875rem; 
-  margin: 0 18.75rem; 
+  box-shadow: 1px 3px 10px 0px rgba(0, 0, 0, 0.17);
+  border-radius: 1.875rem;
   cursor: position;
-  
-`
+`;
 
-
+const PlusIcon = styled.div`
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #bdbdbd;
+  :hover {
+    color: #424242;
+  }
+`;
 
 const MainPage = () => {
   const [currentTab, setCurrentTab] = useState(0);
@@ -89,33 +86,44 @@ const MainPage = () => {
 
   return (
     <>
-      <Container>
-        <TitleBoard>
-          <TitleLogo src={Logo}/>
-        </TitleBoard>
-        <FeedContainer>
+      <TitleBoard>
+        <TitleLogo src={Logo} />
+      </TitleBoard>
 
-          <TapMenu>
-            {menuArr.map((el, idx) => {
-              return (
-                <li
-                  key={idx}
-                  className={
-                    currentTab === idx ? "submenu selected" : "submenu"
-                  }
-                  onClick={() => selectMenuHandler(idx)}
-                >
-                  {el.name}
-                </li>
-              );
-            })}
-          </TapMenu>
-          <FeedPhoto />
-          <FeedPhoto />
-          <FeedPhoto />
+      <TapMenu>
+        {menuArr.map((el, idx) => {
+          return (
+            <li
+              key={idx}
+              className={currentTab === idx ? "submenu selected" : "submenu"}
+              onClick={() => selectMenuHandler(idx)}
+            >
+              {el.name}
+            </li>
+          );
+        })}
+      </TapMenu>
 
-        </FeedContainer>
-      </Container>
+      <FeedCardContainer>
+        <Link to="/post">
+          <FeedPhoto>
+            <PlusIcon>
+              <i class="fas fa-plus fa-3x"></i>
+            </PlusIcon>
+          </FeedPhoto>
+        </Link>
+
+        <Link to="/feeds">
+          <FeedPhoto />
+        </Link>
+        <FeedPhoto />
+        <FeedPhoto />
+        <FeedPhoto />
+        <FeedPhoto />
+        {/* <FeedPhoto />
+        <FeedPhoto />
+        <FeedPhoto /> */}
+      </FeedCardContainer>
     </>
   );
 };
