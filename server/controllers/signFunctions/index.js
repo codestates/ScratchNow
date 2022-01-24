@@ -9,17 +9,22 @@ module.exports = {
     },
 
     sendAccessToken: (res, accessToken) => {
-        res.cookie('accessToken', accessToken, {
+        res.cookie('jwt', accessToken, {
             httpOnly: true, secure: true, samSite: 'None'
         })
-        .json({ data: { accessToken }, message: "ok" });
+        .json({ data: { accessToken }, message: "Login Success" });
+        
+        // res.append('Set-Cookie', `jwt=${accessToken}; SameSite=none; Secure; HttpOnly`).json({ data: { accessToken }, message: 'ok'});
     },
     
     isAuthorized: (req) => {
-        const authorization = req.headers["authorization"];
-        if (!authorization) return null;
-        const token = authorization.split(" ")[1];
+        // const authorization = req.headers["authorization"];
+        const cookie = req.cookies;
+        
+        if (!cookie) return null;
+        // const token = authorization.split(" ")[1];
         try {
+            const token = cookie.jwt;
             return verify(token, process.env.ACCESS_SECRET);
         } catch (err) {
             return null;
