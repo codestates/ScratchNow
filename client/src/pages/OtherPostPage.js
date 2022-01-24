@@ -1,4 +1,4 @@
-import React, { useState }from "react";
+import React from "react";
 import styled from "styled-components";
 
 export const Contentbox = styled.div`
@@ -9,10 +9,11 @@ export const Contentbox = styled.div`
   padding: 100px 10px 100px 10px; //글자위치
   border-radius: 30px;
   align-items: stretch;
-  margin-left: 100px;
+  margin: 100px;
+  margin-top: 150px; 
   border: 1px solid rgba(0, 0, 0, 0);
   overflow: hidden;
-  // transform: translate(10%, -10%)
+  transform: translate(10%, -10%)
 `;
 export const Buttoncontainer = styled.div`
 display: flex;
@@ -89,7 +90,7 @@ export const Writebutton = styled.button`
   border: none;
   border-radius: 10px;
   background: #fff1ac;
-  // transform: translate(1150%, -100%);
+  transform: translate(1150%, -100%);
 `
 
 export const Proplie1 = styled.div`
@@ -108,8 +109,7 @@ export const Container = styled.div`
   display: flex;
   flex-wrap: wrap;
   width: 100%;
-  margin-left: 150px;
-  flex-direction: column;
+  flex-direction: row;
   align-items: stretch;
 `;
 
@@ -120,12 +120,11 @@ export const Namebox = styled.main`
   background: #FFF8D6;
   padding: 50px 0px 100px 50px; //글자위치
   border-radius: 30px;
+  margin: 100px;
   border: 1px solid rgba(0, 0, 0, 0);
   overflow: hidden;
   display: flex;
-  margin-left:100px;
-  margin-bottom: 30px;
-  // transform: translate(10%, 40%)
+  transform: translate(10%, 40%)
 `;
 
 
@@ -152,7 +151,6 @@ export const Cardcontainer = styled.article`
     font-size: 0.9rem;
   }
 `;
-
 
 // export const Followcontainer = styled.div`
 // font-size: 1.2rem;
@@ -183,17 +181,11 @@ const PostPage = () => {
     <Container>
       <Namebox>
       <Container2>
-      <Proplie1>
-      </Proplie1>
+      <Proplie1/>
       </Container2>
       <Namecontainer>
         <div>CrayonPop</div>
-        <Loginsetcontainer>
-          <div>로그인 계정 정보</div>
-          <Icon>
-          <i class="fas fa-user-edit"></i>
-          </Icon>
-        </Loginsetcontainer>
+        <Writebutton>dksl</Writebutton>
       </Namecontainer>
       <Textcontainer>자유로운여행중...</Textcontainer>
       <Followcontainer>
@@ -208,9 +200,6 @@ const PostPage = () => {
       </Followcontainer>
       </Namebox>
     <Contentbox>
-      <Buttoncontainer>
-      <Writebutton>글쓰기</Writebutton>
-      </Buttoncontainer>
       <Container1>
         <Cardcontainer>
           <div>게시글이 없습니다.</div>
