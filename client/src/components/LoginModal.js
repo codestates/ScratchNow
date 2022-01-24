@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
-import LoginModalImg from "../image/LoginModalImg.png";
-import CrayonDiaryLogo from "../image/My_project.png";
+import LoginModalImg from "../images/LoginModalImg.png";
+import CrayonDiaryLogo from "../images/My_project.png";
 import Signup from "./SignupModal";
 import { useNavigate } from "react-router-dom";
 
@@ -15,6 +15,7 @@ export const Modal = styled.div`
   bottom: 0;
   left: 0;
   background: rgba(0, 0, 0, 0.6);
+  z-index: 3;
 `;
 
 export const LoginModal = styled.div`
@@ -89,7 +90,7 @@ export const LoginBtn = styled.button`
   height: 40px;
   width:220px
   font-size: 11px;
-  padding: 10px
+  padding: 10px;
   cursor: pointer;
   background-color: rgb(255, 241, 173);
   color: rgb(83, 81, 70);
@@ -119,6 +120,7 @@ export const TitleImg = styled.img`
 `;
 
 const Login = ({ isOpen, close }) => {
+  console.log(isOpen);
   const [userInfo, setuserInfo] = useState({
     email: "",
     password: "",
@@ -129,6 +131,7 @@ const Login = ({ isOpen, close }) => {
 
   const openModal = () => {
     setIsModalOpen(true);
+    close();
   };
   const closeModal = () => {
     setIsModalOpen(false);
@@ -192,7 +195,9 @@ const Login = ({ isOpen, close }) => {
             </LoginModal>
           </div>
         </Modal>
-      ) : null}
+      ) : (
+        <Signup isOpen={isModalOpen} close={closeModal} />
+      )}
     </>
   );
 };

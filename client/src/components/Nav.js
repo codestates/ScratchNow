@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import navHomeIcon from "../image/navHomeIcon.png";
+import navHomeIcon from "../images/navHomeIcon.png";
 import styled from "styled-components";
-import Login from "./LoginModal";
-import PostPage from "../pages/PostPage";
+import LoginModal from "./LoginModal";
+import UserFeed from "../pages/UserFeed";
+//import FollowingModal from "./FollowingModal";
 
 export const NavContainer = styled.div`
   display: flex;
@@ -49,21 +50,18 @@ function Nav() {
         <Home src={navHomeIcon} alt="logo" className="logo" />
       </Link>
       <Grow />
-      <Link to="/sign/register" className="header-flex-box">
-        <UserButton onClick={openModal}>마이페이지</UserButton>
-        {isLogin ? (
-          <Link to="/feeds" element={<PostPage />} />
-        ) : (
-          <Login isOpen={isModalOpen} close={closeModal} />
-        )}
-      </Link>
-      <Link to="/sign/login" className="header-flex-box">
-        {isLogin ? (
-          <UserButton onClick={() => setIsLogin(false)}>로그아웃</UserButton>
-        ) : (
-          <UserButton onClick={openModal}>로그인</UserButton>
-        )}
-      </Link>
+      <UserButton onClick={openModal}>마이페이지</UserButton>
+      {isLogin ? (
+        <Link to="/feeds" element={<UserFeed />} />
+      ) : (
+        <LoginModal isOpen={isModalOpen} close={closeModal} />
+        // <FollowingModal isOpen={isModalOpen} close={closeModal} />
+      )}
+      {isLogin ? (
+        <UserButton onClick={() => setIsLogin(false)}>로그아웃</UserButton>
+      ) : (
+        <UserButton onClick={openModal}>로그인</UserButton>
+      )}
     </NavContainer>
   );
 }
