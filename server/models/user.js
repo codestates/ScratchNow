@@ -18,9 +18,9 @@ module.exports = (sequelize, DataTypes) => {
     nickname: DataTypes.STRING,
     password: DataTypes.STRING,
     profile_img: DataTypes.BLOB,
-    status_message: DataTypes.STRING,
-    total_follow: DataTypes.INTEGER,
-    total_follower: DataTypes.INTEGER
+    status_msg: DataTypes.STRING,
+    total_follow: { type: DataTypes.INTEGER, defaultValue: 0 },
+    total_follower: { type: DataTypes.INTEGER, defaultValue: 0 }
   }, {
     sequelize,
     modelName: 'user',
