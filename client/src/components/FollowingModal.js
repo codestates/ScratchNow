@@ -309,20 +309,7 @@ const FollowingModal = ({ isOpen, close }) => {
                   <FollowImg src={userImg} />
                   <FollowId>유저아이디</FollowId>
                 </ListRow>
-                {/* </List> */}
               </FollowList>
-              {/* <FollowList>
-                <List>
-                  <ListRow>
-                    <FollowImg src={userImg} />
-                    <FollowId>유저아이디</FollowId>
-                  </ListRow>
-                  <ListRow>
-                    <FollowImg src={userImg} />
-                    <FollowId>유저아이디</FollowId>
-                  </ListRow>
-                </List>
-              </FollowList> */}
             </ModalContents>
           </LoginModal>
         </Modal>

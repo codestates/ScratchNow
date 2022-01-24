@@ -4,7 +4,7 @@ import navHomeIcon from "../images/navHomeIcon.png";
 import styled from "styled-components";
 import LoginModal from "./LoginModal";
 import UserFeed from "../pages/UserFeed";
-import FollowingModal from "./FollowingModal";
+//import FollowingModal from "./FollowingModal";
 
 export const NavContainer = styled.div`
   display: flex;
