@@ -1,4 +1,5 @@
-import {React, useState} from "react";
+import { React, useState } from "react";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 export const Followbutton = styled.button`
@@ -10,18 +11,18 @@ export const Followbutton = styled.button`
   border-radius: 10px;
   background: #fff1ac;
   margin-top: 20px;
-  :hover{
+  :hover {
     background: #ce724a;
     color: white;
-    transition: background-color .5s;
+    transition: background-color 0.5s;
   }
-`
+`;
 
 export const Contentbox = styled.div`
   box-sizing: border-box;
   width: 1320px;
   height: 100%;
-  background: #FFF8D6;
+  background: #fff8d6;
   padding: 100px 10px 100px 10px; //글자위치
   border-radius: 30px;
   align-items: stretch;
@@ -30,71 +31,71 @@ export const Contentbox = styled.div`
   overflow: hidden;
 `;
 export const Buttoncontainer = styled.div`
-display: flex;
-`
+  display: flex;
+`;
 export const Container1 = styled.div`
-display: grid;
-grid-template-columns: repeat(3, 400px); 
-gap: 20px 40px;
-margin: auto;
-`
+  display: grid;
+  grid-template-columns: repeat(3, 400px);
+  gap: 20px 40px;
+  margin: auto;
+`;
 export const Container2 = styled.div`
-display: flex;
-width: 150px;
-height: 500px;
-padding-top: 20px;
-`
+  display: flex;
+  width: 150px;
+  height: 500px;
+  padding-top: 20px;
+`;
 export const Namecontainer = styled.div`
-display: flex;
-height: 100%;
-font-size: 2.4rem;
-padding: 20px 10px 100px 10px; //글자위치
-flex-direction: column;
-`
+  display: flex;
+  height: 100%;
+  font-size: 2.4rem;
+  padding: 20px 10px 100px 10px; //글자위치
+  flex-direction: column;
+`;
 export const Loginsetcontainer = styled.div`
-display: flex;
-font-size: 1.2rem;
-padding-top : 20px;
-`
+  display: flex;
+  font-size: 1.2rem;
+  padding-top: 20px;
+`;
 export const Textcontainer = styled.div`
-display: flex;
-font-size: 1.2rem;
-padding: 30px 300px 0px 30px;
-font-weight: 10; // 글씨 밝기
-margin: auto;
-`
+  display: flex;
+  font-size: 1.2rem;
+  padding: 30px 300px 0px 30px;
+  font-weight: 10; // 글씨 밝기
+  margin: auto;
+`;
 export const Followcontainer = styled.div`
-margin: auto;
-padding-top: 25px;
-font-size: 1.2rem;
-display: flex;
-flex-direction: row;
-gap: 50px;
-`
-export const Followercontainer= styled.div`
-flex-direction: column;
-display: flex;
-align-items: center; //글 위치
-`
-export const Followingcontainer=styled.div`
-flex-direction: column;
-display: flex;
-align-items: center; //글 위치
-`
-export const Followernumber=styled.div`
-display: flex;
-font-size: 1.8rem;
-`
-export const Followingnumber=styled.div`
-display: flex;
-font-size: 1.8rem;
-`
-export const Followertext=styled.div`
-display: flex;
-`
-export const Followingtext=styled.div`
-display: flex;
-`
+  margin: auto;
+  padding-top: 25px;
+  font-size: 1.2rem;
+  display: flex;
+  flex-direction: row;
+  gap: 50px;
+`;
+export const Followercontainer = styled.div`
+  flex-direction: column;
+  display: flex;
+  align-items: center; //글 위치
+`;
+export const Followingcontainer = styled.div`
+  flex-direction: column;
+  display: flex;
+  align-items: center; //글 위치
+`;
+export const Followernumber = styled.div`
+  display: flex;
+  font-size: 1.8rem;
+`;
+export const Followingnumber = styled.div`
+  display: flex;
+  font-size: 1.8rem;
+`;
+export const Followertext = styled.div`
+  display: flex;
+`;
+export const Followingtext = styled.div`
+  display: flex;
+`;
 
 export const Writebutton = styled.button`
   margin: 10px;
@@ -106,12 +107,12 @@ export const Writebutton = styled.button`
   border-radius: 10px;
   background: #fff1ac;
   transform: translate(1150%, -100%);
-  :hover{
+  :hover {
     background: #ce724a;
     color: white;
-    transition: background-color .5s;
+    transition: background-color 0.5s;
   }
-`
+`;
 
 export const Proplie1 = styled.div`
   display: flex;
@@ -119,11 +120,11 @@ export const Proplie1 = styled.div`
   background-color: white;
   width: 120px;
   height: 120px;
-`
+`;
 export const Icon = styled.div`
-display: flex;
-padding : 5px;
-`
+  display: flex;
+  padding: 5px;
+`;
 
 export const Container = styled.div`
   display: flex;
@@ -138,7 +139,7 @@ export const Namebox = styled.main`
   box-sizing: border-box;
   width: 1320px;
   height: 280px;
-  background: #FFF8D6;
+  background: #fff8d6;
   padding: 50px 0px 100px 50px; //글자위치
   border-radius: 30px;
   border: 1px solid rgba(0, 0, 0, 0);
@@ -146,7 +147,6 @@ export const Namebox = styled.main`
   display: flex;
   margin: 30px auto;
 `;
-
 
 export const Cardcontainer = styled.article`
   display: flex;
@@ -180,44 +180,60 @@ const PostPage = () => {
   return (
     <Container>
       <Namebox>
-      <Container2>
-      <Proplie1/>
-      </Container2>
-      <Namecontainer>
-        <div>CrayonPop</div>
-        {Follow?(
-        <Followbutton onClick={FollowClick}>팔로우</Followbutton>):(
-        <Followbutton onClick={FollowClick}>언팔로우</Followbutton>)}
-      </Namecontainer>
-      <Textcontainer>자유로운여행중...</Textcontainer>
-      <Followcontainer>
-        <Followercontainer>
-          <Followernumber>100</Followernumber>
-          <Followertext>팔로워</Followertext>
-        </Followercontainer>
-        <Followingcontainer>
-          <Followingnumber>100</Followingnumber>
-          <Followingtext>팔로잉</Followingtext>
-        </Followingcontainer>
-      </Followcontainer>
-      
+        <Container2>
+          <Proplie1 />
+        </Container2>
+        <Namecontainer>
+          <div>CrayonPop</div>
+          {Follow ? (
+            <Followbutton onClick={FollowClick}>팔로우</Followbutton>
+          ) : (
+            <Followbutton onClick={FollowClick}>언팔로우</Followbutton>
+          )}
+        </Namecontainer>
+        <Textcontainer>자유로운여행중...</Textcontainer>
+        <Followcontainer>
+          <Followercontainer>
+            <Followernumber>100</Followernumber>
+            <Followertext>팔로워</Followertext>
+          </Followercontainer>
+          <Followingcontainer>
+            <Followingnumber>100</Followingnumber>
+            <Followingtext>팔로잉</Followingtext>
+            {/* 시간이 남으면 다른 유저 팔로우 팔로잉 목록 보여주기 */}
+          </Followingcontainer>
+        </Followcontainer>
       </Namebox>
-    <Contentbox>
-      <Container1>
-        <Cardcontainer>
-          <div>게시글이 없습니다.</div>
-        </Cardcontainer>
-        <Cardcontainer>
-          <div>게시글이 없습니다.</div>
-        </Cardcontainer>
-        <Cardcontainer>
-          <div>게시글이 없습니다.</div>
-        </Cardcontainer>
-        <Cardcontainer></Cardcontainer>
+      <Contentbox>
+        <Container1>
+          <Link to="/post/:postId">
+            <Cardcontainer>
+              <div>게시글이 없습니다.</div>
+              {/* 뷰포스트 링크 걸어주기 */}
+            </Cardcontainer>
+          </Link>
+          <Link to="/post/:postId">
+            <Cardcontainer>
+              <div>게시글이 없습니다.</div>
+              {/* 뷰포스트 링크 걸어주기 */}
+            </Cardcontainer>
+          </Link>
+          <Link to="/post/:postId">
+            <Cardcontainer>
+              <div>게시글이 없습니다.</div>
+              {/* 뷰포스트 링크 걸어주기 */}
+            </Cardcontainer>
+          </Link>
+          <Link to="/post/:postId">
+            <Cardcontainer>
+              <div>게시글이 없습니다.</div>
+              {/* 뷰포스트 링크 걸어주기 */}
+            </Cardcontainer>
+          </Link>
         </Container1>
       </Contentbox>
     </Container>
   );
-}
+};
 
 export default PostPage;

@@ -3,12 +3,13 @@ import styled from "styled-components";
 import axios from "axios";
 import ImgUpload from "../components/ImgUpload";
 import { v4 as uuidv4 } from "uuid";
+import { Link } from "react-router-dom";
 
 export const Container = styled.div`
-display: flex;
-margin : auto;
-flex-direction: row;
-`
+  display: flex;
+  margin: auto;
+  flex-direction: row;
+`;
 export const EditForm = styled.div`
   display: flex;
   background-color: #ffffff;
@@ -105,7 +106,7 @@ export const ProfileChange = styled.button`
 `;
 
 const UserEmail = styled.div`
-  diplay: flex;
+  display: flex;
   font-size: 25px;
   height: 30px;
   color: rgb(83, 81, 70);
@@ -147,7 +148,7 @@ export const PasswordForm = styled.input`
 `;
 export const Btn = styled.button`
   height: 40px;
-  width:220px
+  width: 220px;
   font-size: 11px;
   padding: 10px;
   cursor: pointer;
@@ -157,10 +158,10 @@ export const Btn = styled.button`
   margin-top: 10px;
   border-radius: 8px;
   border-style: none;
-  :hover{
+  :hover {
     background: #ce724a;
     color: white;
-    transition: background-color .5s;
+    transition: background-color 0.5s;
   }
 `;
 export const ErrorForm = styled.div`
@@ -168,7 +169,7 @@ export const ErrorForm = styled.div`
   color: rgb(83, 81, 70);
   display: flex;
   justify-content: center;
-  margin : auto;
+  margin: auto;
 `;
 
 export const Email = styled.div`
@@ -218,42 +219,45 @@ const EditUserInfo = () => {
 
   return (
     <Container>
-    <EditForm>
-      <Top>
-        <TopLeft>
-          <Profile>
-            {/* <img
+      <EditForm>
+        <Top>
+          <TopLeft>
+            <Profile>
+              {/* <img
               src={JSON.parse(localStorage.getItem("userInfo")).image}
               alt="profile image"
             /> */}
-          </Profile>
-          <ImgUpload>
-            {/* <ProfileChange>
+            </Profile>
+            <ImgUpload>
+              {/* <ProfileChange>
               <i class="fas fa-camera fa-2x"></i>
             </ProfileChange> */}
-          </ImgUpload>
-        </TopLeft>
-        <TopRight>CrayonPop</TopRight>
-      </Top>
-      <Bottom>
-        <BottomLeft>
-          <Email>이메일 또는 연동계정</Email>
-          <State>상태메세지</State>
-          <PasswordBox>비밀번호</PasswordBox>
-          <PasswordBox>비밀번호 확인</PasswordBox>
-        </BottomLeft>
-        <BottomRight>
-          <UserEmail>1234@naver.com</UserEmail>
-          <MessageForm placeholder="Type Something..." />
-          <PasswordForm placeholder="Type Something..." />
-          <PasswordForm placeholder="Type Something..." />
-          <ErrorForm>비밀번호를 확인해 주세요</ErrorForm>
-          <Btn>수정</Btn>
-          <Btn>회원탈퇴</Btn>
-        </BottomRight>
-      </Bottom>
-    </EditForm>
-  </Container>
+            </ImgUpload>
+          </TopLeft>
+          <TopRight>CrayonPop</TopRight>
+        </Top>
+        <Bottom>
+          <BottomLeft>
+            <Email>이메일 또는 연동계정</Email>
+            <State>상태메세지</State>
+            <PasswordBox>비밀번호</PasswordBox>
+            <PasswordBox>비밀번호 확인</PasswordBox>
+          </BottomLeft>
+          <BottomRight>
+            <UserEmail>1234@naver.com</UserEmail>
+            <MessageForm placeholder="Type Something..." />
+            <PasswordForm placeholder="Type Something..." />
+            <PasswordForm placeholder="Type Something..." />
+            <ErrorForm>비밀번호를 확인해 주세요</ErrorForm>
+            <Link to="/mypage">
+              <Btn>수정</Btn>
+            </Link>
+            {/* 저장되고 마이페이지로 가게 */}
+            <Btn>회원탈퇴</Btn>
+          </BottomRight>
+        </Bottom>
+      </EditForm>
+    </Container>
   );
 };
 

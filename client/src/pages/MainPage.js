@@ -58,7 +58,7 @@ const FeedCardContainer = styled.div`
 const FeedPhoto = styled.div`
   width: 300px; // rem 전환
   height: 321px;
-  background-color: #white;
+  background-color: white;
   box-shadow: 1px 3px 10px 0px rgba(0, 0, 0, 0.17);
   border-radius: 1.875rem;
   cursor: position;
@@ -113,7 +113,7 @@ const MainPage = () => {
           </FeedPhoto>
         </Link>
 
-        <Link to="/feeds">
+        <Link to="/post/:postId">
           <FeedPhoto />
         </Link>
         <FeedPhoto />
