@@ -157,6 +157,11 @@ export const Btn = styled.button`
   margin-top: 10px;
   border-radius: 8px;
   border-style: none;
+  :hover{
+    background: #ce724a;
+    color: white;
+    transition: background-color .5s;
+  }
 `;
 export const ErrorForm = styled.div`
   font-size: 11px;

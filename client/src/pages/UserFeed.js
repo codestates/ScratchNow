@@ -1,5 +1,21 @@
-import React from "react";
+import {React, useState} from "react";
 import styled from "styled-components";
+
+export const Followbutton = styled.button`
+  box-sizing: border-box;
+  width: 100px;
+  height: 50px;
+  font-size: 16px;
+  border: none;
+  border-radius: 10px;
+  background: #fff1ac;
+  margin-top: 20px;
+  :hover{
+    background: #ce724a;
+    color: white;
+    transition: background-color .5s;
+  }
+`
 
 export const Contentbox = styled.div`
   box-sizing: border-box;
@@ -90,6 +106,11 @@ export const Writebutton = styled.button`
   border-radius: 10px;
   background: #fff1ac;
   transform: translate(1150%, -100%);
+  :hover{
+    background: #ce724a;
+    color: white;
+    transition: background-color .5s;
+  }
 `
 
 export const Proplie1 = styled.div`
@@ -151,31 +172,11 @@ export const Cardcontainer = styled.article`
   }
 `;
 
-// export const Followcontainer = styled.div`
-// font-size: 1.2rem;
-// display: flex;
-// `
-// export const Followercontainer= styled.div`
-// display: flex;
-// `
-// export const Followingcontainer=styled.div`
-// display: flex;
-// `
-// export const Followernumber=styled.div`
-// display: flex;
-// `
-// export const Followingnumber=styled.div`
-// display: flex;
-// `
-// export const Followertext=styled.div`
-// display: flex;
-// `
-// export const Followingtext=styled.div`
-// display: flex;
-// `
-  
-
 const PostPage = () => {
+  const [Follow, setFollow] = useState(true);
+  const FollowClick = () => {
+    setFollow(!Follow);
+  };
   return (
     <Container>
       <Namebox>
@@ -184,7 +185,9 @@ const PostPage = () => {
       </Container2>
       <Namecontainer>
         <div>CrayonPop</div>
-        <Writebutton>dksl</Writebutton>
+        {Follow?(
+        <Followbutton onClick={FollowClick}>팔로우</Followbutton>):(
+        <Followbutton onClick={FollowClick}>언팔로우</Followbutton>)}
       </Namecontainer>
       <Textcontainer>자유로운여행중...</Textcontainer>
       <Followcontainer>
@@ -197,6 +200,7 @@ const PostPage = () => {
           <Followingtext>팔로잉</Followingtext>
         </Followingcontainer>
       </Followcontainer>
+      
       </Namebox>
     <Contentbox>
       <Container1>

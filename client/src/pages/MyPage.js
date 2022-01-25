@@ -90,6 +90,11 @@ export const Writebutton = styled.button`
   border: none;
   border-radius: 10px;
   background: #fff1ac;
+  :hover{
+    background: #ce724a;
+    color: white;
+    transition: background-color .5s;
+  }
 `
 
 export const Proplie1 = styled.div`

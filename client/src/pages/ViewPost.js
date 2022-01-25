@@ -143,6 +143,11 @@ export const EditButton = styled.button`
   width: 80px;
   height: 50px;
   font-size: 1rem;
+  :hover{
+    background: #ce724a;
+    color: white;
+    transition: background-color .5s;
+  }
 `;
 export const RightBox = styled.div`
   width: 320px;
