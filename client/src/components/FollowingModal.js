@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import Signup from "./SignupModal";
-import userImg from "../images/userImg.png";
+import icon from "../images/icon.jpg";
 
 axios.defaults.withCredentials = true;
 
@@ -72,7 +72,7 @@ export const ErrorForm = styled.div`
 `;
 export const LoginBtn = styled.button`
   height: 40px;
-  width:220px
+  width: 220px;
   font-size: 11px;
   padding: 10px;
   cursor: pointer;
@@ -82,7 +82,7 @@ export const LoginBtn = styled.button`
   margin-top: 10px;
   border-radius: 8px;
   border-style: none;
-  margin-right:10px
+  margin-right: 10px;
 `;
 
 export const Xbox = styled.div`
@@ -113,6 +113,7 @@ export const TitleImg = styled.img`
 export const User = styled.img`
   width: 80px;
   height: 80px;
+  border-radius: 100px;
 `;
 
 export const UserNickName = styled.div`
@@ -203,6 +204,7 @@ export const FollowImg = styled.img`
   width: 40px;
   height: 40px;
   margin: 10px;
+  border-radius: 100px;
 `;
 export const FollowId = styled.div`
   align-items: center;
@@ -236,7 +238,7 @@ const FollowingModal = ({ isOpen, close }) => {
               <Close onClick={close}>&times;</Close>
             </Xbox>
             <NavContainer>
-              <User src={userImg} alt="" />
+              <User src={icon} alt="" />
               <UserNickName>유저닉네임</UserNickName>
               <LoginBtn onClick={follower}>팔로워</LoginBtn>
               <LoginBtn onClick={following}>팔로잉</LoginBtn>
@@ -250,63 +252,63 @@ const FollowingModal = ({ isOpen, close }) => {
               <FollowList>
                 {/* <List> */}
                 <ListRow>
-                  <FollowImg src={userImg} />
+                  <FollowImg src={icon} />
                   <FollowId>유저아이디</FollowId>
                 </ListRow>
                 <ListRow>
-                  <FollowImg src={userImg} />
+                  <FollowImg src={icon} />
                   <FollowId>유저아이디</FollowId>
                 </ListRow>
                 <ListRow>
-                  <FollowImg src={userImg} />
+                  <FollowImg src={icon} />
                   <FollowId>유저아이디</FollowId>
                 </ListRow>
                 <ListRow>
-                  <FollowImg src={userImg} />
+                  <FollowImg src={icon} />
                   <FollowId>유저아이디</FollowId>
                 </ListRow>
                 <ListRow>
-                  <FollowImg src={userImg} />
+                  <FollowImg src={icon} />
                   <FollowId>유저아이디</FollowId>
                 </ListRow>
                 <ListRow>
-                  <FollowImg src={userImg} />
+                  <FollowImg src={icon} />
                   <FollowId>유저아이디</FollowId>
                 </ListRow>
                 <ListRow>
-                  <FollowImg src={userImg} />
+                  <FollowImg src={icon} />
                   <FollowId>유저아이디</FollowId>
                 </ListRow>
                 <ListRow>
-                  <FollowImg src={userImg} />
+                  <FollowImg src={icon} />
                   <FollowId>유저아이디</FollowId>
                 </ListRow>
                 <ListRow>
-                  <FollowImg src={userImg} />
+                  <FollowImg src={icon} />
                   <FollowId>유저아이디</FollowId>
                 </ListRow>
                 <ListRow>
-                  <FollowImg src={userImg} />
+                  <FollowImg src={icon} />
                   <FollowId>유저아이디</FollowId>
                 </ListRow>
                 <ListRow>
-                  <FollowImg src={userImg} />
+                  <FollowImg src={icon} />
                   <FollowId>유저아이디</FollowId>
                 </ListRow>
                 <ListRow>
-                  <FollowImg src={userImg} />
+                  <FollowImg src={icon} />
                   <FollowId>유저아이디</FollowId>
                 </ListRow>
                 <ListRow>
-                  <FollowImg src={userImg} />
+                  <FollowImg src={icon} />
                   <FollowId>유저아이디</FollowId>
                 </ListRow>
                 <ListRow>
-                  <FollowImg src={userImg} />
+                  <FollowImg src={icon} />
                   <FollowId>유저아이디</FollowId>
                 </ListRow>
                 <ListRow>
-                  <FollowImg src={userImg} />
+                  <FollowImg src={icon} />
                   <FollowId>유저아이디</FollowId>
                 </ListRow>
               </FollowList>
