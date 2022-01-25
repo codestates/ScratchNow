@@ -12,12 +12,11 @@ module.exports = {
                 where: { id: req.params.postId },
                 include: [{ model: db.comment, include: [{ model: db.user, attributes: ['nickname'] }] }]
             }).then((data) => {
-                res.json({ data: data, message: "ok" })
-            })
+                res.json({ data: data, message: "The Post Detail" });
+            });
         } catch {
-            res.status(500).json({ message: "Couldn't find post'"})
+            res.status(404).json({ message: "Couldn't find the post'"});
         }
-
     },
 
     createPost: async (req, res) => {
@@ -26,33 +25,34 @@ module.exports = {
             await db.post.create({ painting, text, user_id: userId })
             .then((data) => {
                 res.json({ data: data, message: "Created Successfully" });
-            })
+            });
         } catch {
-            res.status(500).json({ message: "Error creating post" });
+            res.status(400).json({ message: "Failed creating post" });
         }
     },
 
-    patchPostById: async (req, res) => {
-        const { painting, text } = req.body;
+    updatePostById: async (req, res) => {
+        const { postId, painting, text } = req.body;
         try {
             await db.post.update({ painting, text }, {
-                where: { id: req.params.postId }
+                where: { id: postId }
             }).then((data) => {
                 db.post.findOne({
-                    where: { id: req.params.postId }
+                    where: { id: postId }
                 }).then((data) => {
                     res.json({ data: data, message: "Updated Successfully" });
-                })
-            })
+                });
+            });
         } catch {
-            res.json({ message: "Failed updating post" });
+            res.json({ message: "Failed to update Post" });
         }
     },
 
     deletePost: async (req, res) => {
+        const { postId } = req.body;
         await db.post.destroy({
-            where: { id: req.params.postId }
+            where: { id: postId }
         })
-        res.json({ data: null, message: "post deleted" });
+        res.json({ data: null, message: "Post deleted" });
     }
 };
