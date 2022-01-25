@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import styled from "styled-components";
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import styled from 'styled-components';
 
 export const Container = styled.div`
   display: flex;
@@ -106,7 +106,6 @@ export const Commentsarea = styled.div`
   display: flex;
   margin-left: 10px;
   width: 320px;
-  border-radius: 30%;
   height: 500px;
   padding-left: 5px;
   overflow: scroll;
@@ -153,7 +152,6 @@ export const EditButton = styled.button`
 export const RightBox = styled.div`
   width: 320px;
   height: 100px;
-  background-color: green;
   margin-left: 40px;
   //flex-direction: row;
   display: flex;
@@ -167,11 +165,9 @@ export const Contentbox = styled.div`
   padding: 30px 10px 100px 40px; //글자위치
   border-radius: 30px;
   align-items: stretch;
-  margin: 100px;
-  margin-top: 150px;
+  margin: 70px auto;
   border: 1px solid rgba(0, 0, 0, 0);
   overflow: hidden;
-  transform: translate(10%, -10%);
   flex-direction: row;
 `;
 

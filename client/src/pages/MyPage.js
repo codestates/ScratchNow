@@ -1,14 +1,14 @@
-import React, { useState } from "react";
-import styled from "styled-components";
-import { Link } from "react-router-dom";
-import FollowingModal from "../components/FollowingModal";
+import React, { useState } from 'react';
+import styled from 'styled-components';
+import { Link } from 'react-router-dom';
+import FollowingModal from '../components/FollowingModal';
 
 export const Contentbox = styled.div`
   box-sizing: border-box;
   width: 1320px;
   height: 100%;
   background: #fff8d6;
-  padding: 100px 10px 100px 10px; //글자위치
+  padding: 20px 10px 100px 10px; //글자위치
   border-radius: 30px;
   align-items: stretch;
   margin: auto;
@@ -142,17 +142,16 @@ export const Cardcontainer = styled.article`
   justify-content: center; // 글높이
   align-items: center; //글 위치
   box-sizing: border-box;
-  border: ${(props) => (props.isContent ? "none" : "0.063rem solid #e0dde1;")};
+  border: ${(props) => (props.isContent ? 'none' : '0.063rem solid #e0dde1;')};
   width: 400px; // 박스 넓이
   height: 428px; // 박스 높이
-  font-family: "Gmarket Sans TTF";
+  font-family: 'Gmarket Sans TTF';
   font-weight: 100; // 글씨 밝기
   font-size: 1rem;
   color: #2d2d2d;
   background-color: #fdfbfe;
-  margin: ${(props) =>
-    props.isContent ? "0 0 0.813rem 10px" : "4px 0 0.813rem 10px"};
-  cursor: ${(props) => (props.isContent ? "pointer" : "Default")};
+  margin: ${(props) => (props.isContent ? '0 0 0.813rem 10px' : '4px 0 0.813rem 10px')};
+  cursor: ${(props) => (props.isContent ? 'pointer' : 'Default')};
   @media screen and (max-width: 37.5rem) {
     width: 100%;
     font-size: 0.9rem;
@@ -223,9 +222,7 @@ const PostPage = () => {
             {/* 팔로워 모달 링크 */}
           </Followingcontainer>
         </Followcontainer>
-        {isOopen ? (
-          <FollowingModal isOpen={openModal} close={closeModal} />
-        ) : null}
+        {isOopen ? <FollowingModal isOpen={openModal} close={closeModal} /> : null}
       </Namebox>
       <Contentbox>
         <Buttoncontainer>
