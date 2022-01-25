@@ -1,5 +1,12 @@
 import { useRef, useEffect, useState } from "react";
+// import { useNavigate, useLocation } from 'react-router-dom';
 import styled from "styled-components";
+// import S3 from 'react-aws-s3';
+// import { v4 as uuidv4 } from 'uuid';
+// import axios from 'axios';
+// import dotenv from 'dotenv';
+
+// dotenv.config();
 
 // 다이어리 전체 컨테이너 (좌측 Tool, 중앙 Canvas, 우측 Writing)
 const DiaryContainer = styled.div`
@@ -8,11 +15,8 @@ const DiaryContainer = styled.div`
   background: #fff8d6;
   display: flex;
   margin: 70px auto;
-  /* justify-content: center;
-  align-items: center; */
+  border-radius: 20px;
 `;
-
-// 좌측 그림판 캔버스 컨테이너
 
 // 우측 전체 컨테이너
 const WritingContainer = styled.div`
@@ -28,7 +32,7 @@ const WritingContainer = styled.div`
 const SaveContainer = styled.div`
   display: flex;
   justify-content: end;
-  font-family: 'roboto';
+  font-family: "roboto";
   font-weight: bold;
 
   div.save_btn {
@@ -36,12 +40,17 @@ const SaveContainer = styled.div`
     margin: 10px;
     width: 80px;
     height: 50px;
-    background: #FFF1AD;
+    background: #fff1ad;
     border-radius: 10px;
     /* margin: 0 30px 70px; */
     // 글씨 위치 중앙 설정
     justify-content: center;
     align-items: center;
+    :hover{
+      background: #ce724a;
+      color: white;
+      transition: background-color .5s;
+    }
   }
 `;
 
@@ -59,6 +68,10 @@ const WeatherContainer = styled.div`
     height: 30px;
     margin: auto;
     color: #616161;
+    :hover{
+      transition: transform 1s;
+      filter: brightness(30%);
+    }
   }
 `;
 
@@ -69,35 +82,55 @@ const LetterContainer = styled.div`
   /* font-size: 30px; */
   /* margin: auto; */
 
-  input.input-style {
+  textarea.text-style {
     border-radius: 30px;
     border: none;
     font-family: "Gaegu";
     font-size: 30px;
-    padding: 0;
-    width: 290px;
-    height: 490px;
+    padding: 10px 15px 10px;
+    width: 260px;
+    height: 470px;
     outline: none;
+    resize: none;
+    background-attachment: local;
+    background-image: linear-gradient(to right, white 10px, transparent 10px),
+      linear-gradient(to left, white 10px, transparent 10px),
+      repeating-linear-gradient(
+        white,
+        white 55px,
+        #ccc 40px,
+        #ccc 41px,
+        white 56px
+      );
+    line-height: 55px;
   }
 `;
 
 const CanvasContainer = styled.div`
-  width: 626px;
+  width: 576px;
   height: 650px;
-  /* border: 1px solid; */
   margin: auto;
-  
+  margin-left: 0;
+
   // html 속성이라 styled
   canvas {
     background-color: #fff;
     border-radius: 30px;
     display: flex;
     cursor: pointer;
+
   }
 `;
 
 const DrawingTool = styled.div`
-  
+  width: 150px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 20px auto 40px;
+
+  /* justify-content: center; */
+
   div.controls_range {
     font-size: 0.9em;
     color: #666;
@@ -105,52 +138,86 @@ const DrawingTool = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
-  }
 
+    input[type="range"] {
+      -webkit-appearance: none; /*기본 스타일을 사용할지 말지 정하기 */
+      width: 100%;
+      height: 5px;
+      background: #ce724a; /*바 선색, transparent 로 설정하면 배경생이랑 동일해진다. == 투명 */
+      border-radius: 10px;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none; /*기본 스타일을 사용할지 말지 정하기 */
+      height: 15px;
+      width: 15px;
+      border-radius: 50%;
+      background-color: black;
+    }
+
+    div.thickness {
+      width: 133px;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      font-weight: bold;
+      font-size: 13px;
+      margin: 7px;
+    }
+  }
 
   div.controls_btns {
     display: flex;
-    justify-content: center;
+    flex-direction: row;
+    margin: auto;
+    gap: 30px;
+    z-index: 1;
+    
   }
 
   // button css reset
-  div.controls_btns button {
-    margin: 1.2rem 0.2rem 0.5rem;
-    padding: 0.3rem 0.6rem;
-    border: 1px solid #ccc;
-    background: #fff;s
-    border-radius: 4px;
-  }
+  div.controls_btns div {
+    color: #616161;
+    display: flex;
+    margin: auto;
+    :hover{
+      transition: transform 1s;
+      filter: brightness(50%);
+    }
 
-  div.controls_btns button.active {
-    border: 1px solid #999;
-    box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.2);
-  }
-  
-  // 색상 버튼 컨테이너
-  ul {
-    /* margin: 1rem; */
-    /* display: flex; */
     /* justify-content: center; */
   }
-  
+
+  // 색상 버튼 컨테이너
+  ul {
+    display: grid;
+    grid-template-columns: repeat(2, 60px);
+    gap: 15px;
+    padding: 0;
+  }
+
   // 색상 버튼
   li {
     list-style: none;
-    width: 2.5rem;
-    height: 2.5rem;
-    margin: 0 0.2rem;
+    width: 4rem;
+    height: 4rem;
+    margin: auto;
     border-radius: 50%;
     cursor: pointer;
+    :hover{
+      transition: transform 1s;
+      filter: brightness(85%);
+    }
   }
 `;
 
-const CreatePost = ({ DrawingHandler, SaveDrawingHandler, drawingImg }) => {
+const CreatePost = ({ DrawingHandler, SaveDrawingHandler, picture }) => {
   const canvasRef = useRef(null);
   const [isDrawing, setIsDrawing] = useState(false);
   const [isFillMode, setIsFillMode] = useState(false);
   const [lineWidth, setLineWidth] = useState(7.5);
-  let previousImg = drawingImg;
+
+  let previousImg = picture;
 
   const image = new Image();
   useEffect(() => {
@@ -162,7 +229,7 @@ const CreatePost = ({ DrawingHandler, SaveDrawingHandler, drawingImg }) => {
       ctx.drawImage(image, 0, 0);
     };
     image.onerror = () => {
-      // previousImg = 'https://geutda-cors.herokuapp.com/' + drawingImg;
+      // previousImg = 'https://geutda-cors.herokuapp.com/' + picture;
       image.src = previousImg;
       image.onload = () => {
         ctx.drawImage(image, 0, 0);
@@ -187,7 +254,7 @@ const CreatePost = ({ DrawingHandler, SaveDrawingHandler, drawingImg }) => {
     ctx.beginPath();
     ctx.moveTo(offsetX, offsetY);
   }
-  
+
   // Draw 이벤트
   function draw({ nativeEvent }) {
     if (!isDrawing) {
@@ -220,6 +287,11 @@ const CreatePost = ({ DrawingHandler, SaveDrawingHandler, drawingImg }) => {
       ctx.fillRect(0, 0, canvasRef.current.width, canvasRef.current.height);
       setIsFillMode(!isFillMode);
       ctx.globalCompositeOperation = "source-over";
+    }
+  }
+  function handleeraserClick() {
+    const ctx = canvasRef.current.getContext("2d");
+    if (!isFillMode) { ctx.strokeStyle = "white";
     }
   }
   // lineWidth 변경 함수
@@ -259,48 +331,60 @@ const CreatePost = ({ DrawingHandler, SaveDrawingHandler, drawingImg }) => {
     DrawingHandler();
   };
 
+  // 날씨 변경 탭
+  // const [diaryInfo, setDiaryInfo] = useState([]);
+  // const [pictureContent, setPictureContent] = useState(diaryInfo.drawing);
+  // const [originPic, setOriginPic] = useState('');
+  // const [weatherTap, setWeatherTap] = useState(0);
+  // const [content, setContent] = useState('');
+  // const [isLoading, setisLoading] = useState(true);
+  // const [isDelete, setIsDelete] = useState(false);
+
+  // const history = useNavigate();
+  // const location = useLocation();
+
+  // const s3config = {
+  //   bucketName: process.env.REACT_APP_BUCKET_NAME,
+  //   region: process.env.REACT_APP_REGION,
+  //   accessKeyId: process.env.REACT_APP_ACCESS_ID,
+  //   secretAccessKey: process.env.REACT_APP_ACCESS_KEY,
+  // };
+  // const ReactS3Client = new S3(s3config);
+
+  // useEffect(() => {
+  //   if (location.state._id) {
+  //     axios
+  //       .get('http://ec2-3-38-36-59.ap-northeast-2.compute.amazonaws.com:3000/api/contents', {
+  //         ...config,
+  //         params: { _id: location.state._id },
+  //       })
+  //       .then((res) => {
+  //         // api 참고해서 수정하기
+  //         setDiaryInfo(res.data);
+  //         setPictureContent(res.data.drawing);
+  //         setOriginPic(res.data.drawing);
+  //         setWeatherTap(res.data.weather);
+  //         setContent(res.data.text);
+  //         setisLoading(false);
+  //       })
+  //       .catch((err) => {
+  //         console.log(err);
+  //         setisLoading(false);
+  //       });
+  //   }
+  // }, []);
+
   return (
-      <DiaryContainer>
+    <DiaryContainer>
       <DrawingTool>
-        <div className="controls">
-          <div className="controls_range">
-            <input
-              type="range"
-              min="0.1"
-              max="15"
-              value={lineWidth}
-              step="0.1"
-              onChange={handleRangeChange}
-            />
-            <div>{lineWidth}</div>
-          </div>
-          <div className="controls_btns">
-            <button onClick={fillWhiteHandler}>Clear</button>
-            <button
-              onClick={fillModeHandler}
-              className={!isFillMode ? "active" : ""}
-              data-mode="paint"
-            >
-              Paint
-            </button>
-            <button
-              onClick={fillModeHandler}
-              className={isFillMode ? "active" : ""}
-              data-mode="fill"
-            >
-              Fill
-            </button>
-            <button onClick={SaveImgHandler}>Save</button>
-          </div>
-        </div>
         {/* 컬러 팔레트 */}
         <ul>
           <li
-            style={{ backgroundColor: "#ffffff", border: "1px solid #ccc" }}
+            style={{ backgroundColor: "#ffffff"}}
             onClick={handleColorClick}
           />
           <li
-            style={{ backgroundColor: "#fffafa" }}
+            style={{ backgroundColor: "#c8c8c8" }}
             onClick={handleColorClick}
           />
           <li
@@ -352,39 +436,85 @@ const CreatePost = ({ DrawingHandler, SaveDrawingHandler, drawingImg }) => {
             onClick={handleColorClick}
           />
         </ul>
+        <div className="controls">
+          <div className="controls_range">
+            <input
+              type="range"
+              min="0.1"
+              max="100"
+              step="0.1"
+              onChange={handleRangeChange}
+            />
+            <div className="thickness">
+            <div>작게</div>
+            <div>크게</div>
+
+            </div>
+
+          </div>
+          <div className="controls_btns">
+            <div
+              onClick={handleeraserClick}
+              className={!isFillMode ? "active" : ""}
+              data-mode="paint"
+            >
+              <i class="fa-solid fa-eraser fa-3x" data-mode="paint"></i>
+            </div>
+            <div
+              onClick={fillModeHandler}
+              className={isFillMode ? "active" : ""}
+              data-mode="fill"
+            >
+              <i class="fas fa-fill-drip fa-3x" data-mode="fill"></i>
+            </div>
+          </div>
+        </div>
       </DrawingTool>
-        <CanvasContainer>
-          <canvas
-            ref={canvasRef}
-            onMouseDown={initDraw}
-            onMouseUp={finishDraw}
-            onMouseMove={draw}
-            onMouseLeave={finishDraw}
-            width="626"
-            height="650"
-          />
-        </CanvasContainer>
+      <CanvasContainer>
+        <canvas
+          ref={canvasRef}
+          onMouseDown={initDraw}
+          onMouseUp={finishDraw}
+          onMouseMove={draw}
+          onMouseLeave={finishDraw}
+          width="626"
+          height="650"
+        />
+      </CanvasContainer>
 
-        <WritingContainer>
-          <SaveContainer>
-            <div className="save_btn">저장</div>
-          </SaveContainer>
-          <WeatherContainer>
-            <div className="weathers">
+      <WritingContainer>
+        <SaveContainer>
+          <div className="save_btn" onClick={fillWhiteHandler}>
+            새 그림
+          </div>
+          <div className="save_btn" onClick={SaveImgHandler}>
+            저장
+          </div>
+        </SaveContainer>
+        <WeatherContainer>
+          <div className="weathers">
             <i class="fas fa-sun fa-2x"></i>
-            </div>
-            <div className="weathers">
-              <i class="fa-solid fa-cloud fa-2x"></i>
-            </div>
+          </div>
+          <div className="weathers">
+            <i class="fa-solid fa-cloud fa-2x"></i>
+          </div>
 
-            <div className="weathers"><i class="fas fa-umbrella fa-2x"></i></div>
-            <div className="weathers"><i class="fas fa-snowflake fa-2x"></i></div>
-          </WeatherContainer>
-          <LetterContainer>
-            <input className="input-style" type="text"></input>
-          </LetterContainer>
-        </WritingContainer>
-      </DiaryContainer>
+          <div className="weathers">
+            <i class="fas fa-umbrella fa-2x"></i>
+          </div>
+          <div className="weathers">
+            <i class="fas fa-snowflake fa-2x"></i>
+          </div>
+        </WeatherContainer>
+        <LetterContainer>
+          <textarea
+            className="text-style"
+            type="text"
+            maxlength="100"
+          ></textarea>
+        </LetterContainer>
+      </WritingContainer>
+    </DiaryContainer>
   );
 };
 
