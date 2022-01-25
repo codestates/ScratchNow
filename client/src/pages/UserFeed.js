@@ -9,11 +9,9 @@ export const Contentbox = styled.div`
   padding: 100px 10px 100px 10px; //글자위치
   border-radius: 30px;
   align-items: stretch;
-  margin: 100px;
-  margin-top: 150px; 
+  margin: auto;
   border: 1px solid rgba(0, 0, 0, 0);
   overflow: hidden;
-  transform: translate(10%, -10%)
 `;
 export const Buttoncontainer = styled.div`
 display: flex;
@@ -47,6 +45,7 @@ display: flex;
 font-size: 1.2rem;
 padding: 30px 300px 0px 30px;
 font-weight: 10; // 글씨 밝기
+margin: auto;
 `
 export const Followcontainer = styled.div`
 margin: auto;
@@ -111,6 +110,7 @@ export const Container = styled.div`
   width: 100%;
   flex-direction: row;
   align-items: stretch;
+  margin: 100px auto;
 `;
 
 export const Namebox = styled.main`
@@ -120,11 +120,10 @@ export const Namebox = styled.main`
   background: #FFF8D6;
   padding: 50px 0px 100px 50px; //글자위치
   border-radius: 30px;
-  margin: 100px;
   border: 1px solid rgba(0, 0, 0, 0);
   overflow: hidden;
   display: flex;
-  transform: translate(10%, 40%)
+  margin: 30px auto;
 `;
 
 

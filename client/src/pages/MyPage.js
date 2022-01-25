@@ -9,12 +9,13 @@ export const Contentbox = styled.div`
   padding: 100px 10px 100px 10px; //글자위치
   border-radius: 30px;
   align-items: stretch;
-  margin-left: 100px;
+  margin : auto;
   border: 1px solid rgba(0, 0, 0, 0);
   overflow: hidden;
   // transform: translate(10%, -10%)
 `;
 export const Buttoncontainer = styled.div`
+justify-content: end;
 display: flex;
 `
 export const Container1 = styled.div`
@@ -89,7 +90,6 @@ export const Writebutton = styled.button`
   border: none;
   border-radius: 10px;
   background: #fff1ac;
-  // transform: translate(1150%, -100%);
 `
 
 export const Proplie1 = styled.div`
@@ -108,7 +108,7 @@ export const Container = styled.div`
   display: flex;
   flex-wrap: wrap;
   width: 100%;
-  margin-left: 150px;
+  margin: 100px auto;
   flex-direction: column;
   align-items: stretch;
 `;
@@ -123,7 +123,7 @@ export const Namebox = styled.main`
   border: 1px solid rgba(0, 0, 0, 0);
   overflow: hidden;
   display: flex;
-  margin-left:100px;
+  margin: auto;
   margin-bottom: 30px;
   // transform: translate(10%, 40%)
 `;

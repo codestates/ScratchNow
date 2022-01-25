@@ -4,6 +4,11 @@ import axios from "axios";
 import ImgUpload from "../components/ImgUpload";
 import { v4 as uuidv4 } from "uuid";
 
+export const Container = styled.div`
+display: flex;
+margin : auto;
+flex-direction: row;
+`
 export const EditForm = styled.div`
   display: flex;
   background-color: #ffffff;
@@ -12,7 +17,7 @@ export const EditForm = styled.div`
   height: 600px;
   border-radius: 30px;
   background-color: #fff1ad;
-  margin-left: 280px;
+  margin: 100px auto;
   flex-direction: column;
 `;
 export const Top = styled.div`
@@ -75,6 +80,7 @@ export const BottomRight = styled.div`
   padding-top: 20px;
   padding-right: 200px;
   padding-left: 20px;
+  padding-bottom: 30px;
 `;
 
 export const Profile = styled.div`
@@ -157,8 +163,7 @@ export const ErrorForm = styled.div`
   color: rgb(83, 81, 70);
   display: flex;
   justify-content: center;
-  margin-top: 20px;
-  margin-bottom: 5px;
+  margin : auto;
 `;
 
 export const Email = styled.div`
@@ -207,6 +212,7 @@ const EditUserInfo = () => {
   // };
 
   return (
+    <Container>
     <EditForm>
       <Top>
         <TopLeft>
@@ -242,6 +248,7 @@ const EditUserInfo = () => {
         </BottomRight>
       </Bottom>
     </EditForm>
+  </Container>
   );
 };
 
