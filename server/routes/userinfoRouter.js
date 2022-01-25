@@ -3,8 +3,8 @@ const router = express.Router();
 const userinfoController = require('../controllers/UserinfoController');
 
 router.get('/:userId', userinfoController.getUserinfoById);
-router.patch('/:userId', userinfoController.changeUserinfo);
-// router.patch('/:userId', userinfoController.changeProfileImg);
-router.delete('/:userId', userinfoController.deleteUserinfo);
+router.patch('/', userinfoController.changeUserinfo);
+router.patch('/imgchange', userinfoController.changeProfileImg);
+router.delete('/', userinfoController.deleteUserinfo);
 
 module.exports = router;

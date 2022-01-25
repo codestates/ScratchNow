@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 export const Container = styled.div`
@@ -105,7 +106,7 @@ export const Commentsarea = styled.div`
   display: flex;
   margin-left: 10px;
   width: 320px;
-  border_radius: 30%;
+  border-radius: 30%;
   height: 500px;
   padding-left: 5px;
   overflow: scroll;
@@ -116,7 +117,7 @@ export const Commentsarea = styled.div`
   }
   &::-webkit-scrollbar-track {
     height: 10px;
-    border_radius: 50%;
+    border-radius: 50%;
   }
 `;
 
@@ -143,29 +144,34 @@ export const EditButton = styled.button`
   width: 80px;
   height: 50px;
   font-size: 1rem;
+  :hover {
+    background: #ce724a;
+    color: white;
+    transition: background-color 0.5s;
+  }
 `;
 export const RightBox = styled.div`
   width: 320px;
-  height: 100px
+  height: 100px;
   background-color: green;
   margin-left: 40px;
   //flex-direction: row;
-  display:flex;
-  align-itmes:column;
+  display: flex;
+  align-items: column;
 `;
 export const Contentbox = styled.div`
   box-sizing: border-box;
   width: 1320px;
   height: 900px;
-  background: #FFF8D6;
+  background: #fff8d6;
   padding: 30px 10px 100px 40px; //글자위치
   border-radius: 30px;
   align-items: stretch;
   margin: 100px;
-  margin-top: 150px; 
+  margin-top: 150px;
   border: 1px solid rgba(0, 0, 0, 0);
   overflow: hidden;
-  transform: translate(10%, -10%)
+  transform: translate(10%, -10%);
   flex-direction: row;
 `;
 
@@ -176,7 +182,7 @@ export const Weather = styled.div`
 `;
 
 export const Like = styled.div`
-  diplay: flex;
+  display: flex;
   padding: 5px;
 `;
 
@@ -198,7 +204,11 @@ const ViewPost = () => {
       <Contentbox>
         <Navcontainer>
           <Proplie></Proplie>
-          <Namecontainer>Crayon</Namecontainer>
+          <Link to="/feeds">
+            <Namecontainer>Crayon</Namecontainer>
+          </Link>
+          {/* 유저 이름 누르면 유저피드로 가는 링크 걸어주기 */}
+          {/* 포스트아이디랑 유저아이디가 같으면 수정 삭제 버튼 없애기 */}
           <EditButton>수정</EditButton>
           <EditButton>삭제</EditButton>
           <RightBox>
@@ -229,7 +239,10 @@ const ViewPost = () => {
               </Textarea>
               <Commentsarea>
                 <Comment1>
-                  <Proplie1></Proplie1>
+                  <Link to="/feeds">
+                    <Proplie1></Proplie1>
+                  </Link>
+                  {/* 유저피드 링크 걸어주기 */}
                   <Comment>댓글asdfasdfsadfsadfasdfdasfsdf</Comment>
                 </Comment1>
               </Commentsarea>

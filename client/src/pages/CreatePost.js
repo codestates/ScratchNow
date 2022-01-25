@@ -164,6 +164,7 @@ const DrawingTool = styled.div`
       font-size: 13px;
       margin: 7px;
     }
+
   }
 
   div.controls_btns {
@@ -172,7 +173,7 @@ const DrawingTool = styled.div`
     margin: auto;
     gap: 30px;
     z-index: 1;
-    
+
   }
 
   // button css reset
@@ -180,6 +181,7 @@ const DrawingTool = styled.div`
     color: #616161;
     display: flex;
     margin: auto;
+
     :hover{
       transition: transform 1s;
       filter: brightness(50%);

@@ -11,8 +11,6 @@ module.exports = {
             db.follow.findAll({
                 where: { user_id: req.params.userId }
             }).then((data) => {
-                // data[n].dataValues.follower_id === 팔로워 한명의 user.id 값
-                // 위 user.id 값들을 기준으로 렌더링 정보를 findAll
                 const followerIds = [];
                 data.forEach((el) => {
                     const id = el['dataValues'].follower_id;
@@ -26,7 +24,7 @@ module.exports = {
                 })
             })
         } catch {
-            res.status(500).json({ message: "Failed to Load Followers" });
+            res.status(404).json({ message: "Failed to Load Followers" });
         }
     },
 
@@ -35,8 +33,6 @@ module.exports = {
             db.follow.findAll({
                 where: { follower_id: req.params.userId }
             }).then((data) => {
-                // data[n].dataValues.follower_id === 팔로워 한명의 user.id 값
-                // 위 user.id 값들을 기준으로 렌더링 정보를 findAll
                 const followingIds = [];
                 data.forEach((el) => {
                     const id = el['dataValues'].user_id;
@@ -51,49 +47,58 @@ module.exports = {
                 })
             })
         } catch {
-            res.status(500).json({ message: "Failed to Load Followings" });
+            res.status(404).json({ message: "Failed to Load Followings" });
         }
 
     },
 
     followUser: (req, res) => {
-        // 팔로우 할 유저의 id를 받으면 유저 테이블에서 그 id의 total_follower 1 증가
-        // 팔로우를 요청하는 사용자의 user.id의 total_follow 1 증가 .increment('total_follow')
         const { userId, followerId } = req.body;
         // userId: 해당 요청으로 follower가 증가하는 사용자 id
         // followerId: follow를 요청한 사용자 id
-        try {
+        const followinfo = db.follow.findOne({
+            where: { user_id: userId, follower_id: followerId }
+        })
+        if (followinfo) {
+            res.status(401).json({ message: "Already Followed this User" })
+        } else {
             db.follow.findOrCreate( { 
                 where : { user_id: userId, follower_id: followerId }
-            })
-            .then(() => {
+            }).then((data) => {
                 db.user.increment({ total_follow: 1 }, { where: { id: followerId }});
                 db.user.increment({ total_follower: 1 }, { where: { id: userId }});
-            }).then(() => {
-                res.json({ message: "Follow Success" });
+                db.user.findOne({
+                    where: { id: userId },
+                    attributes: ['id', 'total_follower']
+                }).then((data) => {
+                    res.json({ data: data, message: "Follow Success" });
+                })
             })
-        } catch {
-            res.status(500).json({ message: "Failed Following" });
         }
     },
 
     unfollowUser: (req, res) => {
-        // 언팔로우 할 유저의 id를 받으면 유저 테이블에서 그 id의 total_follower 1 차감
-        // 언팔로우를 요청하는 사용자의 user.id의 total_follow 1 차감 .decrement('total_follow')
         const { unfollowId, userId } = req.body;
         // unfollowId: unfollow 되는 사용자 id : 파라미터의 :followId와 동일한 값
         // userId: unfollow를 요청한 사용자 id
-        try {
-            db.follow.destroy({ where: { user_id: unfollowId } })
-            .then(() => {
+        const followinfo = db.follow.findOne({
+            where: { user_id: userId, follower_id: unfollowId }
+        })
+        if (followinfo) {
+            db.follow.destroy({
+                where: { user_id: unfollowId }
+            }).then((data) => {
                 db.user.decrement({ total_follow: 1 }, { where: { id: userId }});
                 db.user.decrement({ total_follower: 1 }, { where: { id: unfollowId }});
+                db.user.findOne({
+                    where: { id: userId },
+                    attributes: ['id', 'total_follower']
+                }).then((data) => {
+                    res.json({ data: data, message: "Unfollow Success" });
+                })
             })
-            .then(() => {
-                res.json({ message: "Unfollow Success" });
-            })
-        } catch {
-            res.status(500).json({ message: "Failed Unfollowing" });
+        } else {
+            res.status(400).json({ message: "Failed Unfollowing" });
         }
     }
 };
