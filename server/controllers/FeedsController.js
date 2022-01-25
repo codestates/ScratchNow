@@ -15,7 +15,7 @@ module.exports = {
                 res.json({ data: data, message: "All posts of our service by Date" });
             })
         } catch {
-            res.json({ data: null, message: "Failed to Load the Post by Date" })
+            res.json({ data: null, message: "Failed to Load the Post by Date" });
         }
     },
 
@@ -28,28 +28,28 @@ module.exports = {
                 res.json({ data: data, message: "All posts of our service by Likes" });
             })
         } catch {
-            res.json({ data: null, message: "Failed to Load the Post by Likes" })
+            res.status(404).json({ data: null, message: "Failed to Load the Post by Likes" });
         }
     },
 
-    getUserFeeds: (req, res) => {
+    getUserFeeds: (req, res) => { // 테스트 요망
         try {
-            db.post.findAll({
-                where: { user_id: req.params.userId },
-                order: [['createdAt', 'DESC']],
-                attributes: ['id', 'painting', 'user_id', 'createdAt']
+            db.user.findAll({
+                where: { id: req.params.userId },
+                attributes: ['id', 'nickname', 'profile_img', 'status_msg', 'total_follow', 'total_follower'],
+                include: [{ model: db.post,
+                    where: { user_id: req.params.userId },
+                    order:[['createdAt', 'DESC']] }],
+                    attributes: ['id', 'painting', 'createdAt']
             }).then((data) => {
-                res.json({ data: data, message: "The User Posts by Date" })
+                res.json({ data: data, message: "The User Info and Feeds by Date" });
             })
         } catch {
-            res.json({ message: "Could Not Bring the Posts" });
+            res.status(404).json({ message: "Could Not Bring the Posts" });
         }
     },
 
-    // 내가 팔로우한 사람들 모아보기 피드 - 아직 미구현! 현재 고민 중
     getFollowingFeeds: (req, res) => {
-        // 내가 팔로우하는 사용자 id 도출
-        // 그 사용자 id의 getUserFeeds 도출
         try {
             db.follow.findAll({
                 where: { follower_id: req.params.userId },
@@ -59,17 +59,16 @@ module.exports = {
                     const id = el['dataValues'].user_id;
                     if (!followingIds.includes(id)) followingIds.push(id);
                 })
-                console.log(followingIds)
                 db.post.findAll({
                     where: { id: followingIds },
-                    attributes: ['painting', 'createdAt'],
+                    attributes: ['id', 'painting', 'user_id', 'createdAt'],
                     order: [['createdAt', 'DESC']]
                 }).then((data) => {
-                    res.json({ data: data, message: "Following Posts" })
+                    res.json({ data: data, message: "Following Posts" });
                 })
             })
         } catch {
-            res.status(500).json({ message: "Could Not Bring Following's Posts" })
+            res.status(404).json({ message: "Could Not Bring Following's Posts" });
         }
     }
 };

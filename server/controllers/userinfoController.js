@@ -9,49 +9,56 @@ const db = require('../models');
 module.exports = {
     getUserinfoById: (req, res) => {
         try {
-            db.user.findOne({
-                where: { id: req.params.userId }
+            db.post.findOne({
+                where: { user_id: req.params.userId },
+                attributes: ['id', 'painting', 'createdAt'],
+                order: [['createdAt', 'DESC']],
+                include: [{ model: db.user,
+                    attributes: ['id', 'nickname', 'profile_img', 'status_msg', 'total_follow', 'total_follower']
+                }]
             }).then((data) => {
-                res.json({ data: data, message: "Returning My Userinfo" })
+                res.json({ data: data, message: "My Userinfo" });
             })
         } catch {
-            res.status(500).json({ message: "Failed to Bring UserInfo" })
+            res.status(404).json({ message: "Failed to Bring UserInfo" });
         }
     },
 
     changeUserinfo: (req, res) => {
-        const { nickname, status_msg, profile_img } = req.body;
+        const { userId, status_msg, password } = req.body;
         try {
             db.user.update( 
-                req.body, { where: { id: req.params.userId } }
+                req.body, { where: { id: userId } }
             ).then((data) => {
                 db.user.findOne({
-                    where: { id: req.params.userId }
+                    where: { id: userId }
                 }).then((data) => {
-                    res.json({ data: data, message: "Updated the Userinfo" })
+                    res.json({ data: data, message: "Updated the Userinfo" });
                 })
             })
         } catch {
-            res.status(500).json({ message: "Failed to Update UserInfo" })
+            res.status(406).json({ message: "Failed to Update UserInfo" });
         }
     },
 
-    // 사용 X
     changeProfileImg: (req, res) => {
-        const { id, profile_img } = req.body;
+        const { userId, profile_img } = req.body;
         try {
-            const userInfo = db.user.update(
-                req.body,profile_img, { where: { id: req.body.id } }
-            )
+            db.user.update(
+                profile_img, { where: { id: userId } }
+            ).then((data) => {
+                res.json({ data: data, message: "Updated the Profile Img" });
+            })
         } catch {
-            res.status(500).json({ message: "Failed to Update Profile Img" })
+            res.status(406).json({ message: "Failed to Update Profile Img" });
         }
     },
 
     deleteUserinfo: async (req, res) => {
+        const { userId } = req.body;
         await db.user.destroy({
-            where: { id: req.params.userId }
+            where: { id: userId }
         })
-        res.json({ message: "UserInfo Deleted" })
+        res.json({ message: "UserInfo Deleted" });
     }
 };
