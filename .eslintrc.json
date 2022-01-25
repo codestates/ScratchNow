@@ -1,0 +1,24 @@
+{  
+    "parser": "babel-eslint", 
+    "parserOptions": {    
+        "ecmaVersion": 6,    
+        "sourceType": "module",    
+        "ecmaFeatures": { "jsx": true }  },  
+    "plugins": ["react", "import", "node", "promise", "standard", "react-hooks"],  
+    "settings": {
+        "react": {
+            "createClass": "createReactClass",      
+            "pragma": "React",      
+            "version": "detect"    
+        }  
+    },  
+    "env": {    
+        "browser": true,    
+        "node": true,  
+    },  
+    "extends": [  "eslint:recommended",    "plugin:react/recommended",  "plugin:prettier/recommended"  ],  
+    "rules": { 
+        "react-hooks/rules-of-hooks": "error",
+        "react-hooks/exhaustive-deps": "warn",    
+        "no-console": "error"  }
+}
