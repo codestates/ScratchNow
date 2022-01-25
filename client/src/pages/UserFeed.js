@@ -1,5 +1,21 @@
-import React from "react";
+import {React, useState} from "react";
 import styled from "styled-components";
+
+export const Followbutton = styled.button`
+  box-sizing: border-box;
+  width: 100px;
+  height: 50px;
+  font-size: 16px;
+  border: none;
+  border-radius: 10px;
+  background: #fff1ac;
+  margin-top: 20px;
+  :hover{
+    background: #ce724a;
+    color: white;
+    transition: background-color .5s;
+  }
+`
 
 export const Contentbox = styled.div`
   box-sizing: border-box;
@@ -9,11 +25,9 @@ export const Contentbox = styled.div`
   padding: 100px 10px 100px 10px; //글자위치
   border-radius: 30px;
   align-items: stretch;
-  margin: 100px;
-  margin-top: 150px; 
+  margin: auto;
   border: 1px solid rgba(0, 0, 0, 0);
   overflow: hidden;
-  transform: translate(10%, -10%)
 `;
 export const Buttoncontainer = styled.div`
 display: flex;
@@ -47,6 +61,7 @@ display: flex;
 font-size: 1.2rem;
 padding: 30px 300px 0px 30px;
 font-weight: 10; // 글씨 밝기
+margin: auto;
 `
 export const Followcontainer = styled.div`
 margin: auto;
@@ -91,6 +106,11 @@ export const Writebutton = styled.button`
   border-radius: 10px;
   background: #fff1ac;
   transform: translate(1150%, -100%);
+  :hover{
+    background: #ce724a;
+    color: white;
+    transition: background-color .5s;
+  }
 `
 
 export const Proplie1 = styled.div`
@@ -111,6 +131,7 @@ export const Container = styled.div`
   width: 100%;
   flex-direction: row;
   align-items: stretch;
+  margin: 100px auto;
 `;
 
 export const Namebox = styled.main`
@@ -120,11 +141,10 @@ export const Namebox = styled.main`
   background: #FFF8D6;
   padding: 50px 0px 100px 50px; //글자위치
   border-radius: 30px;
-  margin: 100px;
   border: 1px solid rgba(0, 0, 0, 0);
   overflow: hidden;
   display: flex;
-  transform: translate(10%, 40%)
+  margin: 30px auto;
 `;
 
 
@@ -152,31 +172,11 @@ export const Cardcontainer = styled.article`
   }
 `;
 
-// export const Followcontainer = styled.div`
-// font-size: 1.2rem;
-// display: flex;
-// `
-// export const Followercontainer= styled.div`
-// display: flex;
-// `
-// export const Followingcontainer=styled.div`
-// display: flex;
-// `
-// export const Followernumber=styled.div`
-// display: flex;
-// `
-// export const Followingnumber=styled.div`
-// display: flex;
-// `
-// export const Followertext=styled.div`
-// display: flex;
-// `
-// export const Followingtext=styled.div`
-// display: flex;
-// `
-  
-
 const PostPage = () => {
+  const [Follow, setFollow] = useState(true);
+  const FollowClick = () => {
+    setFollow(!Follow);
+  };
   return (
     <Container>
       <Namebox>
@@ -185,7 +185,9 @@ const PostPage = () => {
       </Container2>
       <Namecontainer>
         <div>CrayonPop</div>
-        <Writebutton>dksl</Writebutton>
+        {Follow?(
+        <Followbutton onClick={FollowClick}>팔로우</Followbutton>):(
+        <Followbutton onClick={FollowClick}>언팔로우</Followbutton>)}
       </Namecontainer>
       <Textcontainer>자유로운여행중...</Textcontainer>
       <Followcontainer>
@@ -198,6 +200,7 @@ const PostPage = () => {
           <Followingtext>팔로잉</Followingtext>
         </Followingcontainer>
       </Followcontainer>
+      
       </Namebox>
     <Contentbox>
       <Container1>
