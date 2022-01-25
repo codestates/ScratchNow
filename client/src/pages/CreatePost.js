@@ -46,6 +46,11 @@ const SaveContainer = styled.div`
     // 글씨 위치 중앙 설정
     justify-content: center;
     align-items: center;
+    :hover{
+      background: #ce724a;
+      color: white;
+      transition: background-color .5s;
+    }
   }
 `;
 
@@ -63,6 +68,10 @@ const WeatherContainer = styled.div`
     height: 30px;
     margin: auto;
     color: #616161;
+    :hover{
+      transition: transform 1s;
+      filter: brightness(30%);
+    }
   }
 `;
 
@@ -100,7 +109,6 @@ const LetterContainer = styled.div`
 const CanvasContainer = styled.div`
   width: 576px;
   height: 650px;
-  /* border: 1px solid; */
   margin: auto;
   margin-left: 0;
 
@@ -110,6 +118,7 @@ const CanvasContainer = styled.div`
     border-radius: 30px;
     display: flex;
     cursor: pointer;
+
   }
 `;
 
@@ -145,6 +154,17 @@ const DrawingTool = styled.div`
       border-radius: 50%;
       background-color: black;
     }
+
+    div.thickness {
+      width: 133px;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      font-weight: bold;
+      font-size: 13px;
+      margin: 7px;
+    }
+
   }
 
   div.controls_btns {
@@ -153,6 +173,7 @@ const DrawingTool = styled.div`
     margin: auto;
     gap: 30px;
     z-index: 1;
+
   }
 
   // button css reset
@@ -160,6 +181,11 @@ const DrawingTool = styled.div`
     color: #616161;
     display: flex;
     margin: auto;
+
+    :hover{
+      transition: transform 1s;
+      filter: brightness(50%);
+    }
 
     /* justify-content: center; */
   }
@@ -180,6 +206,10 @@ const DrawingTool = styled.div`
     margin: auto;
     border-radius: 50%;
     cursor: pointer;
+    :hover{
+      transition: transform 1s;
+      filter: brightness(85%);
+    }
   }
 `;
 
@@ -259,6 +289,11 @@ const CreatePost = ({ DrawingHandler, SaveDrawingHandler, picture }) => {
       ctx.fillRect(0, 0, canvasRef.current.width, canvasRef.current.height);
       setIsFillMode(!isFillMode);
       ctx.globalCompositeOperation = "source-over";
+    }
+  }
+  function handleeraserClick() {
+    const ctx = canvasRef.current.getContext("2d");
+    if (!isFillMode) { ctx.strokeStyle = "white";
     }
   }
   // lineWidth 변경 함수
@@ -347,11 +382,11 @@ const CreatePost = ({ DrawingHandler, SaveDrawingHandler, picture }) => {
         {/* 컬러 팔레트 */}
         <ul>
           <li
-            style={{ backgroundColor: "#ffffff", border: "1px solid #ccc" }}
+            style={{ backgroundColor: "#ffffff"}}
             onClick={handleColorClick}
           />
           <li
-            style={{ backgroundColor: "#fffafa" }}
+            style={{ backgroundColor: "#c8c8c8" }}
             onClick={handleColorClick}
           />
           <li
@@ -408,23 +443,29 @@ const CreatePost = ({ DrawingHandler, SaveDrawingHandler, picture }) => {
             <input
               type="range"
               min="0.1"
-              max="15"
-              value={lineWidth}
+              max="100"
               step="0.1"
               onChange={handleRangeChange}
             />
-            <div>{lineWidth}</div>
+            <div className="thickness">
+            <div>작게</div>
+            <div>크게</div>
+
+            </div>
+
           </div>
           <div className="controls_btns">
             <div
-              onClick={fillModeHandler}
+              onClick={handleeraserClick}
               className={!isFillMode ? "active" : ""}
+              data-mode="paint"
             >
-              <i class="fas fa-paint-brush fa-3x" data-mode="paint"></i>
+              <i class="fa-solid fa-eraser fa-3x" data-mode="paint"></i>
             </div>
             <div
               onClick={fillModeHandler}
               className={isFillMode ? "active" : ""}
+              data-mode="fill"
             >
               <i class="fas fa-fill-drip fa-3x" data-mode="fill"></i>
             </div>
