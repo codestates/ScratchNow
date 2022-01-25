@@ -1,9 +1,9 @@
-import React, { useState } from "react";
-import styled from "styled-components";
-import axios from "axios";
-import LoginModalImg from "../images/LoginModalImg.png";
-import CrayonDiaryLogo from "../images/My_project.png";
-import { useNavigate } from "react-router-dom";
+import React, { useState } from 'react';
+import styled from 'styled-components';
+import axios from 'axios';
+import LoginModalImg from '../images/LoginModalImg.png';
+import CrayonDiaryLogo from '../images/My_project.png';
+import { useNavigate } from 'react-router-dom';
 
 axios.defaults.withCredentials = true;
 
@@ -88,16 +88,16 @@ export const ErrorForm = styled.div`
   margin-top: 5px;
 `;
 export const LoginBtn = styled.button`
-height: 40px;
-font-size: 11px;
-padding: 10px
-cursor: pointer;
-background-color: rgb(255, 241, 173);
-color: rgb(83, 81, 70);
-line-height: 1px;
-margin-top: 10px;
-border-radius: 8px;
-border-style: none;
+  height: 40px;
+  font-size: 11px;
+  padding: 10px;
+  cursor: pointer;
+  background-color: rgb(255, 241, 173);
+  color: rgb(83, 81, 70);
+  line-height: 1px;
+  margin-top: 10px;
+  border-radius: 8px;
+  border-style: none;
 `;
 export const LoginImg = styled.img`
   width: 100px;
@@ -121,12 +121,12 @@ export const TitleImg = styled.img`
 
 const SignupModal = ({ isOpen, close }) => {
   const [userInfo, setuserInfo] = useState({
-    email: "",
-    nickname: "",
-    password: "",
-    passwordCheck: "",
+    email: '',
+    nickname: '',
+    password: '',
+    passwordCheck: '',
   });
-  const [errorMessage, setErrorMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
 
   const loginHandler = (key) => (e) => {
@@ -136,19 +136,19 @@ const SignupModal = ({ isOpen, close }) => {
     const { email, nickname, password, passwordCheck } = userInfo;
     if (email && nickname && password && passwordCheck) {
       axios
-        .post("https://localhost:4000/signup", userInfo, {
+        .post('https://localhost:4000/signup', userInfo, {
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
           },
           withCredentials: true,
         })
         .then(() => {
           loginHandler(userInfo);
         })
-        .then(() => navigate("/"))
+        .then(() => navigate('/'))
         .catch((err) => console.log(err));
     }
-    setErrorMessage("모든 항목은 필수입니다");
+    setErrorMessage('모든 항목은 필수입니다');
   };
 
   return (
@@ -164,30 +164,10 @@ const SignupModal = ({ isOpen, close }) => {
                 <Close onClick={close}>&times;</Close>
                 <LoginImg src={LoginModalImg} />
                 <ModalContents>
-                  <SignupFrom
-                    name="email"
-                    type="text"
-                    placeholder="아이디"
-                    onChange={loginHandler}
-                  />
-                  <SignupFrom
-                    name="password"
-                    type="password"
-                    placeholder="비밀번호"
-                    onChange={loginHandler}
-                  />
-                  <SignupFrom
-                    name="password"
-                    type="password"
-                    placeholder="비밀번호"
-                    onChange={loginHandler}
-                  />
-                  <SignupFrom
-                    name="password"
-                    type="password"
-                    placeholder="비밀번호확인"
-                    onChange={loginHandler}
-                  />
+                  <SignupFrom name="email" type="text" placeholder="아이디" onChange={loginHandler} />
+                  <SignupFrom name="email" type="text" placeholder="닉네임" onChange={loginHandler} />
+                  <SignupFrom name="password" type="password" placeholder="비밀번호" onChange={loginHandler} />
+                  <SignupFrom name="password" type="password" placeholder="비밀번호확인" onChange={loginHandler} />
                   <ErrorForm>{errorMessage}</ErrorForm>
                   <LoginBtn onClick={signupClickHandler}> 회원가입 </LoginBtn>
                 </ModalContents>

@@ -1,8 +1,8 @@
-import React, { useState } from "react";
-import styled from "styled-components";
-import axios from "axios";
-import Signup from "./SignupModal";
-import icon from "../images/icon.jpg";
+import React, { useState } from 'react';
+import styled from 'styled-components';
+import axios from 'axios';
+import Signup from './SignupModal';
+import icon from '../images/icon.jpg';
 
 axios.defaults.withCredentials = true;
 
@@ -72,7 +72,6 @@ export const ErrorForm = styled.div`
 `;
 export const LoginBtn = styled.button`
   height: 40px;
-  width: 220px;
   font-size: 11px;
   padding: 10px;
   cursor: pointer;
@@ -118,7 +117,7 @@ export const User = styled.img`
 
 export const UserNickName = styled.div`
   padding: 20px;
-  width: 50%;
+  width: 10%;
 `;
 
 export const Grow = styled.div`

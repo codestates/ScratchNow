@@ -1,10 +1,10 @@
-import React, { useState } from "react";
-import styled from "styled-components";
-import axios from "axios";
-import LoginModalImg from "../images/LoginModalImg.png";
-import CrayonDiaryLogo from "../images/My_project.png";
-import Signup from "./SignupModal";
-import { useNavigate } from "react-router-dom";
+import React, { useState } from 'react';
+import styled from 'styled-components';
+import axios from 'axios';
+import LoginModalImg from '../images/LoginModalImg.png';
+import CrayonDiaryLogo from '../images/My_project.png';
+import Signup from './SignupModal';
+import { useNavigate } from 'react-router-dom';
 
 axios.defaults.withCredentials = true;
 
@@ -88,7 +88,7 @@ export const ErrorForm = styled.div`
 `;
 export const LoginBtn = styled.button`
   height: 40px;
-  width:220px
+  width: 220px;
   font-size: 11px;
   padding: 10px;
   cursor: pointer;
@@ -122,10 +122,10 @@ export const TitleImg = styled.img`
 const Login = ({ isOpen, close }) => {
   console.log(isOpen);
   const [userInfo, setuserInfo] = useState({
-    email: "",
-    password: "",
+    email: '',
+    password: '',
   });
-  const [errorMessage, setErrorMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
 
@@ -135,7 +135,7 @@ const Login = ({ isOpen, close }) => {
   };
   const closeModal = () => {
     setIsModalOpen(false);
-    navigate("/");
+    navigate('/');
   };
 
   const loginHandler = (key) => (e) => {
@@ -145,19 +145,19 @@ const Login = ({ isOpen, close }) => {
   const loginClickHandler = () => {
     if (userInfo.email && userInfo.password) {
       axios
-        .post("https://localhost:4000/login", userInfo, {
+        .post('https://localhost:4000/login', userInfo, {
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
           },
           withCredentials: true,
         })
         .then(() => {
           loginHandler(userInfo);
         })
-        .then(() => navigate("/"))
+        .then(() => navigate('/'))
         .catch((err) => console.log(err));
     }
-    setErrorMessage("모든 항목은 필수입니다");
+    setErrorMessage('모든 항목은 필수입니다');
   };
 
   return (
@@ -173,18 +173,8 @@ const Login = ({ isOpen, close }) => {
                 <Close onClick={close}>&times;</Close>
                 <LoginImg src={LoginModalImg} />
                 <ModalContents>
-                  <LoginForm
-                    name="email"
-                    type="text"
-                    placeholder="이메일 아이디"
-                    onChange={loginHandler}
-                  />
-                  <LoginForm
-                    name="password"
-                    type="password"
-                    placeholder="비밀번호"
-                    onChange={loginHandler}
-                  />
+                  <LoginForm name="email" type="text" placeholder="이메일 아이디" onChange={loginHandler} />
+                  <LoginForm name="password" type="password" placeholder="비밀번호" onChange={loginHandler} />
                   <ErrorForm>{errorMessage}</ErrorForm>
                   <LoginBtn onClick={loginClickHandler}> 로그인 </LoginBtn>
                   <LoginBtn>SNS 로그인</LoginBtn>
