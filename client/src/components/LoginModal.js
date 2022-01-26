@@ -120,11 +120,11 @@ export const TitleImg = styled.img`
 `;
 
 const Login = ({ isOpen, close }) => {
-  console.log(isOpen);
   const [userInfo, setuserInfo] = useState({
     email: '',
     password: '',
   });
+  
   const [errorMessage, setErrorMessage] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
@@ -145,19 +145,24 @@ const Login = ({ isOpen, close }) => {
   const loginClickHandler = () => {
     if (userInfo.email && userInfo.password) {
       axios
-        .post('https://localhost:4000/login', userInfo, {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          withCredentials: true,
+        .post('http://localhost:80/api/sign/login',
+          {...userInfo},
+          {
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          withCredentials: false
         })
-        .then(() => {
-          loginHandler(userInfo);
-        })
-        .then(() => navigate('/'))
-        .catch((err) => console.log(err));
+        .then((data) => {
+          if (data.data.message === 'Invalid User') {
+            setErrorMessage('아이디 또는 비밀번호를 다시 확인해주세요');
+          } else {
+            close();
+          }
+        })        
+    } else {
+      setErrorMessage('모든 항목은 필수입니다');
     }
-    setErrorMessage('모든 항목은 필수입니다');
   };
 
   return (
@@ -173,8 +178,8 @@ const Login = ({ isOpen, close }) => {
                 <Close onClick={close}>&times;</Close>
                 <LoginImg src={LoginModalImg} />
                 <ModalContents>
-                  <LoginForm name="email" type="text" placeholder="이메일 아이디" onChange={loginHandler} />
-                  <LoginForm name="password" type="password" placeholder="비밀번호" onChange={loginHandler} />
+                  <LoginForm name="email" type="text" placeholder="이메일 아이디" onChange={loginHandler('email')} />
+                  <LoginForm name="password" type="password" placeholder="비밀번호" onChange={loginHandler('password')} />
                   <ErrorForm>{errorMessage}</ErrorForm>
                   <LoginBtn onClick={loginClickHandler}> 로그인 </LoginBtn>
                   <LoginBtn>SNS 로그인</LoginBtn>

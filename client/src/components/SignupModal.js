@@ -129,26 +129,44 @@ const SignupModal = ({ isOpen, close }) => {
   const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
 
-  const loginHandler = (key) => (e) => {
+  const loginHandler = (key) => (e) => {  
     setuserInfo({ ...userInfo, [key]: e.target.value });
   };
-  const signupClickHandler = () => {
+  const signupClickHandler = (e) => {
+    e.preventDefault();
     const { email, nickname, password, passwordCheck } = userInfo;
-    if (email && nickname && password && passwordCheck) {
-      axios
-        .post('https://localhost:4000/signup', userInfo, {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          withCredentials: true,
-        })
-        .then(() => {
-          loginHandler(userInfo);
-        })
-        .then(() => navigate('/'))
-        .catch((err) => console.log(err));
+    const emailregExp = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
+    const digitsregExp = /\d/;
+    if (!userInfo) {
+      setErrorMessage('모든 항목은 필수입니다');
     }
-    setErrorMessage('모든 항목은 필수입니다');
+    else if (!emailregExp.test(email)) {
+      setErrorMessage('이메일 형식이 올바르지 않습니다');
+    }
+    else if (!digitsregExp.test(password)) {
+      setErrorMessage('비밀번호에 숫자기 하나 이상 포함되어야 합니다');
+    }
+    else if (password !== passwordCheck) {
+      setErrorMessage('비밀번호가 동일해야 합니다');
+    }
+    else {
+      axios
+        .post('http://localhost:3000/api/sign/register',
+            { email, nickname, password },
+            {
+              'Content-Type': 'application/json',
+              withCredentials: false
+            })
+        .then((data) => {
+            if (data.data.message === 'Email Exists') {
+              setErrorMessage('이미 가입된 이메일입니다');
+            } else if (data.data.message === 'Nickname Exists') {
+              setErrorMessage('이미 존재하는 닉네임입니다');
+            } else {
+              close();
+            }
+        })
+    }
   };
 
   return (
@@ -164,12 +182,12 @@ const SignupModal = ({ isOpen, close }) => {
                 <Close onClick={close}>&times;</Close>
                 <LoginImg src={LoginModalImg} />
                 <ModalContents>
-                  <SignupFrom name="email" type="text" placeholder="아이디" onChange={loginHandler} />
-                  <SignupFrom name="email" type="text" placeholder="닉네임" onChange={loginHandler} />
-                  <SignupFrom name="password" type="password" placeholder="비밀번호" onChange={loginHandler} />
-                  <SignupFrom name="password" type="password" placeholder="비밀번호확인" onChange={loginHandler} />
+                  <SignupFrom name="email" type="text" placeholder="아이디" onChange={loginHandler('email')} />
+                  <SignupFrom name="nickname" type="text" placeholder="닉네임" onChange={loginHandler('nickname')} />
+                  <SignupFrom name="password" type="password" placeholder="비밀번호" onChange={loginHandler('password')} />
+                  <SignupFrom name="passwordCheck" type="password" placeholder="비밀번호확인" onChange={loginHandler('passwordCheck')} />
                   <ErrorForm>{errorMessage}</ErrorForm>
-                  <LoginBtn onClick={signupClickHandler}> 회원가입 </LoginBtn>
+                  <LoginBtn type='submit' onClick={signupClickHandler}> 회원가입 </LoginBtn>
                 </ModalContents>
               </RightLogin>
             </LoginModal>
