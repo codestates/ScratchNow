@@ -1,0 +1,9 @@
+openapi: '3.0.0'
+info:
+  version: 1.0.0
+  title: ScratchNow API docs
+  description: ScratchNow API swagger document
+  license:
+    name: MIT
+servers:
+  - url: http://localhost:2208
