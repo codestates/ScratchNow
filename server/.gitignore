@@ -2,3 +2,5 @@
 package-lock.json
 .idea
 build
+.dev.env
+.prod.env
