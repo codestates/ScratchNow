@@ -39,7 +39,7 @@ app.use(`/api/${API_VER}/comment`, CommentsRouter);
 app.use(`/api/${API_VER}/like`, LikesRouter);
 
 const swaggerSpec = YAML.load(path.join(__dirname, './swagger/swagger.yaml'));
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec))
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.get('/', (req: Request, res: Response) => { res.send('ScratchNow Server Running!'); });
 
@@ -55,4 +55,4 @@ app.listen(PORT, async () => {
             console.log('DB connection error: ', e);
         });
     console.log(`ScratchNow Server Running! API Doc: ${PROTOCOL}://${myIp}:${PORT}/api-docs`);
-})
+});
