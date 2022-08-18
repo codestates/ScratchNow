@@ -2,9 +2,12 @@ import {
     Sequelize,
     DataTypes,
     Model,
-    Association
+    Association, ForeignKey
 } from 'sequelize';
 import { sequelize } from './index';
+import {Users} from "./users";
+import {Posts} from "./posts";
+import {Likes} from "./likes";
 
 interface CommentsAttributes {
     id: number;
@@ -18,9 +21,9 @@ interface CommentsAttributes {
 
 export class Comments extends Model<CommentsAttributes> {
     private readonly id!: number;
-    private user_id!: number;
-    private post_id!: number;
-    private original_comment_id!: number;
+    private user_id!: ForeignKey<Users['id']>;
+    private post_id!: ForeignKey<Posts['id']>;
+    private original_comment_id!: ForeignKey<Comments['id']>;
     private anonymity_yn!: string;
     private text!: string;
     private deleted_yn!: string;
@@ -28,7 +31,8 @@ export class Comments extends Model<CommentsAttributes> {
     private readonly updated_at!: Date;
 
     static associations: {
-
+        commentBelongsToUsers: Association<Comments, Users>;
+        commentBelongsToPosts: Association<Comments, Posts>;
     }
 }
 
@@ -78,4 +82,14 @@ Comments.init(
     }
 )
 
-// Posts.hasMany()
+Comments.belongsTo(Users, {
+    targetKey: 'id',
+    foreignKey: 'user_id',
+    as: 'commentBelongsToUsers'
+})
+
+Comments.belongsTo(Posts, {
+    targetKey: 'id',
+    foreignKey: 'post_id',
+    as: 'commentBelongsToPosts'
+})

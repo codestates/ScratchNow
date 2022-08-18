@@ -2,7 +2,11 @@ import {
     Sequelize,
     DataTypes,
     Model,
-    Association
+    Association,
+    HasManyAddAssociationMixin,
+    HasManyGetAssociationsMixin,
+    HasManyHasAssociationMixin,
+    HasManyCountAssociationsMixin, HasManyCreateAssociationMixin
 } from 'sequelize';
 import { sequelize } from './index';
 import {Posts} from "./posts";
@@ -29,12 +33,6 @@ export class Users extends Model<UsersAttributes> {
     private readonly deleted_yn!: string;
     private readonly created_at!: Date;
     private readonly updated_at!: Date;
-
-    static associations: {
-        userHasManyPosts: Association<Users, Posts>;
-        userHasManyLikes: Association<Users, Likes>;
-        userHasManyComments: Association<Users, Comments>;
-    }
 }
 
 Users.init(
@@ -81,21 +79,3 @@ Users.init(
         updatedAt: 'updated_at'
     }
 )
-
-Users.hasMany(Posts, {
-    sourceKey: 'id',
-    foreignKey: 'user_id',
-    as: 'userHasManyPosts'
-})
-
-Users.hasMany(Likes, {
-    sourceKey: 'id',
-    foreignKey: 'user_id',
-    as: 'userHasManyLikes'
-})
-
-Users.hasMany(Comments, {
-    sourceKey: 'id',
-    foreignKey: 'user_id',
-    as: 'userHasManyComments'
-})
