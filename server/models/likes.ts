@@ -2,9 +2,11 @@ import {
     Sequelize,
     DataTypes,
     Model,
-    Association
+    Association, ForeignKey
 } from 'sequelize';
 import { sequelize } from './index';
+import {Posts} from "./posts";
+import {Users} from "./users";
 
 interface LikesAttributes {
     id: number;
@@ -15,14 +17,15 @@ interface LikesAttributes {
 
 export class Likes extends Model<LikesAttributes> {
     private readonly id! : number;
-    private user_id! : number;
-    private post_id! : number;
+    private user_id! : ForeignKey<Users['id']>;
+    private post_id! : ForeignKey<Posts['id']>;
     private deleted_yn!: string;
     private readonly created_at!: Date;
     private readonly updated_at!: Date;
 
     static associations: {
-
+        likeBelongsToUsers: Association<Likes, Users>;
+        likeBelongsToPosts: Association<Likes, Posts>;
     }
 }
 
@@ -59,4 +62,14 @@ Likes.init(
     }
 )
 
-// Posts.hasMany()
+Likes.belongsTo(Users, {
+    targetKey: 'id',
+    foreignKey: 'user_id',
+    as: 'likeBelongsToUsers'
+})
+
+Likes.belongsTo(Posts, {
+    targetKey: 'id',
+    foreignKey: 'post_id',
+    as: 'likeBelongsToPosts'
+})

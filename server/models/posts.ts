@@ -2,7 +2,7 @@ import {
     Sequelize,
     DataTypes,
     Model,
-    Association
+    Association, ForeignKey
 } from 'sequelize';
 import { sequelize } from './index';
 import {Likes} from "./likes";
@@ -22,16 +22,14 @@ export class Posts extends Model<PostsAttributes> {
     private readonly id!: number;
     private painting_url!: string;
     private text!: string;
-    private user_id!: number;
+    private user_id!: ForeignKey<Users['id']>;
     private total_likes!: number;
     private deleted_yn!: string;
     private readonly created_at!: Date;
     private readonly updated_at!: Date;
 
     static associations: {
-        // postBelongsToUsers: Association<Posts, Users>;
-        postHasManyLikes: Association<Posts, Likes>;
-        postHasManyComments: Association<Posts, Comments>;
+        postBelongsToUsers: Association<Posts, Users>;
     }
 }
 
@@ -77,20 +75,8 @@ Posts.init(
     }
 )
 
-// Posts.belongsTo(Users, {
-//     targetKey: 'id',
-//     foreignKey: 'user_id',
-//     as: 'postBelongsToUsers'
-// })
-
-Posts.hasMany(Likes, {
-    sourceKey: 'id',
-    foreignKey: 'post_id',
-    as: 'postHasManyLikes'
-})
-
-Posts.hasMany(Comments, {
-    sourceKey: 'id',
-    foreignKey: 'post_id',
-    as: 'postHasManyComments'
+Posts.belongsTo(Users, {
+    targetKey: 'id',
+    foreignKey: 'user_id',
+    as: 'postBelongsToUsers'
 })
