@@ -4,10 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "tsc && npm run api-docs && nodemon build/app.js",
-    "predev": "npm run api-docs",
-    "dev": "nodemon --watch \\\\\\\"*.ts\\\\\\\" --exec \\\\\\\"ts-node\\\\\\\" app.ts",
+    "start:test": "tsc && NODE_ENV=test node build/app.js",
+    "start:prod": "tsc && NODE_ENV=production node build/app.js",
+    "migrate": "./node_modules/.bin/ts-node ./migrations/createTables.ts",
     "api-docs": "swagger-cli bundle ./swagger/openapi.yaml --outfile build/swagger/swagger.yaml --type yaml"
   },
   "author": "",

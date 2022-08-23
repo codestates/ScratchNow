@@ -1,17 +1,8 @@
 import {
-    Sequelize,
     DataTypes,
     Model,
-    Association,
-    HasManyAddAssociationMixin,
-    HasManyGetAssociationsMixin,
-    HasManyHasAssociationMixin,
-    HasManyCountAssociationsMixin, HasManyCreateAssociationMixin
 } from 'sequelize';
 import { sequelize } from './index';
-import {Posts} from "./posts";
-import {Likes} from "./likes";
-import {Comments} from "./comments";
 
 interface UsersAttributes {
     id: number;
@@ -21,7 +12,7 @@ interface UsersAttributes {
     profile_image_url: string,
     status_message: string,
     deleted_yn: string
-}
+};
 
 export class Users extends Model<UsersAttributes> {
     private readonly id!: number;
@@ -33,7 +24,7 @@ export class Users extends Model<UsersAttributes> {
     private readonly deleted_yn!: string;
     private readonly created_at!: Date;
     private readonly updated_at!: Date;
-}
+};
 
 Users.init(
     {
@@ -78,4 +69,4 @@ Users.init(
         createdAt: 'created_at',
         updatedAt: 'updated_at'
     }
-)
+);

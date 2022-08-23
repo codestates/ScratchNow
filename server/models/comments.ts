@@ -1,5 +1,4 @@
 import {
-    Sequelize,
     DataTypes,
     Model,
     Association, ForeignKey
@@ -7,7 +6,6 @@ import {
 import { sequelize } from './index';
 import {Users} from "./users";
 import {Posts} from "./posts";
-import {Likes} from "./likes";
 
 interface CommentsAttributes {
     id: number;
@@ -17,24 +15,25 @@ interface CommentsAttributes {
     anonymity_yn: string,
     text: string,
     deleted_yn: string
-}
+};
 
 export class Comments extends Model<CommentsAttributes> {
-    private readonly id!: number;
+    private readonly id?: number;
     private user_id!: ForeignKey<Users['id']>;
     private post_id!: ForeignKey<Posts['id']>;
-    private original_comment_id!: ForeignKey<Comments['id']>;
-    private anonymity_yn!: string;
+    private original_comment_id?: ForeignKey<Comments['id']>;
+    private anonymity_yn?: string;
     private text!: string;
-    private deleted_yn!: string;
+    private deleted_yn?: string;
     private readonly created_at!: Date;
     private readonly updated_at!: Date;
 
     static associations: {
-        commentBelongsToUsers: Association<Comments, Users>;
-        commentBelongsToPosts: Association<Comments, Posts>;
+        userHasManyComments: Association<Users, Comments>;
+        postHasManyComments: Association<Posts, Comments>;
+        commentHasManyComments: Association<Comments, Comments>;
     }
-}
+};
 
 Comments.init(
     {
@@ -80,16 +79,34 @@ Comments.init(
         createdAt: 'created_at',
         updatedAt: 'updated_at'
     }
-)
+);
+
+Users.hasMany(Comments, {
+    sourceKey: 'id',
+    foreignKey: 'user_id',
+    as: 'userHasManyComments'
+});
 
 Comments.belongsTo(Users, {
     targetKey: 'id',
     foreignKey: 'user_id',
-    as: 'commentBelongsToUsers'
-})
+    as: 'userHasManyComments'
+});
+
+Posts.hasMany(Comments, {
+    sourceKey: 'id',
+    foreignKey: 'post_id',
+    as: 'postHasManyComments'
+});
 
 Comments.belongsTo(Posts, {
     targetKey: 'id',
     foreignKey: 'post_id',
-    as: 'commentBelongsToPosts'
-})
+    as: 'postHasManyComments'
+});
+
+Comments.belongsTo(Comments, {
+    targetKey: 'id',
+    foreignKey: 'original_comment_id',
+    as: 'commentHasManyComments'
+});

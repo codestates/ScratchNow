@@ -4,7 +4,8 @@ import * as path from 'path';
 dotenv.config({
     path: path.resolve(
         process.env.NODE_ENV === 'production'
-            ? '.prod.env' : '.dev.env'
+            ? '.prod.env' : process.env.NODE_ENV === 'test'
+                ? '.test.env' : '.dev.env'
     )
 });
 

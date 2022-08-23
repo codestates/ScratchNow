@@ -1,4 +1,4 @@
-import { Likes } from '../models/likes';
+import { Likes } from '../../models/likes';
 
 console.log("======Creating Likes Table======");
 

@@ -1,4 +1,4 @@
-import { Posts } from '../models/posts';
+import { Posts } from '../../models/posts';
 
 console.log("======Creating Posts Table======");
 

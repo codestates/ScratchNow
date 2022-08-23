@@ -1,4 +1,9 @@
-import express from 'express';
-const router = express.Router();
+import { Router } from 'express';
+const { addLike, cancelLike } = require('../controllers');
 
-module.exports = router
+const router = Router();
+
+router.post('/', addLike);
+router.delete('/', cancelLike);
+
+export default router;

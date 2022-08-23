@@ -1,5 +1,4 @@
 import {
-    Sequelize,
     DataTypes,
     Model,
     Association, ForeignKey
@@ -13,7 +12,7 @@ interface LikesAttributes {
     user_id: number,
     post_id: number,
     deleted_yn: string
-}
+};
 
 export class Likes extends Model<LikesAttributes> {
     private readonly id! : number;
@@ -24,10 +23,10 @@ export class Likes extends Model<LikesAttributes> {
     private readonly updated_at!: Date;
 
     static associations: {
-        likeBelongsToUsers: Association<Likes, Users>;
-        likeBelongsToPosts: Association<Likes, Posts>;
+        userHasManyLikes: Association<Users, Likes>;
+        postHasManyLikes: Association<Posts, Likes>;
     }
-}
+};
 
 Likes.init(
     {
@@ -60,16 +59,28 @@ Likes.init(
         createdAt: 'created_at',
         updatedAt: 'updated_at'
     }
-)
+);
+
+Users.hasMany(Likes, {
+    sourceKey: 'id',
+    foreignKey: 'user_id',
+    as: 'userHasManyLikes'
+});
 
 Likes.belongsTo(Users, {
     targetKey: 'id',
     foreignKey: 'user_id',
-    as: 'likeBelongsToUsers'
-})
+    as: 'userHasManyLikes'
+});
+
+Posts.hasMany(Likes, {
+    sourceKey: 'id',
+    foreignKey: 'post_id',
+    as: 'postHasManyLikes'
+});
 
 Likes.belongsTo(Posts, {
     targetKey: 'id',
     foreignKey: 'post_id',
-    as: 'likeBelongsToPosts'
-})
+    as: 'postHasManyLikes'
+});
