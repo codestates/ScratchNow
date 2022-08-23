@@ -9,6 +9,6 @@ router.post('/logout', logout);
 router.post('/emailcheck', emailAuthentication);
 
 router.patch('/', modifyUserInfo);
-router.post('/', withdrawal);
+router.delete('/', withdrawal);
 
 export default router;
