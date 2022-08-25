@@ -5,13 +5,13 @@ import {
 import { sequelize } from './index';
 
 interface UsersAttributes {
-    id: number;
+    id?: number;
     email: string,
     password: string,
     nickname: string,
-    profile_image_url: string,
-    status_message: string,
-    deleted_yn: string
+    profile_image_url?: string,
+    status_message?: string,
+    deleted_yn?: string
 };
 
 export class Users extends Model<UsersAttributes> {
@@ -19,7 +19,7 @@ export class Users extends Model<UsersAttributes> {
     private email!: string;
     private password!: string;
     private nickname!: string;
-    private profile_image_url! : string;
+    private profile_image_url!: string;
     private status_message!: string;
     private readonly deleted_yn!: string;
     private readonly created_at!: Date;
