@@ -8,13 +8,13 @@ import {Users} from "./users";
 import {Posts} from "./posts";
 
 interface CommentsAttributes {
-    id: number;
+    id?: number;
     user_id: number,
     post_id: number,
-    original_comment_id: number,
+    original_comment_id?: number,
     anonymity_yn: string,
     text: string,
-    deleted_yn: string
+    deleted_yn?: string
 };
 
 export class Comments extends Model<CommentsAttributes> {

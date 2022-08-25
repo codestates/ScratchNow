@@ -7,12 +7,12 @@ import { sequelize } from './index';
 import {Users} from "./users";
 
 interface PostsAttributes {
-    id: number;
+    id?: number;
     painting_url: string,
-    text: string,
+    text?: string,
     user_id: number,
-    total_likes: number,
-    deleted_yn: string
+    total_likes?: number,
+    deleted_yn?: string
 };
 
 export class Posts extends Model<PostsAttributes> {

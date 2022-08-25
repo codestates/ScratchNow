@@ -8,16 +8,16 @@ import {Posts} from "./posts";
 import {Users} from "./users";
 
 interface LikesAttributes {
-    id: number;
+    id?: number;
     user_id: number,
     post_id: number,
-    deleted_yn: string
+    deleted_yn?: string
 };
 
 export class Likes extends Model<LikesAttributes> {
-    private readonly id! : number;
-    private user_id! : ForeignKey<Users['id']>;
-    private post_id! : ForeignKey<Posts['id']>;
+    private readonly id!: number;
+    private user_id!: ForeignKey<Users['id']>;
+    private post_id!: ForeignKey<Posts['id']>;
     private deleted_yn!: string;
     private readonly created_at!: Date;
     private readonly updated_at!: Date;
