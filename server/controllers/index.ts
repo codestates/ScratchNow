@@ -4,12 +4,14 @@ import PostsHandler from "./postsController";
 import FeedsHandler from "./feedsController";
 import LikesHandler from "./likesController";
 import CommentsHandler from "./commentsController";
+import {Sign} from "crypto";
 
 module.exports = {
     signup: SignHandler.signup,
     login: SignHandler.login,
     logout: SignHandler.logout,
     emailAuthentication: SignHandler.emailAuthentication,
+    tokenAuthentication: SignHandler.tokenAuthentication,
     modifyUserInfo: UserinfoHandler.modifyUserInfo,
     withdrawal: UserinfoHandler.withdrawal,
     getPost: PostsHandler.getPost,
