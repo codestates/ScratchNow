@@ -9,5 +9,6 @@ export const sequelize = new Sequelize(
         host: config.host,
         port: Number(config.port),
         dialect: 'mysql',
+        timezone: '+09:00'
     }
 )
