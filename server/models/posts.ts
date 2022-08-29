@@ -11,8 +11,7 @@ interface PostsAttributes {
     painting_url: string,
     text?: string,
     user_id: number,
-    total_likes?: number,
-    deleted_yn?: string
+    total_likes?: number
 };
 
 export class Posts extends Model<PostsAttributes> {
@@ -21,9 +20,9 @@ export class Posts extends Model<PostsAttributes> {
     private text!: string;
     private user_id!: ForeignKey<Users['id']>;
     private total_likes!: number;
-    private deleted_yn!: string;
     private readonly created_at!: Date;
     private readonly updated_at!: Date;
+    private readonly deleted_at!: Date;
 
     static associations: {
         userHasManyPosts: Association<Users, Posts>;
@@ -54,11 +53,6 @@ Posts.init(
             type: DataTypes.INTEGER,
             defaultValue: 0,
             allowNull: false
-        },
-        deleted_yn: {
-            type: DataTypes.STRING(1),
-            defaultValue: 'n',
-            allowNull: false
         }
     },
     {
@@ -66,9 +60,11 @@ Posts.init(
         tableName: 'posts',
         sequelize,
         freezeTableName: true,
+        paranoid: true,
         timestamps: true,
         createdAt: 'created_at',
-        updatedAt: 'updated_at'
+        updatedAt: 'updated_at',
+        deletedAt: 'deleted_at'
     }
 );
 

@@ -10,17 +10,16 @@ import {Users} from "./users";
 interface LikesAttributes {
     id?: number;
     user_id: number,
-    post_id: number,
-    deleted_yn?: string
+    post_id: number
 };
 
 export class Likes extends Model<LikesAttributes> {
     private readonly id!: number;
     private user_id!: ForeignKey<Users['id']>;
     private post_id!: ForeignKey<Posts['id']>;
-    private deleted_yn!: string;
     private readonly created_at!: Date;
     private readonly updated_at!: Date;
+    private readonly deleted_at!: Date;
 
     static associations: {
         userHasManyLikes: Association<Users, Likes>;
@@ -43,11 +42,6 @@ Likes.init(
         post_id: {
             type: DataTypes.INTEGER,
             allowNull: false
-        },
-        deleted_yn: {
-            type: DataTypes.STRING(1),
-            defaultValue: 'n',
-            allowNull: false
         }
     },
     {
@@ -55,9 +49,11 @@ Likes.init(
         tableName: 'likes',
         sequelize,
         freezeTableName: true,
+        paranoid: true,
         timestamps: true,
         createdAt: 'created_at',
-        updatedAt: 'updated_at'
+        updatedAt: 'updated_at',
+        deletedAt: 'deleted_at'
     }
 );
 
