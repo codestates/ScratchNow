@@ -37,7 +37,7 @@ app.listen(PORT, async () => {
     console.log(`Node ENV: ${process.env.NODE_ENV}`);
     await sequelize.authenticate()
         .then(async () => {
-            console.log('DB connection success');
+            console.log(`DB connection success port: ${process.env.DATABASE_PORT}`);
         })
         .catch((e) => {
             console.log('DB connection error: ', e);
