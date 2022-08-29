@@ -10,8 +10,7 @@ interface UsersAttributes {
     password: string,
     nickname: string,
     profile_image_url?: string,
-    status_message?: string,
-    deleted_yn?: string
+    status_message?: string
 };
 
 export class Users extends Model<UsersAttributes> {
@@ -21,9 +20,9 @@ export class Users extends Model<UsersAttributes> {
     private nickname!: string;
     private profile_image_url!: string;
     private status_message!: string;
-    private readonly deleted_yn!: string;
     private readonly created_at!: Date;
     private readonly updated_at!: Date;
+    private readonly deleted_at!: Date;
 };
 
 Users.init(
@@ -43,7 +42,7 @@ Users.init(
             allowNull: true
         },
         nickname: {
-            type: DataTypes.STRING(8),
+            type: DataTypes.STRING(10),
             allowNull: false
         },
         profile_image_url: {
@@ -51,13 +50,8 @@ Users.init(
             allowNull: true
         },
         status_message: {
-            type: DataTypes.STRING(20),
+            type: DataTypes.STRING(30),
             allowNull: true
-        },
-        deleted_yn: {
-            type: DataTypes.STRING(1),
-            defaultValue: 'n',
-            allowNull: false
         }
     },
     {
@@ -65,8 +59,10 @@ Users.init(
         tableName: 'users',
         sequelize,
         freezeTableName: true,
+        paranoid: true,
         timestamps: true,
         createdAt: 'created_at',
-        updatedAt: 'updated_at'
+        updatedAt: 'updated_at',
+        deletedAt: 'deleted_at'
     }
 );

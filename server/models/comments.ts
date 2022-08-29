@@ -13,8 +13,7 @@ interface CommentsAttributes {
     post_id: number,
     original_comment_id?: number,
     anonymity_yn: string,
-    text: string,
-    deleted_yn?: string
+    text: string
 };
 
 export class Comments extends Model<CommentsAttributes> {
@@ -24,9 +23,9 @@ export class Comments extends Model<CommentsAttributes> {
     private original_comment_id?: ForeignKey<Comments['id']>;
     private anonymity_yn?: string;
     private text!: string;
-    private deleted_yn?: string;
     private readonly created_at!: Date;
     private readonly updated_at!: Date;
+    private readonly deleted_at!: Date;
 
     static associations: {
         userHasManyComments: Association<Users, Comments>;
@@ -63,11 +62,6 @@ Comments.init(
         text: {
             type: DataTypes.STRING(100),
             allowNull: false
-        },
-        deleted_yn: {
-            type: DataTypes.STRING(1),
-            defaultValue: 'n',
-            allowNull: false
         }
     },
     {
@@ -75,9 +69,11 @@ Comments.init(
         tableName: 'comments',
         sequelize,
         freezeTableName: true,
+        paranoid: true,
         timestamps: true,
         createdAt: 'created_at',
-        updatedAt: 'updated_at'
+        updatedAt: 'updated_at',
+        deletedAt: 'deleted_at'
     }
 );
 
