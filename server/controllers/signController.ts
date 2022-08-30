@@ -1,9 +1,9 @@
-import express, { Request, Response } from "express";
+import { Request, Response } from "express";
 import { Users } from '../models/users';
-import { sign, verify } from 'jsonwebtoken';
 import * as bcrypt from 'bcrypt';
 import * as dotenv from "dotenv";
 import path from "path";
+import { generateAccessToken, tokenAuthentication } from './tokenFunctions';
 
 dotenv.config({
     path: path.resolve(
@@ -16,13 +16,13 @@ dotenv.config({
 const SALT_ROUND  = 4;
 const SECRET = String(process.env.JWT_SECRET);
 
-const signHandler = {
+const signController = {
     signup: async (req: Request, res: Response) => {
         const { email, password, nickname } = req.body;
-        const userinfo = await Users.findOne({ where:{ email } });
+        const emailValidity = await Users.findOne({ where:{ email } });
         const nicknameValidity = await Users.findOne({ where:{ nickname } });
 
-        if (userinfo) {
+        if (emailValidity) {
             res.json({ message: 'Email already exists' });
         } else if (nicknameValidity) {
             res.json({ message: 'Nickname already exists' });
@@ -46,37 +46,23 @@ const signHandler = {
         } else {
             const dataValues = userinfo.get({ plain: true });
             const hashedPassword = dataValues.password;
-            const checkPassword = await bcrypt.compare(password, hashedPassword);
+            const passwordValidity = await bcrypt.compare(password, hashedPassword);
 
-            if (!checkPassword) {
+            if (!passwordValidity) {
                 res.status(404).json({ message: `Wrong password` });
             } else {
-                const accessToken = sign(dataValues, SECRET, {expiresIn: '24h'});
-                await res.cookie('jwt', accessToken, {
+                const accessToken = generateAccessToken(dataValues);
+                res.cookie('jwt', accessToken, {
                     httpOnly: true, secure: true, sameSite: 'none'
                 }).status(200).json({ data: { accessToken }, message: `Login success with email: ${email}` })
             };
         };
     },
 
-    logout: async (req: Request, res: Response) => {
-        // res.clearCookie('accessToken', {
-        //     httpOnly: true, secure: true, sameSite: 'none'
-        // }).status(200).json({ message: 'Logout success'});
-    },
-
-    tokenAuthentication: (req: Request) => {
-        const cookie = req.cookies;
-
-        if (!cookie) {
-            return null;
-        }
-        try {
-            const token = cookie.jwt;
-            return verify(token, SECRET);
-        } catch (err) {
-            return null;
-        };
+    logout: async (res: Response) => {
+        res.clearCookie('accessToken', {
+            httpOnly: true, secure: true, sameSite: 'none'
+        }).status(200).json({ message: 'Logout success'});
     },
 
     emailAuthentication: async (req: Request, res: Response) => {
@@ -84,4 +70,4 @@ const signHandler = {
     }
 }
 
-export default signHandler;
+export default signController;
