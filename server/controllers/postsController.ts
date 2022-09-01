@@ -1,6 +1,6 @@
 import express, {Request, Response} from "express";
 
-const postsHandler = {
+const postsController = {
     getPost: async (req: Request, res: Response) => {
 
     },
@@ -18,4 +18,4 @@ const postsHandler = {
     }
 }
 
-export default postsHandler;
+export default postsController;

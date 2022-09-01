@@ -1,6 +1,6 @@
 import express, {Request, Response} from "express";
 
-const feedsHandler = {
+const feedsController = {
     getTotalFeed: async (req: Request, res: Response) => {
 
     },
@@ -10,4 +10,4 @@ const feedsHandler = {
     }
 };
 
-export default feedsHandler;
+export default feedsController;
