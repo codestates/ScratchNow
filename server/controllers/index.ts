@@ -1,7 +1,7 @@
 import SignController from "./signController";
 import userinfoController from "./userinfoController";
-import PostsHandler from "./postsController";
-import FeedsHandler from "./feedsController";
+import PostsController from "./postsController";
+import feedsController from "./feedsController";
 import LikesHandler from "./likesController";
 import CommentsHandler from "./commentsController";
 
@@ -12,12 +12,12 @@ module.exports = {
     emailAuthentication: SignController.emailAuthentication,
     modifyUserInfo: userinfoController.modifyUserInfo,
     withdrawal: userinfoController.withdrawal,
-    getPost: PostsHandler.getPost,
-    createPost: PostsHandler.createPost,
-    modifyPost: PostsHandler.modifyPost,
-    deletePost: PostsHandler.deletePost,
-    getTotalFeed: FeedsHandler.getTotalFeed,
-    getUserFeed: FeedsHandler.getUserFeed,
+    getPost: PostsController.getPost,
+    createPost: PostsController.createPost,
+    modifyPost: PostsController.modifyPost,
+    deletePost: PostsController.deletePost,
+    getTotalFeed: feedsController.getTotalFeed,
+    getUserFeed: feedsController.getUserFeed,
     addLike: LikesHandler.addLike,
     cancelLike: LikesHandler.cancelLike,
     createComment: CommentsHandler.createComment,
