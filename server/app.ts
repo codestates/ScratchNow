@@ -44,8 +44,8 @@ app.listen(PORT, async () => {
     .then(async () => {
       console.log(`DB connection success port: ${process.env.DATABASE_PORT}`);
     })
-    .catch((e) => {
-      console.log('DB connection error: ', e);
+    .catch((err) => {
+      console.log('DB connection error: ', err);
     });
   console.log(
     `ScratchNow Server Running! API Doc: ${PROTOCOL}://${myIP}:${PORT}/api-docs`,
