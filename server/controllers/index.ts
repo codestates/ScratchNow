@@ -1,8 +1,8 @@
 import SignController from './signController';
-import userinfoController from './userinfoController';
+import UserinfoController from './userinfoController';
 import PostsController from './postsController';
-import feedsController from './feedsController';
-import LikesHandler from './likesController';
+import FeedsController from './feedsController';
+import LikesController from './likesController';
 import CommentsHandler from './commentsController';
 
 module.exports = {
@@ -10,17 +10,17 @@ module.exports = {
   login: SignController.login,
   logout: SignController.logout,
   emailAuthentication: SignController.emailAuthentication,
-  modifyUserInfo: userinfoController.modifyUserInfo,
-  withdrawal: userinfoController.withdrawal,
+  modifyUserInfo: UserinfoController.modifyUserInfo,
+  withdrawal: UserinfoController.withdrawal,
   getPost: PostsController.getPost,
   createPost: PostsController.createPost,
   modifyPost: PostsController.modifyPost,
   deletePost: PostsController.deletePost,
-  getTotalFeedByDate: feedsController.getTotalFeedByDate,
-  getTotalFeedByLikes: feedsController.getTotalFeedByLikes,
-  getUserFeed: feedsController.getUserFeed,
-  addLike: LikesHandler.addLike,
-  cancelLike: LikesHandler.cancelLike,
+  getTotalFeedByDate: FeedsController.getTotalFeedByDate,
+  getTotalFeedByLikes: FeedsController.getTotalFeedByLikes,
+  getUserFeed: FeedsController.getUserFeed,
+  addLike: LikesController.addLike,
+  cancelLike: LikesController.cancelLike,
   createComment: CommentsHandler.createComment,
   modifyComment: CommentsHandler.modifyComment,
   deleteComment: CommentsHandler.deleteComment,
