@@ -3,7 +3,7 @@ import UserinfoController from './userinfoController';
 import PostsController from './postsController';
 import FeedsController from './feedsController';
 import LikesController from './likesController';
-import CommentsHandler from './commentsController';
+import commentsController from './commentsController';
 
 module.exports = {
   signup: SignController.signup,
@@ -21,8 +21,8 @@ module.exports = {
   getUserFeed: FeedsController.getUserFeed,
   addLike: LikesController.addLike,
   cancelLike: LikesController.cancelLike,
-  createComment: CommentsHandler.createComment,
-  modifyComment: CommentsHandler.modifyComment,
-  deleteComment: CommentsHandler.deleteComment,
-  getComments: CommentsHandler.getComments,
+  createComment: commentsController.createComment,
+  modifyComment: commentsController.modifyComment,
+  deleteComment: commentsController.deleteComment,
+  getComments: commentsController.getComments,
 };
