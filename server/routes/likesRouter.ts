@@ -1,9 +1,9 @@
 import { Router } from 'express';
-const { addLike, cancelLike } = require('../controllers');
+import LikesController from '../controllers/likesController';
 
 const router = Router();
 
-router.post('/', addLike);
-router.delete('/', cancelLike);
+router.post('/', LikesController.addLike);
+router.delete('/', LikesController.cancelLike);
 
 export default router;

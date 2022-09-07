@@ -1,16 +1,11 @@
 import { Router } from 'express';
-const {
-  createPost,
-  modifyPost,
-  deletePost,
-  getPost,
-} = require('../controllers');
+import PostsController from '../controllers/postsController';
 
 const router = Router();
 
-router.post('/', createPost);
-router.patch('/', modifyPost);
-router.delete('/', deletePost);
-router.get('/', getPost);
+router.post('/', PostsController.createPost);
+router.patch('/', PostsController.modifyPost);
+router.delete('/', PostsController.deletePost);
+router.get('/', PostsController.getPost);
 
 export default router;
