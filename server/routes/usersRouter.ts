@@ -1,14 +1,19 @@
 import { Router } from 'express';
-const { signup, login, logout, emailAuthentication, modifyUserInfo, withdrawal } = require('../controllers');
+import SignController from '../controllers/signController';
+import UserinfoController from '../controllers/userinfoController';
 
 const router = Router();
 
-router.post('/', signup);
-router.post('/login', login);
-router.post('/logout', logout);
-router.post('/emailcheck', emailAuthentication);
+router.post('/', SignController.signup);
+router.post('/login', SignController.login);
+router.post('/logout', SignController.logout);
+router.post('/emailcheck', SignController.emailAuthentication);
 
-router.patch('/', modifyUserInfo);
-router.delete('/', withdrawal);
+router.get('/', UserinfoController.getUserInfo);
+router.patch('/profileimagenull', UserinfoController.deleteProfileImage);
+router.post('/nicknamecheck', UserinfoController.checkNickname);
+router.patch('/', UserinfoController.updateUserInfo);
+router.patch('/password', UserinfoController.updatePassword);
+router.delete('/', UserinfoController.withdrawal);
 
 export default router;

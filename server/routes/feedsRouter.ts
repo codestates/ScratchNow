@@ -1,14 +1,10 @@
 import { Router } from 'express';
-const {
-  getTotalFeedByDate,
-  getTotalFeedByLikes,
-  getUserFeed,
-} = require('../controllers');
+import FeedsController from '../controllers/feedsController';
 
 const router = Router();
 
-router.get('/feed/date', getTotalFeedByDate);
-router.get('/feed/likes', getTotalFeedByLikes);
-router.get('/feed/user', getUserFeed);
+router.get('/feed/date', FeedsController.getTotalFeedByDate);
+router.get('/feed/likes', FeedsController.getTotalFeedByLikes);
+router.get('/feed/user', FeedsController.getUserFeed);
 
 export default router;
