@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { Users } from '../models/users';
 import * as bcrypt from 'bcrypt';
-import { generateAccessToken } from './tokenFunctions';
+import { generateAccessToken, sendAuthNumber } from './authFunctions';
 
 const SALT_ROUND = 4;
 
@@ -68,7 +68,11 @@ const signController = {
       .json({ message: 'Logout success' });
   },
 
-  emailAuthentication: async (req: Request, res: Response) => {},
+  emailAuthentication: async (req: Request, res: Response) => {
+    const { email } = req.body;
+
+    await sendAuthNumber(email, res);
+  },
 };
 
 export default signController;
