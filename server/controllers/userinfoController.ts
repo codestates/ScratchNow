@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { Users } from '../models/users';
 import { Posts } from '../models/posts';
 import * as bcrypt from 'bcrypt';
-import { tokenAuthentication } from './tokenFunctions';
+import { tokenAuthentication } from './authFunctions';
 
 const SALT_ROUND = 4;
 
