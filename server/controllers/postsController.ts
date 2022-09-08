@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { Posts } from '../models/posts';
-import { tokenAuthentication } from './tokenFunctions';
+import { tokenAuthentication } from './authFunctions';
 
 const postsController = {
   getPost: async (req: Request, res: Response) => {

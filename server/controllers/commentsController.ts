@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { Comments } from '../models/comments';
-import { tokenAuthentication } from './tokenFunctions';
+import { tokenAuthentication } from './authFunctions';
 
 const commentsController = {
   createComment: async (req: Request, res: Response) => {
