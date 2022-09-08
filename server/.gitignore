@@ -4,3 +4,4 @@ package-lock.json
 build
 .dev.env
 .prod.env
+/config/emailAuth.ts
