@@ -3,9 +3,9 @@ import { sequelize } from './index';
 
 interface UsersAttributes {
   id?: number;
-  email: string;
-  password: string;
-  nickname: string;
+  email?: string;
+  password?: string;
+  nickname?: string;
   profile_image_url?: string;
   status_message?: string;
 }
@@ -40,7 +40,7 @@ Users.init(
     },
     nickname: {
       type: DataTypes.STRING(10),
-      allowNull: false,
+      allowNull: true,
     },
     profile_image_url: {
       type: DataTypes.STRING,
