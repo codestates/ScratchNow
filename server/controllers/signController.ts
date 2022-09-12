@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { Users } from '../models/users';
 import { generateAccessToken, sendAuthNumber } from './authFunctions';
+import { google } from 'googleapis';
 import * as bcrypt from 'bcrypt';
 import axios from 'axios';
 
@@ -21,7 +22,7 @@ const signController = {
       const hashedPassword = await bcrypt.hash(password, salt);
 
       await Users.create({ email, password: hashedPassword, nickname }).then(
-        (data) => {
+        () => {
           res.status(201).json({ message: `Created the user ${nickname}` });
         },
       );
@@ -73,8 +74,8 @@ const signController = {
     const baseUrl = 'https://kauth.kakao.com/oauth/authorize';
 
     const config: any = {
-      client_id: process.env.CLIENT_ID,
-      redirect_uri: process.env.REDIRECT_URI,
+      client_id: process.env.KAKAO_CLIENT_ID,
+      redirect_uri: process.env.KAKAO_REDIRECT_URI,
       response_type: 'code',
     };
 
@@ -85,10 +86,10 @@ const signController = {
   kakaoToken: async (req: Request, res: Response) => {
     const baseUrl = 'https://kauth.kakao.com/oauth/token';
     const config: any = {
-      client_id: process.env.CLIENT_ID,
-      client_secret: process.env.CLIENT_SECRET,
+      client_id: process.env.KAKAO_CLIENT_ID,
+      client_secret: process.env.KAKAO_CLIENT_SECRET,
       grant_type: 'authorization_code',
-      redirect_uri: process.env.REDIRECT_URI,
+      redirect_uri: process.env.KAKAO_REDIRECT_URI,
       code: req.query.code,
     };
 
@@ -122,6 +123,50 @@ const signController = {
         });
       } else {
         res.json({ message: 'No access token from Kakao' });
+      }
+    } catch (err) {
+      res.status(500).json(err);
+    }
+  },
+
+  googleOAuth: async (req: Request, res: Response) => {
+    res.redirect(
+      `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.GOOGLE_CLIENT_ID}&redirect_uri=${process.env.GOOGLE_REDIRECT_URI}&response_type=code&scope=https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email&state=google`,
+    );
+  },
+
+  googleCallback: async (req: Request, res: Response) => {
+    const code = req.query.code;
+
+    try {
+      const oauth2Client = new google.auth.OAuth2(
+        process.env.GOOGLE_CLIENT_ID,
+        process.env.GOOGLE_CLIENT_SECRET,
+        process.env.GOOGLE_REDIRECT_URI,
+      );
+
+      const { tokens } = await oauth2Client.getToken(<string>code);
+
+      if (tokens) {
+        oauth2Client.setCredentials(tokens);
+
+        const userinfo = await axios.get(
+          `https://www.googleapis.com/oauth2/v3/userinfo?access_token=${tokens.access_token}`,
+        );
+
+        await Users.findOrCreate({
+          where: {
+            email: userinfo.data.email,
+            profile_image_url: userinfo.data.picture,
+          },
+        }).then((data) => {
+          res.status(200).json({
+            userdata: { data, tokens },
+            message: 'Google login result',
+          });
+        });
+      } else {
+        res.json({ message: 'No token from Google' });
       }
     } catch (err) {
       res.status(500).json(err);

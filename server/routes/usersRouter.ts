@@ -10,6 +10,8 @@ router.post('/logout', SignController.logout);
 router.post('/emailcheck', SignController.emailAuthentication);
 router.get('/kakao/login', SignController.kakaoOAuth);
 router.get('/kakao/token', SignController.kakaoToken);
+router.get('/google/login', SignController.googleOAuth);
+router.get('/google/callback', SignController.googleCallback);
 
 router.get('/', UserinfoController.getUserInfo);
 router.patch('/profileimagenull', UserinfoController.deleteProfileImage);
