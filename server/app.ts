@@ -48,7 +48,7 @@ app.listen(PORT, async () => {
       '                                                                                                                                                                                             ',
   );
   console.log(
-    `===== 🎨️Environment Info 🎨 ======\nUser home: ${
+    `======================= 🎨️Environment Info 🎨 =======================\nUser home: ${
       os.userInfo().username
     }\nNode Version: ${process.version}\nNode ENV: ${process.env.NODE_ENV}`,
   );
@@ -56,13 +56,10 @@ app.listen(PORT, async () => {
     .authenticate()
     .then(async () => {
       console.log(
-        `DB connection success! DB Port: ${process.env.DATABASE_PORT}`,
+        `DB connection success! DB Port: ${process.env.DATABASE_PORT}\nScratchNow Server Running! API Doc: ${PROTOCOL}://${myIP}:${PORT}/api-docs`,
       );
     })
     .catch((err) => {
       console.log('DB connection error: ', err);
     });
-  console.log(
-    `ScratchNow Server Running! API Doc: ${PROTOCOL}://${myIP}:${PORT}/api-docs`,
-  );
 });
