@@ -3,7 +3,6 @@ import LikesController from '../controllers/likesController';
 
 const router = Router();
 
-router.post('/', LikesController.addLike);
-router.delete('/', LikesController.cancelLike);
+router.post('/', LikesController.addOrCancelLike);
 
 export default router;
