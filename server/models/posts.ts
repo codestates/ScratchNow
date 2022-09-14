@@ -4,9 +4,9 @@ import { Users } from './users';
 
 interface PostsAttributes {
   id?: number;
-  painting_url: string;
+  painting_url?: string;
   text?: string;
-  user_id: number;
+  user_id?: number;
   total_likes?: number;
 }
 
