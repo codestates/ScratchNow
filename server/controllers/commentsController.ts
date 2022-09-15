@@ -1,23 +1,36 @@
 import { Request, Response } from 'express';
 import { Comments } from '../models/comments';
 import { tokenAuthentication } from './authFunctions';
+import { Users } from '../models/users';
 
 const commentsController = {
   createComment: async (req: Request, res: Response) => {
     const tokenValidity = tokenAuthentication(req);
-    const { user_id, post_id, text, anonymity_yn } = req.body;
+    const { user_id, post_id, text, anonymity_yn, original_comment_id } =
+      req.body;
+    const commentValidity = await Comments.findOne({
+      where: { id: Number(original_comment_id) },
+    });
 
     if (!tokenValidity) {
       res.status(404).json({ message: 'Invalid Token' });
+    } else if (original_comment_id !== null && !commentValidity) {
+      res
+        .status(404)
+        .json({ message: `No original comment ${original_comment_id}` });
     } else {
       try {
-        await Comments.create({ user_id, post_id, anonymity_yn, text }).then(
-          (data) => {
-            res
-              .status(201)
-              .json({ postData: data, message: `Created the comment` });
-          },
-        );
+        await Comments.create({
+          user_id,
+          post_id,
+          anonymity_yn,
+          text,
+          original_comment_id,
+        }).then((data) => {
+          res
+            .status(201)
+            .json({ commentData: data, message: `Created the comment` });
+        });
       } catch (err) {
         res.status(500).json({ message: 'Failed to create comment' });
       }
@@ -35,8 +48,19 @@ const commentsController = {
         await Comments.update(
           { text, anonymity_yn },
           { where: { id: comment_id } },
-        ).then(() => {
-          res.status(200).json({ message: `Modified the comment` });
+        ).then(async () => {
+          const data = await Comments.findOne({
+            where: { id: comment_id },
+            attributes: [
+              'id',
+              'original_comment_id',
+              'anonymity_yn',
+              'updated_at',
+            ],
+          });
+          res
+            .status(200)
+            .json({ commentInfo: data, message: `Modified the comment` });
         });
       } catch (err) {
         res.status(500).json({ message: 'Failed to modify comment' });
@@ -47,31 +71,56 @@ const commentsController = {
   deleteComment: async (req: Request, res: Response) => {
     const tokenValidity = tokenAuthentication(req);
     const { comment_id } = req.body;
+    const commentValidity = await Comments.findOne({
+      where: { id: comment_id },
+    });
 
     if (!tokenValidity) {
       res.status(404).json({ message: 'Invalid Token' });
+    } else if (!commentValidity) {
+      res.status(404).json({ message: `No comment ${comment_id}` });
     } else {
       try {
         await Comments.destroy({ where: { id: comment_id } }).then(() => {
           res.status(200).json({ message: `Soft deleted the comment` });
         });
       } catch (err) {
-        res.status(500).json({ message: 'Failed to delete comment' });
+        res.status(500).json({ message: 'Failed to delete the comment' });
       }
     }
   },
 
   getComments: async (req: Request, res: Response) => {
-    const { post_id } = req.body;
+    const { id } = req.query;
 
     try {
-      await Comments.findAll({ where: { post_id } }).then((data) => {
-        res
-          .status(200)
-          .json({ data: data, message: `Comments of post ${post_id}` });
+      await Comments.findAll({
+        where: { post_id: Number(id) },
+        order: [['created_at', 'DESC']],
+        include: [
+          {
+            model: Users,
+            as: 'userHasManyComments',
+            attributes: ['id', 'nickname', 'profile_image_url'],
+          },
+          {
+            model: Comments,
+            as: 'commentHasManyComments',
+            attributes: ['id', 'text', 'updated_at'],
+            include: [
+              {
+                model: Users,
+                as: 'userHasManyComments',
+                attributes: ['id', 'nickname', 'profile_image_url'],
+              },
+            ],
+          },
+        ],
+      }).then((data) => {
+        res.status(200).json({ data: data, message: `Comments of post ${id}` });
       });
     } catch (err) {
-      res.status(500).json({ message: 'Failed giving comments' });
+      res.status(500).json({ message: 'Failed providing comments' });
     }
   },
 };
