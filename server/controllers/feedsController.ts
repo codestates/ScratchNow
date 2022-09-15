@@ -11,10 +11,14 @@ const feedsController = {
         'painting_url',
         'user_id',
         'total_likes',
-        'updated_at',
+        'created_at',
       ],
       include: [
-        { model: Users, attributes: ['id', 'nickname', 'profile_image_url'] },
+        {
+          model: Users,
+          as: 'userHasManyPosts',
+          attributes: ['id', 'nickname', 'profile_image_url'],
+        },
       ],
     }).then((data) => {
       res.status(200).json({
@@ -26,16 +30,23 @@ const feedsController = {
 
   getTotalFeedByLikes: async (req: Request, res: Response) => {
     await Posts.findAll({
-      order: [['total_likes', 'DESC']],
+      order: [
+        ['total_likes', 'DESC'],
+        ['created_at', 'DESC'],
+      ],
       attributes: [
         'id',
         'painting_url',
         'user_id',
         'total_likes',
-        'updated_at',
+        'created_at',
       ],
       include: [
-        { model: Users, attributes: ['id', 'nickname', 'profile_image_url'] },
+        {
+          model: Users,
+          as: 'userHasManyPosts',
+          attributes: ['id', 'nickname', 'profile_image_url'],
+        },
       ],
     }).then((data) => {
       res.status(200).json({
@@ -46,18 +57,12 @@ const feedsController = {
   },
 
   getUserFeed: async (req: Request, res: Response) => {
-    const { id } = req.body;
+    const { id } = req.query;
 
-    await Users.findOne({
-      where: { id },
-      attributes: ['id', 'nickname', 'profile_image_url', 'status_message'],
-      include: [
-        {
-          model: Posts,
-          order: ['created_at', 'DESC'],
-          attributes: ['id', 'painting_url', 'total_likes', 'created_at'],
-        },
-      ],
+    await Posts.findAll({
+      where: { user_id: Number(id) },
+      order: [['created_at', 'DESC']],
+      attributes: ['id', 'painting_url', 'total_likes', 'created_at'],
     }).then((data) => {
       res.status(200).json({
         data: data,

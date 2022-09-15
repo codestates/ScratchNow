@@ -25,15 +25,18 @@ const userinfoController = {
 
   deleteProfileImage: async (req: Request, res: Response) => {
     const tokenValidity = tokenAuthentication(req);
-    const { id } = req.body;
+    const { user_id } = req.body;
 
     if (!tokenValidity) {
       res.status(404).json({ message: 'Invalid Token' });
     } else {
-      await Users.update({ profile_image_url: '' }, { where: id }).then(() => {
+      await Users.update(
+        { profile_image_url: '' },
+        { where: { id: user_id } },
+      ).then(() => {
         res
           .status(200)
-          .json({ message: `Deleted the profile image of user ${id}` });
+          .json({ message: `Deleted the profile image of user ${user_id}` });
       });
     }
   },
@@ -61,7 +64,7 @@ const userinfoController = {
     } else {
       await Users.update(
         { profile_image_url, nickname, status_message },
-        { where: id },
+        { where: { id } },
       ).then(() => {
         res
           .status(200)
@@ -72,7 +75,7 @@ const userinfoController = {
 
   updatePassword: async (req: Request, res: Response) => {
     const tokenValidity = tokenAuthentication(req);
-    const { id, password } = req.body;
+    const { user_id, password } = req.body;
 
     if (!tokenValidity) {
       res.status(404).json({ message: 'Invalid Token' });
@@ -80,13 +83,14 @@ const userinfoController = {
       const salt = await bcrypt.genSalt(SALT_ROUND);
       const hashedPassword = await bcrypt.hash(password, salt);
 
-      await Users.update({ password: hashedPassword }, { where: id }).then(
-        () => {
-          res
-            .status(200)
-            .json({ message: `Changed the password of user ${id}` });
-        },
-      );
+      await Users.update(
+        { password: hashedPassword },
+        { where: { id: user_id } },
+      ).then(() => {
+        res
+          .status(200)
+          .json({ message: `Changed the password of user ${user_id}` });
+      });
     }
   },
 

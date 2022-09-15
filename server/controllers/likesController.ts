@@ -4,11 +4,9 @@ import { Posts } from '../models/posts';
 
 const likesController = {
   updateLikesCount: async (post_id: number) => {
-    const totalLikesAfter = await Likes.count({ where: { id: post_id } });
-    await Posts.update(
-      { total_likes: totalLikesAfter },
-      { where: { id: post_id } },
-    );
+    await Likes.count({ where: { post_id } }).then((counts) => {
+      Posts.update({ total_likes: counts }, { where: { id: post_id } });
+    });
   },
 
   addOrCancelLike: async (req: Request, res: Response) => {
@@ -17,8 +15,8 @@ const likesController = {
 
     if (likedOrNot) {
       await Likes.destroy({ where: { user_id, post_id } })
-        .then(async () => {
-          await likesController.updateLikesCount(post_id);
+        .then(() => {
+          likesController.updateLikesCount(post_id);
         })
         .then(() => {
           res
@@ -27,8 +25,8 @@ const likesController = {
         });
     } else {
       await Likes.create({ user_id, post_id })
-        .then(async () => {
-          await likesController.updateLikesCount(post_id);
+        .then(() => {
+          likesController.updateLikesCount(post_id);
         })
         .then(() => {
           res.status(201).json({ message: `Liked the post ${post_id}` });
