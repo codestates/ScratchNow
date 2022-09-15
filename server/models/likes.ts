@@ -14,8 +14,6 @@ export class Likes extends Model<LikesAttributes> {
   private user_id!: ForeignKey<Users['id']>;
   private post_id!: ForeignKey<Posts['id']>;
   private readonly created_at!: Date;
-  private readonly updated_at!: Date;
-  private readonly deleted_at!: Date;
 
   static associations: {
     userHasManyLikes: Association<Users, Likes>;
@@ -47,7 +45,6 @@ Likes.init(
     freezeTableName: true,
     timestamps: true,
     createdAt: 'created_at',
-    updatedAt: 'updated_at',
   },
 );
 
