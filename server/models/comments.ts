@@ -44,7 +44,7 @@ Comments.init(
     },
     post_id: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
     },
     original_comment_id: {
       type: DataTypes.INTEGER,
@@ -97,8 +97,8 @@ Comments.belongsTo(Posts, {
   as: 'postHasManyComments',
 });
 
-Comments.belongsTo(Comments, {
-  targetKey: 'id',
+Comments.hasMany(Comments, {
+  sourceKey: 'id',
   foreignKey: 'original_comment_id',
   as: 'commentHasManyComments',
 });
