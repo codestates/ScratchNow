@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { Comments } from '../models/comments';
-import { tokenAuthentication } from './authFunctions';
 import { Users } from '../models/users';
+import { tokenAuthentication } from './authFunctions';
 
 const commentsController = {
   createComment: async (req: Request, res: Response) => {
@@ -9,15 +9,15 @@ const commentsController = {
     const { user_id, post_id, text, anonymity_yn, original_comment_id } =
       req.body;
     const commentValidity = await Comments.findOne({
-      where: { id: Number(original_comment_id) },
+      where: { id: original_comment_id },
     });
 
     if (!tokenValidity) {
-      res.status(404).json({ message: 'Invalid Token' });
+      res.status(401).json({ message: 'Invalid Token' });
     } else if (original_comment_id !== null && !commentValidity) {
-      res
-        .status(404)
-        .json({ message: `No original comment ${original_comment_id}` });
+      res.status(400).json({
+        message: `Invalid original comment id ${original_comment_id}`,
+      });
     } else {
       try {
         await Comments.create({
@@ -27,9 +27,7 @@ const commentsController = {
           text,
           original_comment_id,
         }).then((data) => {
-          res
-            .status(201)
-            .json({ commentData: data, message: `Created the comment` });
+          res.status(201).json({ data: data, message: `Created the comment` });
         });
       } catch (err) {
         res.status(500).json({ message: 'Failed to create comment' });
@@ -42,14 +40,14 @@ const commentsController = {
     const { comment_id, text, anonymity_yn } = req.body;
 
     if (!tokenValidity) {
-      res.status(404).json({ message: 'Invalid Token' });
+      res.status(401).json({ message: 'Invalid Token' });
     } else {
       try {
         await Comments.update(
           { text, anonymity_yn },
           { where: { id: comment_id } },
         ).then(async () => {
-          const data = await Comments.findOne({
+          const updatedCommentInfo = await Comments.findOne({
             where: { id: comment_id },
             attributes: [
               'id',
@@ -58,9 +56,10 @@ const commentsController = {
               'updated_at',
             ],
           });
-          res
-            .status(200)
-            .json({ commentInfo: data, message: `Modified the comment` });
+          res.status(200).json({
+            data: updatedCommentInfo,
+            message: `Modified the comment`,
+          });
         });
       } catch (err) {
         res.status(500).json({ message: 'Failed to modify comment' });
@@ -76,7 +75,7 @@ const commentsController = {
     });
 
     if (!tokenValidity) {
-      res.status(404).json({ message: 'Invalid Token' });
+      res.status(401).json({ message: 'Invalid Token' });
     } else if (!commentValidity) {
       res.status(404).json({ message: `No comment ${comment_id}` });
     } else {
@@ -96,7 +95,14 @@ const commentsController = {
     try {
       await Comments.findAll({
         where: { post_id: Number(id) },
-        order: [['created_at', 'DESC']],
+        order: [
+          ['created_at', 'DESC'],
+          [
+            { model: Comments, as: 'commentHasManyComments' },
+            'created_at',
+            'DESC',
+          ],
+        ],
         include: [
           {
             model: Users,
