@@ -17,7 +17,7 @@ dotenv.config({
 const SECRET = String(process.env.JWT_SECRET);
 
 export const generateAccessToken = (data: object) => {
-  return sign(data, SECRET, { expiresIn: '12h' });
+  return sign(data, SECRET, { expiresIn: '6h' });
 };
 
 export const tokenAuthentication = (req: Request) => {
