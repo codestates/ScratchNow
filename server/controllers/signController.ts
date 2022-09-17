@@ -14,18 +14,30 @@ const signController = {
     const nicknameValidity = await Users.findOne({ where: { nickname } });
 
     if (emailValidity) {
-      res.status(404).json({ message: 'Email already exists' });
+      const dataValues = emailValidity.get({ plain: true });
+      const signType = dataValues.sign_type;
+
+      if (signType == 1) {
+        res.status(400).json({ message: 'Email already exists with Kakao' });
+      } else if (signType == 2) {
+        res.status(400).json({ message: 'Email already exists with Google' });
+      } else {
+        res.status(400).json({ message: 'Email already exists with JWT' });
+      }
     } else if (nicknameValidity) {
-      res.status(404).json({ message: 'Nickname already exists' });
+      res.status(400).json({ message: 'Nickname already exists' });
     } else {
       const salt = await bcrypt.genSalt(SALT_ROUND);
       const hashedPassword = await bcrypt.hash(password, salt);
 
-      await Users.create({ email, password: hashedPassword, nickname }).then(
-        () => {
-          res.status(201).json({ message: `Created the user ${nickname}` });
-        },
-      );
+      await Users.create({
+        email,
+        password: hashedPassword,
+        nickname,
+        sign_type: 0,
+      }).then(() => {
+        res.status(201).json({ message: `Created the user ${nickname}` });
+      });
     }
   },
 
@@ -37,13 +49,22 @@ const signController = {
       res.status(404).json({ message: `No user data with email: ${email}` });
     } else {
       const dataValues = userinfo.get({ plain: true });
+      const signType = dataValues.sign_type;
       const hashedPassword = dataValues.password;
       const passwordValidity = bcrypt.compare(password, <string>hashedPassword);
 
-      if (!passwordValidity) {
-        res.status(404).json({ message: `Wrong password` });
+      if (signType !== 0) {
+        res.status(404).json({ message: `Email is registered with OAuth` });
+      } else if (!passwordValidity) {
+        res.status(403).json({ message: `Wrong password` });
       } else {
-        const accessToken = generateAccessToken(dataValues);
+        const payload = {
+          id: dataValues.id,
+          email: dataValues.email,
+          nickname: dataValues.nickname,
+        };
+        const accessToken = generateAccessToken(payload);
+
         res
           .cookie('jwt', accessToken, {
             httpOnly: true,
@@ -112,8 +133,7 @@ const signController = {
         await Users.findOrCreate({
           where: {
             email: userinfo.data.kakao_account.email,
-            profile_image_url:
-              userinfo.data.kakao_account.profile.profile_image_url,
+            sign_type: 1,
           },
         }).then((data) => {
           res.status(200).json({
@@ -122,17 +142,26 @@ const signController = {
           });
         });
       } else {
-        res.json({ message: 'No access token from Kakao' });
+        res.status(400).json({ message: 'No access token from Kakao' });
       }
     } catch (err) {
-      res.status(500).json(err);
+      res.json(err);
     }
   },
 
   googleOAuth: async (req: Request, res: Response) => {
-    res.redirect(
-      `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.GOOGLE_CLIENT_ID}&redirect_uri=${process.env.GOOGLE_REDIRECT_URI}&response_type=code&scope=https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email&state=google`,
-    );
+    const baseUrl = 'https://accounts.google.com/o/oauth2/v2/auth';
+
+    const config: any = {
+      client_id: process.env.GOOGLE_CLIENT_ID,
+      redirect_uri: process.env.GOOGLE_REDIRECT_URI,
+      response_type: 'code',
+      scope: process.env.GOOGLE_OAUTH_SCOPE,
+      state: 'google',
+    };
+
+    const params = new URLSearchParams(config).toString();
+    res.redirect(`${baseUrl}?${params}`);
   },
 
   googleCallback: async (req: Request, res: Response) => {
@@ -157,7 +186,7 @@ const signController = {
         await Users.findOrCreate({
           where: {
             email: userinfo.data.email,
-            profile_image_url: userinfo.data.picture,
+            sign_type: 2,
           },
         }).then((data) => {
           res.status(200).json({
@@ -166,10 +195,10 @@ const signController = {
           });
         });
       } else {
-        res.json({ message: 'No token from Google' });
+        res.status(400).json({ message: 'No token from Google' });
       }
     } catch (err) {
-      res.status(500).json(err);
+      res.json(err);
     }
   },
 
