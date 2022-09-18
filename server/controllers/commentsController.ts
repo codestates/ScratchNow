@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import { Comments } from '../models/comments';
-import { Users } from '../models/users';
+import { Comment } from '../models/comment';
+import { User } from '../models/user';
 import { tokenAuthentication } from './authFunctions';
 
 const commentsController = {
@@ -8,7 +8,7 @@ const commentsController = {
     const tokenValidity = tokenAuthentication(req);
     const { user_id, post_id, text, anonymity_yn, original_comment_id } =
       req.body;
-    const commentValidity = await Comments.findOne({
+    const commentValidity = await Comment.findOne({
       where: { id: original_comment_id },
     });
 
@@ -20,7 +20,7 @@ const commentsController = {
       });
     } else {
       try {
-        await Comments.create({
+        await Comment.create({
           user_id,
           post_id,
           anonymity_yn,
@@ -43,11 +43,11 @@ const commentsController = {
       res.status(401).json({ message: 'Invalid Token' });
     } else {
       try {
-        await Comments.update(
+        await Comment.update(
           { text, anonymity_yn },
           { where: { id: comment_id } },
         ).then(async () => {
-          const updatedCommentInfo = await Comments.findOne({
+          const updatedCommentInfo = await Comment.findOne({
             where: { id: comment_id },
             attributes: [
               'id',
@@ -70,7 +70,7 @@ const commentsController = {
   deleteComment: async (req: Request, res: Response) => {
     const tokenValidity = tokenAuthentication(req);
     const { comment_id } = req.body;
-    const commentValidity = await Comments.findOne({
+    const commentValidity = await Comment.findOne({
       where: { id: comment_id },
     });
 
@@ -80,7 +80,7 @@ const commentsController = {
       res.status(404).json({ message: `No comment ${comment_id}` });
     } else {
       try {
-        await Comments.destroy({ where: { id: comment_id } }).then(() => {
+        await Comment.destroy({ where: { id: comment_id } }).then(() => {
           res.status(200).json({ message: `Soft deleted the comment` });
         });
       } catch (err) {
@@ -93,29 +93,29 @@ const commentsController = {
     const { id } = req.query;
 
     try {
-      await Comments.findAll({
+      await Comment.findAll({
         where: { post_id: Number(id) },
         order: [
           ['created_at', 'DESC'],
           [
-            { model: Comments, as: 'commentHasManyComments' },
+            { model: Comment, as: 'commentHasManyComments' },
             'created_at',
             'DESC',
           ],
         ],
         include: [
           {
-            model: Users,
+            model: User,
             as: 'userHasManyComments',
             attributes: ['id', 'nickname', 'profile_image_url'],
           },
           {
-            model: Comments,
+            model: Comment,
             as: 'commentHasManyComments',
             attributes: ['id', 'text', 'updated_at'],
             include: [
               {
-                model: Users,
+                model: User,
                 as: 'userHasManyComments',
                 attributes: ['id', 'nickname', 'profile_image_url'],
               },

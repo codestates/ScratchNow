@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import { Users } from '../models/users';
-import { Posts } from '../models/posts';
+import { User } from '../models/user';
+import { Post } from '../models/post';
 import { tokenAuthentication } from './authFunctions';
 import * as bcrypt from 'bcrypt';
 
@@ -10,11 +10,11 @@ const userinfoController = {
   getUserInfo: async (req: Request, res: Response) => {
     const { id } = req.body;
 
-    await Users.findOne({
+    await User.findOne({
       where: id,
       attributes: ['id', 'nickname', 'profile_image_url', 'status_message'],
     }).then(async (userData) => {
-      const postCount = await Posts.count({ where: { user_id: id } });
+      const postCount = await Post.count({ where: { user_id: id } });
 
       res.status(200).json({
         data: { userData, postCount },
@@ -30,7 +30,7 @@ const userinfoController = {
     if (!tokenValidity) {
       res.status(404).json({ message: 'Invalid Token' });
     } else {
-      await Users.update(
+      await User.update(
         { profile_image_url: '' },
         { where: { id: user_id } },
       ).then(() => {
@@ -44,7 +44,7 @@ const userinfoController = {
   checkNickname: async (req: Request, res: Response) => {
     const tokenValidity = tokenAuthentication(req);
     const { nickname } = req.body;
-    const nicknameValidity = await Users.findOne({ where: { nickname } });
+    const nicknameValidity = await User.findOne({ where: { nickname } });
 
     if (!tokenValidity) {
       res.status(404).json({ message: 'Invalid Token' });
@@ -62,7 +62,7 @@ const userinfoController = {
     if (!tokenValidity) {
       res.status(404).json({ message: 'Invalid Token' });
     } else {
-      await Users.update(
+      await User.update(
         { profile_image_url, nickname, status_message },
         { where: { id } },
       ).then(() => {
@@ -83,7 +83,7 @@ const userinfoController = {
       const salt = await bcrypt.genSalt(SALT_ROUND);
       const hashedPassword = await bcrypt.hash(password, salt);
 
-      await Users.update(
+      await User.update(
         { password: hashedPassword },
         { where: { id: user_id } },
       ).then(() => {
@@ -102,7 +102,7 @@ const userinfoController = {
     if (!tokenValidity) {
       res.status(404).json({ message: 'Invalid Token' });
     } else {
-      await Users.destroy({ where: { id } }).then(() => {
+      await User.destroy({ where: { id } }).then(() => {
         res.status(200).json({ message: `Soft deleted the account ${email}` });
       });
     }

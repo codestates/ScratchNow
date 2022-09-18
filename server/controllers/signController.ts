@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { Users } from '../models/users';
+import { User } from '../models/user';
 import { generateAccessToken, sendAuthNumber } from './authFunctions';
 import { google } from 'googleapis';
 import * as bcrypt from 'bcrypt';
@@ -10,8 +10,8 @@ const SALT_ROUND = 4;
 const signController = {
   signup: async (req: Request, res: Response) => {
     const { email, password, nickname } = req.body;
-    const emailValidity = await Users.findOne({ where: { email } });
-    const nicknameValidity = await Users.findOne({ where: { nickname } });
+    const emailValidity = await User.findOne({ where: { email } });
+    const nicknameValidity = await User.findOne({ where: { nickname } });
 
     if (emailValidity) {
       const dataValues = emailValidity.get({ plain: true });
@@ -30,7 +30,7 @@ const signController = {
       const salt = await bcrypt.genSalt(SALT_ROUND);
       const hashedPassword = await bcrypt.hash(password, salt);
 
-      await Users.create({
+      await User.create({
         email,
         password: hashedPassword,
         nickname,
@@ -43,7 +43,7 @@ const signController = {
 
   login: async (req: Request, res: Response) => {
     const { email, password } = req.body;
-    const userinfo = await Users.findOne({ where: { email } });
+    const userinfo = await User.findOne({ where: { email } });
 
     if (!userinfo) {
       res.status(404).json({ message: `No user data with email: ${email}` });
@@ -130,7 +130,7 @@ const signController = {
           },
         });
 
-        await Users.findOrCreate({
+        await User.findOrCreate({
           where: {
             email: userinfo.data.kakao_account.email,
             sign_type: 1,
@@ -183,7 +183,7 @@ const signController = {
           `https://www.googleapis.com/oauth2/v3/userinfo?access_token=${tokens.access_token}`,
         );
 
-        await Users.findOrCreate({
+        await User.findOrCreate({
           where: {
             email: userinfo.data.email,
             sign_type: 2,
