@@ -1,36 +1,42 @@
-import { DataTypes, Model, Association, ForeignKey } from 'sequelize';
+import {
+  DataTypes,
+  Model,
+  Association,
+  ForeignKey,
+  CreationOptional,
+} from 'sequelize';
 import { sequelize } from './index';
-import { Users } from './users';
-import { Posts } from './posts';
+import { User } from './user';
+import { Post } from './post';
 
-interface CommentsAttributes {
+type CommentsAttributes = {
   id?: number;
   user_id?: number;
   post_id?: number;
   original_comment_id?: number;
   anonymity_yn?: string;
   text: string;
-}
+};
 
-export class Comments extends Model<CommentsAttributes> {
-  private readonly id?: number;
-  private user_id!: ForeignKey<Users['id']>;
-  private post_id!: ForeignKey<Posts['id']>;
-  private original_comment_id?: ForeignKey<Comments['id']>;
-  private anonymity_yn?: string;
-  private text!: string;
-  private readonly created_at!: Date;
-  private readonly updated_at!: Date;
-  private readonly deleted_at!: Date;
+export class Comment extends Model<CommentsAttributes> {
+  private declare readonly id: number;
+  private declare user_id: ForeignKey<User['id']>;
+  private declare post_id: ForeignKey<Post['id']>;
+  private declare original_comment_id: ForeignKey<Comment['id']>;
+  private declare anonymity_yn: string;
+  private declare text: string;
+  private declare readonly created_at: CreationOptional<Date>;
+  private declare readonly updated_at: CreationOptional<Date>;
+  private declare readonly deleted_at: CreationOptional<Date>;
 
-  static associations: {
-    userHasManyComments: Association<Users, Comments>;
-    postHasManyComments: Association<Posts, Comments>;
-    commentHasManyComments: Association<Comments, Comments>;
+  declare static associations: {
+    userHasManyComments: Association<User, Comment>;
+    postHasManyComments: Association<Post, Comment>;
+    commentHasManyComments: Association<Comment, Comment>;
   };
 }
 
-Comments.init(
+Comment.init(
   {
     id: {
       type: DataTypes.INTEGER,
@@ -45,6 +51,11 @@ Comments.init(
     post_id: {
       type: DataTypes.INTEGER,
       allowNull: true,
+      references: {
+        model: Post,
+        key: 'id',
+      },
+      onDelete: 'CASCADE',
     },
     original_comment_id: {
       type: DataTypes.INTEGER,
@@ -61,8 +72,8 @@ Comments.init(
     },
   },
   {
-    modelName: 'Comments',
-    tableName: 'comments',
+    modelName: 'Comment',
+    tableName: 'comment',
     sequelize,
     freezeTableName: true,
     paranoid: true,
@@ -73,31 +84,33 @@ Comments.init(
   },
 );
 
-Users.hasMany(Comments, {
+User.hasMany(Comment, {
   sourceKey: 'id',
   foreignKey: 'user_id',
   as: 'userHasManyComments',
 });
 
-Comments.belongsTo(Users, {
+Comment.belongsTo(User, {
   targetKey: 'id',
   foreignKey: 'user_id',
   as: 'userHasManyComments',
 });
 
-Posts.hasMany(Comments, {
+Post.hasMany(Comment, {
   sourceKey: 'id',
   foreignKey: 'post_id',
   as: 'postHasManyComments',
 });
 
-Comments.belongsTo(Posts, {
+Comment.belongsTo(Post, {
   targetKey: 'id',
   foreignKey: 'post_id',
+  onDelete: 'CASCADE',
+  hooks: true,
   as: 'postHasManyComments',
 });
 
-Comments.hasMany(Comments, {
+Comment.hasMany(Comment, {
   sourceKey: 'id',
   foreignKey: 'original_comment_id',
   as: 'commentHasManyComments',

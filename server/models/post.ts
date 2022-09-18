@@ -1,31 +1,37 @@
-import { DataTypes, Model, Association, ForeignKey } from 'sequelize';
+import {
+  DataTypes,
+  Model,
+  Association,
+  ForeignKey,
+  CreationOptional,
+} from 'sequelize';
 import { sequelize } from './index';
-import { Users } from './users';
+import { User } from './user';
 
-interface PostsAttributes {
+type PostsAttributes = {
   id?: number;
   painting_url?: string;
   text?: string;
   user_id?: number;
   total_likes?: number;
-}
+};
 
-export class Posts extends Model<PostsAttributes> {
-  private readonly id!: number;
-  private painting_url!: string;
-  private text!: string;
-  private user_id!: ForeignKey<Users['id']>;
-  private total_likes!: number;
-  private readonly created_at!: Date;
-  private readonly updated_at!: Date;
-  private readonly deleted_at!: Date;
+export class Post extends Model<PostsAttributes> {
+  private declare id: number;
+  private declare painting_url: string;
+  private declare text: string;
+  private declare user_id: ForeignKey<User['id']>;
+  private declare total_likes: number;
+  private declare readonly created_at: CreationOptional<Date>;
+  private declare readonly updated_at: CreationOptional<Date>;
+  private declare readonly deleted_at: CreationOptional<Date>;
 
-  static associations: {
-    userHasManyPosts: Association<Users, Posts>;
+  declare static associations: {
+    userHasManyPosts: Association<User, Post>;
   };
 }
 
-Posts.init(
+Post.init(
   {
     id: {
       type: DataTypes.INTEGER,
@@ -44,6 +50,11 @@ Posts.init(
     user_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      references: {
+        model: User,
+        key: 'id',
+      },
+      onDelete: 'CASCADE',
     },
     total_likes: {
       type: DataTypes.INTEGER,
@@ -52,8 +63,8 @@ Posts.init(
     },
   },
   {
-    modelName: 'Posts',
-    tableName: 'posts',
+    modelName: 'Post',
+    tableName: 'post',
     sequelize,
     freezeTableName: true,
     paranoid: true,
@@ -64,14 +75,16 @@ Posts.init(
   },
 );
 
-Users.hasMany(Posts, {
+User.hasMany(Post, {
   sourceKey: 'id',
   foreignKey: 'user_id',
   as: 'userHasManyPosts',
 });
 
-Posts.belongsTo(Users, {
+Post.belongsTo(User, {
   targetKey: 'id',
   foreignKey: 'user_id',
+  onDelete: 'CASCADE',
+  hooks: true,
   as: 'userHasManyPosts',
 });
