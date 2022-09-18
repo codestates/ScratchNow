@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { Posts } from '../models/posts';
-import { Users } from '../models/users';
+import { User } from '../models/user';
 
 const feedsController = {
   getTotalFeedByDate: async (req: Request, res: Response) => {
@@ -15,7 +15,7 @@ const feedsController = {
       ],
       include: [
         {
-          model: Users,
+          model: User,
           as: 'userHasManyPosts',
           attributes: ['id', 'nickname', 'profile_image_url'],
         },
@@ -43,7 +43,7 @@ const feedsController = {
       ],
       include: [
         {
-          model: Users,
+          model: User,
           as: 'userHasManyPosts',
           attributes: ['id', 'nickname', 'profile_image_url'],
         },
