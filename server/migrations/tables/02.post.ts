@@ -1,9 +1,9 @@
-import { Posts } from '../../models/posts';
+import { Post } from '../../models/post';
 
 console.log('======Creating <post> Table======');
 
 const create_table_post = async () => {
-  await Posts.sync({ force: true })
+  await Post.sync({ force: true })
     .then(() => {
       console.log('✅ Successfully created <post> Table');
     })

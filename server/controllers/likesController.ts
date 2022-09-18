@@ -1,11 +1,11 @@
 import { Request, Response } from 'express';
 import { Liking } from '../models/liking';
-import { Posts } from '../models/posts';
+import { Post } from '../models/post';
 
 const likesController = {
   updateLikesCount: async (post_id: number) => {
     await Liking.count({ where: { post_id } }).then((counts) => {
-      Posts.update({ total_likes: counts }, { where: { id: post_id } });
+      Post.update({ total_likes: counts }, { where: { id: post_id } });
     });
   },
 

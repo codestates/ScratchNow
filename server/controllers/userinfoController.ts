@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { User } from '../models/user';
-import { Posts } from '../models/posts';
+import { Post } from '../models/post';
 import { tokenAuthentication } from './authFunctions';
 import * as bcrypt from 'bcrypt';
 
@@ -14,7 +14,7 @@ const userinfoController = {
       where: id,
       attributes: ['id', 'nickname', 'profile_image_url', 'status_message'],
     }).then(async (userData) => {
-      const postCount = await Posts.count({ where: { user_id: id } });
+      const postCount = await Post.count({ where: { user_id: id } });
 
       res.status(200).json({
         data: { userData, postCount },
