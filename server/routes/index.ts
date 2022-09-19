@@ -5,14 +5,12 @@ import FeedsRouter from './feedsRouter';
 import CommentsRouter from './commentsRouter';
 import LikesRouter from './likesRouter';
 
-const API_VER = 'v1';
-
 const routes = Router();
 
-routes.use(`/api/${API_VER}/user`, UsersRouter);
-routes.use(`/api/${API_VER}/post`, PostsRouter);
-routes.use(`/api/${API_VER}/feed`, FeedsRouter);
-routes.use(`/api/${API_VER}/comment`, CommentsRouter);
-routes.use(`/api/${API_VER}/like`, LikesRouter);
+routes.use(`/api/user`, UsersRouter);
+routes.use(`/api/post`, PostsRouter);
+routes.use(`/api/feed`, FeedsRouter);
+routes.use(`/api/comment`, CommentsRouter);
+routes.use(`/api/like`, LikesRouter);
 
 export default routes;
