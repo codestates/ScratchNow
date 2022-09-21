@@ -29,7 +29,20 @@ paths:
       tags:
         - user
       summary: 회원가입
+      description: 서비스 자체 회원가입(이메일)
+      requestBody:
+        description: 회원정보 생성
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Signup'
       responses:
+        default:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SignupRes'
     get:
       tags:
         - user
@@ -49,31 +62,67 @@ paths:
     post:
       tags:
         - user
-      summary: 로그인
+      summary: 이메일 로그인(JWT)
+      description: email login
+      operationId: loginUser
+      requestBody:
+        description: 이메일 로그인
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Login'
       responses:
   /user/logout:
     get:
       tags:
         - user
       summary: 로그아웃
+      description: 쿠키 삭제
+      operationId: logoutUser
       responses:
+        default:
+          description: successful operation
   /user/emailcheck:
-    get:
+    post:
       tags:
         - user
-      summary: 이메일 인증 요청
+      summary: 이메일 인증번호 발송
+      description: 이메일 인증번호 메일 발송
+      operationId: deleteUser
+      requestBody:
+        description: 이메일 인증 요청
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmailAuthentication'
       responses:
   /user/kakao/login:
     post:
       tags:
         - user
       summary: 카카오 소셜로그인
+      description: Kakao OAuth
+      operationId: ?
+      requestBody:
+        description: 카카오 소셜로그인
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Kakao'
       responses:
   /user/google/login:
     post:
       tags:
         - user
-      summary: 구글 소셜로그인
+      summary: Update user
+      description: This can only be done by the logged in user.
+      operationId: updateUser
+      requestBody:
+        description: 구글 소셜로그인
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Google'
       responses:
   /user/profileimagenull:
     patch:
@@ -159,3 +208,32 @@ paths:
         - like
       summary: 좋아요 추가 또는 취소
       responses:
+
+components:
+  schemas:
+    Signup:
+      type: object
+      properties:
+        email:
+          type: string
+          example: scratch2022@gmail.com
+        password:
+          type: string
+          example: 'test'
+        nickname:
+          type: string
+          example: 'scratchnow'
+    SignupRes:
+      type: object
+      properties:
+        id:
+          type: number
+        email:
+          type: string
+          # example: scratch2022@gmail.com
+        password:
+          type: string
+          # example: 'test'
+        nickname:
+          type: string
+          # example: 'scratchnow'
