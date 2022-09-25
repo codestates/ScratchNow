@@ -70,7 +70,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Login'
+#              $ref: '#/components/schemas/Login'
       responses:
   /user/logout:
     get:
@@ -94,7 +94,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/EmailAuthentication'
+#              $ref: '#/components/schemas/EmailAuthentication'
       responses:
   /user/kakao/login:
     post:
@@ -102,13 +102,13 @@ paths:
         - user
       summary: 카카오 소셜로그인
       description: Kakao OAuth
-      operationId: ?
+      operationId:
       requestBody:
         description: 카카오 소셜로그인
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Kakao'
+#              $ref: '#/components/schemas/Kakao'
       responses:
   /user/google/login:
     post:
@@ -122,7 +122,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Google'
+#              $ref: '#/components/schemas/Google'
       responses:
   /user/profileimagenull:
     patch:
