@@ -1,5 +1,7 @@
 import { Request, Response } from 'express';
 import { Post } from '../models/post';
+import { Comment } from '../models/comment';
+import { Liking } from '../models/liking';
 import { tokenAuthentication } from './authFunctions';
 
 const postsController = {
@@ -51,6 +53,9 @@ const postsController = {
     } else {
       try {
         await Post.destroy({ where: { id } }).then(() => {
+          Comment.destroy({ where: { post_id: id } });
+          Liking.destroy({ where: { post_id: id } });
+        }).then(() => {
           res.status(200).json({ message: `Soft deleted the post` });
         });
       } catch (err) {

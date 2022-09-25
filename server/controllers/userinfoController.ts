@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { User } from '../models/user';
 import { Post } from '../models/post';
+import { Liking } from '../models/liking';
 import { tokenAuthentication } from './authFunctions';
 import * as bcrypt from 'bcrypt';
 
@@ -94,7 +95,6 @@ const userinfoController = {
     }
   },
 
-  // 비밀번호 검증 포함? 프론트와 협의 후 픽스
   withdrawal: async (req: Request, res: Response) => {
     const tokenValidity = tokenAuthentication(req);
     const { id, email, password } = req.body;
@@ -103,6 +103,9 @@ const userinfoController = {
       res.status(404).json({ message: 'Invalid Token' });
     } else {
       await User.destroy({ where: { id } }).then(() => {
+        Post.destroy({ where: { user_id: id } });
+        Liking.destroy({ where: { user_id: id } });
+      }).then(() => {
         res.status(200).json({ message: `Soft deleted the account ${email}` });
       });
     }

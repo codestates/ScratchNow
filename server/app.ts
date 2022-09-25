@@ -9,15 +9,7 @@ import * as ip from 'ip';
 import * as os from 'os';
 import { sequelize } from './models';
 
-dotenv.config({
-  path: path.resolve(
-    process.env.NODE_ENV === 'production'
-      ? '.prod.env'
-      : process.env.NODE_ENV === 'test'
-      ? '.test.env'
-      : '.dev.env',
-  ),
-});
+dotenv.config();
 
 const app = express();
 const PROTOCOL = 'http';

@@ -1,15 +1,6 @@
 import * as dotenv from 'dotenv';
-import * as path from 'path';
 
-dotenv.config({
-  path: path.resolve(
-    process.env.NODE_ENV === 'production'
-      ? '.prod.env'
-      : process.env.NODE_ENV === 'test'
-      ? '.test.env'
-      : '.dev.env',
-  ),
-});
+dotenv.config();
 
 export const config = {
   host: process.env.DATABASE_HOST,
