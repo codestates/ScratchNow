@@ -1,16 +1,7 @@
 import * as nodemailer from 'nodemailer';
 import * as dotenv from 'dotenv';
-import * as path from 'path';
 
-dotenv.config({
-  path: path.resolve(
-    process.env.NODE_ENV === 'production'
-      ? '.prod.env'
-      : process.env.NODE_ENV === 'test'
-      ? '.test.env'
-      : '.dev.env',
-  ),
-});
+dotenv.config();
 
 export const smtpTransport = nodemailer.createTransport({
   service: process.env.SMTP_SERVICE,

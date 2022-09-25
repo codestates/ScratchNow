@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "tsc && npm run api-docs && nodemon build/app.js",
-    "start:test": "tsc && NODE_ENV=test node build/app.js",
-    "start:prod": "tsc && NODE_ENV=production node build/app.js",
+    "start": "tsc && nodemon build/app.js",
+    "start:test": "tsc && nodemon build/app.js",
+    "start:prod": "tsc && nodemon build/app.js",
     "migrate": "./node_modules/.bin/ts-node ./migrations/createTables.ts",
     "api-docs": "swagger-cli bundle ./swagger/openapi.yaml --outfile build/swagger/swagger.yaml --type yaml"
   },
