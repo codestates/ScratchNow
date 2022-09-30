@@ -9,7 +9,8 @@ externalDocs:
   url: https://github.com/codestates/ScratchNow
 
 servers:
-  - url: https://localhost:3300
+  - url: http://localhost:3300
+  - url: 13.124.208.89:3300
 
 tags:
   - name: user
@@ -46,168 +47,223 @@ paths:
     get:
       tags:
         - user
-      summary: 사용자 정보 조회
+      summary: 사용자 계정 정보 조회
+      parameters:
+        - name: id
+          in: query
+          description: 사용자 id
+          required: true
+          schema:
+            type: string
       responses:
+        default:
+          description: get user inforamation success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetUserInfoRes'
     patch:
       tags:
         - user
       summary: 회원정보 수정(프로필 이미지, 닉네임, 상태메시지)
+      requestBody:
+        description: 로그인
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateUserInfo'
       responses:
+        default:
+          description: Update user information
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateUserInfoRes'
     delete:
       tags:
         - user
       summary: 회원탈퇴
+      parameters:
+        - name: id
+          in: query
+          description: 사용자 id
+          required: true
+          schema:
+            type: string
       responses:
+        default:
+          description: withdrawal success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WithdrawRes'
   /user/login:
     post:
       tags:
         - user
-      summary: 이메일 로그인(JWT)
+      summary: 이메일 로그인
       description: email login
       operationId: loginUser
       requestBody:
-        description: 이메일 로그인
+        description: 로그인
         content:
           application/json:
             schema:
-#              $ref: '#/components/schemas/Login'
-      responses:
-  /user/logout:
-    get:
-      tags:
-        - user
-      summary: 로그아웃
-      description: 쿠키 삭제
-      operationId: logoutUser
+              $ref: '#/components/schemas/Signin'
       responses:
         default:
-          description: successful operation
-  /user/emailcheck:
-    post:
-      tags:
-        - user
-      summary: 이메일 인증번호 발송
-      description: 이메일 인증번호 메일 발송
-      operationId: deleteUser
-      requestBody:
-        description: 이메일 인증 요청
-        content:
-          application/json:
-            schema:
-#              $ref: '#/components/schemas/EmailAuthentication'
-      responses:
-  /user/kakao/login:
-    post:
-      tags:
-        - user
-      summary: 카카오 소셜로그인
-      description: Kakao OAuth
-      operationId:
-      requestBody:
-        description: 카카오 소셜로그인
-        content:
-          application/json:
-            schema:
-#              $ref: '#/components/schemas/Kakao'
-      responses:
-  /user/google/login:
-    post:
-      tags:
-        - user
-      summary: Update user
-      description: This can only be done by the logged in user.
-      operationId: updateUser
-      requestBody:
-        description: 구글 소셜로그인
-        content:
-          application/json:
-            schema:
-#              $ref: '#/components/schemas/Google'
-      responses:
-  /user/profileimagenull:
-    patch:
-      tags:
-        - user
-      summary: 프로필 이미지 기본으로 변경
-      responses:
-  /user/nicknamecheck:
-    get:
-      tags:
-        - user
-      summary: 닉네임 중복 여부 확인
-      responses:
-  /user/password:
-    patch:
-      tags:
-        - user
-      summary: 비밀번호 수정
-      responses:
-  /post:
-    post:
-      tags:
-        - post
-      summary: 게시물 등록
-      responses:
-    get:
-      tags:
-        - post
-      summary: 게시물 조회
-      responses:
-    patch:
-      tags:
-        - post
-      summary: 게시물 수정
-      responses:
-    delete:
-      tags:
-        - post
-      summary: 게시물 삭제
-      responses:
-  /feed/data:
-    get:
-      tags:
-        - feed
-      summary: 최신순 피드 조회
-      responses:
-  /feed/likes:
-    get:
-      tags:
-        - feed
-      summary: 인기순 피드 조회
-      responses:
-  /feed/user:
-    get:
-      tags:
-        - feed
-      summary: 유저 피드 조회
-      responses:
-  /comment:
-    post:
-      tags:
-        - comment
-      summary: 댓글 등록
-      responses:
-    get:
-      tags:
-        - comment
-      summary: 댓글 조회
-      responses:
-    patch:
-      tags:
-        - comment
-      summary: 댓글 수정
-      responses:
-    delete:
-      tags:
-        - comment
-      summary: 댓글 삭제
-      responses:
-  /like:
-    post:
-      tags:
-        - like
-      summary: 좋아요 추가 또는 취소
-      responses:
+          description: login success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SigninRes'
+  # /user/logout:
+  #   get:
+  #     tags:
+  #       - user
+  #     summary: 로그아웃
+  #     description: 쿠키 삭제
+  #     operationId: logoutUser
+  #     parameters:
+  #       - name: id
+  #         in: query
+  #         description: 사용자 id
+  #         required: true
+  #         schema:
+  #           type: string
+  #     responses:
+  #       default:
+  #         description: logout success
+  #         content:
+  #           application/json:
+  #             schema:
+  #               $ref: '#/components/schemas/LogoutRes'
+#   /user/emailcheck:
+#     post:
+#       tags:
+#         - user
+#       summary: 이메일 인증번호 발송
+#       description: 이메일 인증번호 메일 발송
+#       operationId: deleteUser
+#       requestBody:
+#         description: 이메일 인증 요청
+#         content:
+#           application/json:
+#             schema:
+# #              $ref: '#/components/schemas/EmailAuthentication'
+#       responses:
+#   /user/kakao/login:
+#     post:
+#       tags:
+#         - user
+#       summary: 카카오 소셜로그인
+#       description: Kakao OAuth
+#       operationId:
+#       requestBody:
+#         description: 카카오 소셜로그인
+#         content:
+#           application/json:
+#             schema:
+# #              $ref: '#/components/schemas/Kakao'
+#       responses:
+#   /user/google/login:
+#     post:
+#       tags:
+#         - user
+#       summary: Update user
+#       description: This can only be done by the logged in user.
+#       operationId: updateUser
+#       requestBody:
+#         description: 구글 소셜로그인
+#         content:
+#           application/json:
+#             schema:
+# #              $ref: '#/components/schemas/Google'
+#       responses:
+#   /user/profileimagenull:
+#     patch:
+#       tags:
+#         - user
+#       summary: 프로필 이미지 기본으로 변경
+#       responses:
+#   /user/nicknamecheck:
+#     get:
+#       tags:
+#         - user
+#       summary: 닉네임 중복 여부 확인
+#       responses:
+#   /user/password:
+#     patch:
+#       tags:
+#         - user
+#       summary: 비밀번호 수정
+#       responses:
+#   /post:
+#     post:
+#       tags:
+#         - post
+#       summary: 게시물 등록
+#       responses:
+#     get:
+#       tags:
+#         - post
+#       summary: 게시물 조회
+#       responses:
+#     patch:
+#       tags:
+#         - post
+#       summary: 게시물 수정
+#       responses:
+#     delete:
+#       tags:
+#         - post
+#       summary: 게시물 삭제
+#       responses:
+#   /feed/data:
+#     get:
+#       tags:
+#         - feed
+#       summary: 최신순 피드 조회
+#       responses:
+#   /feed/likes:
+#     get:
+#       tags:
+#         - feed
+#       summary: 인기순 피드 조회
+#       responses:
+#   /feed/user:
+#     get:
+#       tags:
+#         - feed
+#       summary: 유저 피드 조회
+#       responses:
+#   /comment:
+#     post:
+#       tags:
+#         - comment
+#       summary: 댓글 등록
+#       responses:
+#     get:
+#       tags:
+#         - comment
+#       summary: 댓글 조회
+#       responses:
+#     patch:
+#       tags:
+#         - comment
+#       summary: 댓글 수정
+#       responses:
+#     delete:
+#       tags:
+#         - comment
+#       summary: 댓글 삭제
+#       responses:
+#   /like:
+#     post:
+#       tags:
+#         - like
+#       summary: 좋아요 추가 또는 취소
+#       responses:
 
 components:
   schemas:
@@ -226,14 +282,70 @@ components:
     SignupRes:
       type: object
       properties:
-        id:
-          type: number
+        message:
+          type: string
+          example: 'Created the user scratchnow'
+    GetUserInfoRes:
+      type: object
+      properties:
+        data:
+          type: object
+          example: {
+            "userData": {
+              "id": 1,
+              "nickname": "test093001",
+              "profile_image_url": null,
+              "status_message": null
+            },
+            "postCount": 0
+          }
+        message:
+          type: string
+          example: 'User information of the user 1'
+    Signin:
+      type: object
+      properties:
         email:
           type: string
-          # example: scratch2022@gmail.com
+          example: scratch2022@gmail.com
         password:
           type: string
-          # example: 'test'
+          example: 'test'
+    SigninRes:
+      type: object
+      properties:
+        data:
+          type: string
+          example: {
+            "accessToken": 'eyJhbGciOiJIUzI2MiIsInQ9cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWvfOiJ0ZXN0XAkzMDAxQGdtYWlsLmNvbSIsIm5pY2tuYW1lIjoidGVzdDA5MzAwMSIsImlhdCI6MTY2NDUzODUyNSwiZXhwIjoxNjY0NTYwMTI1fQ.swJBBFKwQ7xzvjtrXsdDMhBj7kQQPjCNlZtF6yfruYo'
+          }
+        message:
+          type: string
+          example: 'Login success with email: scratch2022@gmail.com'
+    UpdateUserInfo:
+      type: object
+      properties:
+        id:
+          type: number
+          example: 1
+        profile_image_url:
+          type: string
+          example: 'url'
         nickname:
           type: string
-          # example: 'scratchnow'
+          example: 'scratchnow'
+        status_message:
+          type: string
+          example: 'status message of user scratchnow'
+    UpdateUserInfoRes:
+      type: object
+      properties:
+        message:
+          type: string
+          example: 'Updated user information of user 1'
+    WithdrawRes:
+      type: object
+      properties:
+        message:
+          type: string
+          example: 'Soft deleted the account 1'
