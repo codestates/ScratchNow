@@ -20,7 +20,13 @@ const postsController = {
           },
         ],
       }).then((data) => {
-        res.json({ data: data, message: `Post detail of post id ${id}` });
+        if (data === null) {
+          res.status(404).json({ message: `Invalid post id` });
+        } else {
+          res
+            .status(200)
+            .json({ data: data, message: `Post detail of post id ${id}` });
+        }
       });
     } catch (err) {
       res.status(404).json({ message: 'Invalid post id' });
