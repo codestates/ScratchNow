@@ -5,7 +5,7 @@ info:
   version: 1.0.0
 
 externalDocs:
-  description: Github Respository
+  description: Github Repository
   url: https://github.com/codestates/ScratchNow
 
 servers:
@@ -25,7 +25,7 @@ tags:
     description: 좋아요 API
 
 paths:
-  /user:
+  /api/user:
     post:
       tags:
         - user
@@ -36,14 +36,16 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Signup'
+              $ref: '#/components/schemas/SignUp'
       responses:
-        default:
+        '201':
           description: successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SignupRes'
+                $ref: '#/components/schemas/SignUpRes'
+        '403':
+          description: Email already exists
     get:
       tags:
         - user
@@ -56,8 +58,8 @@ paths:
           schema:
             type: string
       responses:
-        default:
-          description: get user inforamation success
+        '200':
+          description: get user information success
           content:
             application/json:
               schema:
@@ -73,12 +75,14 @@ paths:
             schema:
               $ref: '#/components/schemas/UpdateUserInfo'
       responses:
-        default:
+        '200':
           description: Update user information
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/UpdateUserInfoRes'
+        '401':
+          description: Invalid Token
     delete:
       tags:
         - user
@@ -91,13 +95,15 @@ paths:
           schema:
             type: string
       responses:
-        default:
+        '200':
           description: withdrawal success
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/WithdrawRes'
-  /user/login:
+        '401':
+          description: Invalid Token
+  /api/user/login:
     post:
       tags:
         - user
@@ -109,50 +115,54 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Signin'
+              $ref: '#/components/schemas/SignIn'
       responses:
-        default:
+        '200':
           description: login success
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SigninRes'
-  # /user/logout:
-  #   get:
-  #     tags:
-  #       - user
-  #     summary: 로그아웃
-  #     description: 쿠키 삭제
-  #     operationId: logoutUser
-  #     parameters:
-  #       - name: id
-  #         in: query
-  #         description: 사용자 id
-  #         required: true
-  #         schema:
-  #           type: string
-  #     responses:
-  #       default:
-  #         description: logout success
-  #         content:
-  #           application/json:
-  #             schema:
-  #               $ref: '#/components/schemas/LogoutRes'
-#   /user/emailcheck:
-#     post:
-#       tags:
-#         - user
-#       summary: 이메일 인증번호 발송
-#       description: 이메일 인증번호 메일 발송
-#       operationId: deleteUser
-#       requestBody:
-#         description: 이메일 인증 요청
-#         content:
-#           application/json:
-#             schema:
-# #              $ref: '#/components/schemas/EmailAuthentication'
-#       responses:
-#   /user/kakao/login:
+                $ref: '#/components/schemas/SignInRes'
+        '400':
+          description: Email is registered with OAuth
+        '403':
+          description: Wrong password
+        '404':
+          description: No user data with email
+  /api/user/logout:
+    get:
+      tags:
+        - user
+      summary: 로그아웃
+      description: 쿠키 삭제
+      operationId: logoutUser
+      responses:
+        '200':
+          description: Logout success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LogoutRes'
+  /api/user/emailcheck:
+    post:
+      tags:
+        - user
+      summary: 이메일 인증번호 발송
+      description: 이메일 인증번호 메일 발송
+      requestBody:
+        description: 이메일 인증 요청
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmailAuthentication'
+      responses:
+        '200':
+          description: Email authenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmailAuthenticationRes'
+#   /api//user/kakao/login:
 #     post:
 #       tags:
 #         - user
@@ -166,7 +176,7 @@ paths:
 #             schema:
 # #              $ref: '#/components/schemas/Kakao'
 #       responses:
-#   /user/google/login:
+#   /api//user/google/login:
 #     post:
 #       tags:
 #         - user
@@ -180,94 +190,302 @@ paths:
 #             schema:
 # #              $ref: '#/components/schemas/Google'
 #       responses:
-#   /user/profileimagenull:
-#     patch:
-#       tags:
-#         - user
-#       summary: 프로필 이미지 기본으로 변경
-#       responses:
-#   /user/nicknamecheck:
-#     get:
-#       tags:
-#         - user
-#       summary: 닉네임 중복 여부 확인
-#       responses:
-#   /user/password:
-#     patch:
-#       tags:
-#         - user
-#       summary: 비밀번호 수정
-#       responses:
-#   /post:
-#     post:
-#       tags:
-#         - post
-#       summary: 게시물 등록
-#       responses:
-#     get:
-#       tags:
-#         - post
-#       summary: 게시물 조회
-#       responses:
-#     patch:
-#       tags:
-#         - post
-#       summary: 게시물 수정
-#       responses:
-#     delete:
-#       tags:
-#         - post
-#       summary: 게시물 삭제
-#       responses:
-#   /feed/data:
-#     get:
-#       tags:
-#         - feed
-#       summary: 최신순 피드 조회
-#       responses:
-#   /feed/likes:
-#     get:
-#       tags:
-#         - feed
-#       summary: 인기순 피드 조회
-#       responses:
-#   /feed/user:
-#     get:
-#       tags:
-#         - feed
-#       summary: 유저 피드 조회
-#       responses:
-#   /comment:
-#     post:
-#       tags:
-#         - comment
-#       summary: 댓글 등록
-#       responses:
-#     get:
-#       tags:
-#         - comment
-#       summary: 댓글 조회
-#       responses:
-#     patch:
-#       tags:
-#         - comment
-#       summary: 댓글 수정
-#       responses:
-#     delete:
-#       tags:
-#         - comment
-#       summary: 댓글 삭제
-#       responses:
-#   /like:
-#     post:
-#       tags:
-#         - like
-#       summary: 좋아요 추가 또는 취소
-#       responses:
+  /api/user/profileimagenull:
+    patch:
+      tags:
+        - user
+      summary: 프로필 이미지 기본으로 변경
+      requestBody:
+        description: 회원 id 전송
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeleteProfileImage'
+      responses:
+        '200':
+          description: 프로필 이미지 기본으로 변경
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteProfileImageRes'
+        '401':
+          description: Invalid Token
+  /api/user/nicknamecheck:
+    get:
+      tags:
+        - user
+      summary: 닉네임 중복 여부 확인
+      parameters:
+        - name: nickname
+          in: query
+          description: 중복확인 대상 닉네임
+          required: true
+          schema:
+            type: string
+      responses:
+        '202':
+          description: 중복 여부 결과
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NicknameCheckRes'
+        '200':
+          description: Nickname already exists
+  /api/user/password:
+    patch:
+      tags:
+        - user
+      summary: 비밀번호 변경
+      requestBody:
+        description: 비밀번호 변경 요청
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatePassword'
+      responses:
+        '200':
+          description: 비밀번호 변경 완료
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdatePasswordRes'
+        '401':
+          description: Invalid Token
+  /api/post:
+    get:
+      tags:
+        - post
+      summary: 게시물 상세 조회
+      parameters:
+        - name: id
+          in: query
+          description: 게시물 id
+          required: true
+          schema:
+            type: number
+      responses:
+        '200':
+          description: 게시물 상세 조회
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetPostRes'
+        '404':
+          description: Invalid Post id
+    post:
+      tags:
+        - post
+      summary: 게시물 등록
+      requestBody:
+        description: 게시물 등록 요청
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePost'
+      responses:
+        '201':
+          description: 게시물 생성
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreatePostRes'
+    patch:
+      tags:
+        - post
+      summary: 게시물 수정
+      requestBody:
+        description: 게시물 수정 요청
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatePost'
+      responses:
+        '200':
+          description: 게시물 수정 완료
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdatePostRes'
+        '401':
+          description: Invalid Token
+        '404':
+          description: Invalid Post id
+    delete:
+      tags:
+        - post
+      summary: 게시물 삭제
+      parameters:
+        - name: id
+          in: query
+          description: 게시물 id
+          required: true
+          schema:
+            type: number
+      responses:
+        '200':
+          description: 게시물 삭제 완료
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeletePostRes'
+        '401':
+          description: Invalid Token
+  /api/feed/date:
+    get:
+      tags:
+        - feed
+      summary: 최신순 피드 조회
+      responses:
+        '200':
+          description: 최신순 정렬 피드
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FeedDateRes'
+  /api/feed/likes:
+    get:
+      tags:
+        - feed
+      summary: 인기순 피드 조회
+      responses:
+        '200':
+          description: 인기순 정렬 피드
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FeedLikesRes'
+  /api/feed/user:
+    get:
+      tags:
+        - feed
+      summary: 유저 피드 조회
+      parameters:
+        - name: id
+          in: query
+          description: 사용자 id
+          required: true
+          schema:
+            type: number
+      responses:
+        '200':
+          description: 개별 사용자 피드
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FeedUserRes'
+  /api/comment:
+    post:
+      tags:
+        - comment
+      summary: 댓글 등록
+      requestBody:
+        description: 댓글 등록
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateComment'
+      responses:
+        '201':
+          description: 댓글 등록 완료
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateCommentRes'
+        '401':
+          description: Invalid Token
+        '404':
+          description: Invalid Comment id
+        '500':
+          description: Failed to create comment
+    get:
+      tags:
+        - comment
+      summary: 댓글 조회
+      parameters:
+        - name: id
+          in: query
+          description: 게시물 id
+          required: true
+          schema:
+            type: number
+      responses:
+        '200':
+          description: 해당 게시물의 댓글 조회(예시에서 대댓글 id 5번만 탈퇴하지 않은 사용자)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCommentRes'
+        '500':
+          description: Failed providing comments
+    patch:
+      tags:
+        - comment
+      summary: 댓글 수정
+      requestBody:
+        description: 댓글 수정 요청
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateComment'
+      responses:
+        '200':
+          description: 댓글 수정 완료
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateCommentRes'
+        '401':
+          description: Invalid Token
+        '500':
+          description: Failed to modify comment
+    delete:
+      tags:
+        - comment
+      summary: 댓글 삭제
+      parameters:
+        - name: id
+          in: query
+          description: 댓글 id
+          required: true
+          schema:
+            type: number
+      responses:
+        '200':
+          description: 댓글 삭제 완료
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteCommentRes'
+        '401':
+          description: Invalid Token
+        '404':
+          description: Invalid Comment id
+        '500':
+          description: Failed to delete the comment
+  /api/like:
+    post:
+      tags:
+        - like
+      summary: 좋아요 추가 또는 취소
+      requestBody:
+        description: 좋아요 추가 또는 취소 요청
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LikeOrNot'
+      responses:
+        '200':
+          description: 좋아요 추가 또는 취소 완료
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LikeOrNotRes'
+        '404':
+          description: Wrong id number requested
 
 components:
   schemas:
-    Signup:
+    SignUp:
       type: object
       properties:
         email:
@@ -279,7 +497,7 @@ components:
         nickname:
           type: string
           example: 'scratchnow'
-    SignupRes:
+    SignUpRes:
       type: object
       properties:
         message:
@@ -302,7 +520,7 @@ components:
         message:
           type: string
           example: 'User information of the user 1'
-    Signin:
+    SignIn:
       type: object
       properties:
         email:
@@ -311,7 +529,7 @@ components:
         password:
           type: string
           example: 'test'
-    SigninRes:
+    SignInRes:
       type: object
       properties:
         data:
@@ -349,3 +567,316 @@ components:
         message:
           type: string
           example: 'Soft deleted the account 1'
+    LogoutRes:
+      type: object
+      properties:
+        message:
+          type: string
+          example: 'Logout success'
+    EmailAuthentication:
+      type: object
+      properties:
+        email:
+          type: string
+          example: sampleuser2022@gmail.com
+    EmailAuthenticationRes:
+      type: object
+      properties:
+        authNumber:
+          type: number
+          example: 123456
+        message:
+          type: string
+          example: 'Authentication mail is sent to sampleuser2022@gmail.com'
+    DeleteProfileImage:
+      type: object
+      properties:
+        user_id:
+          type: number
+          example: 1
+    DeleteProfileImageRes:
+      type: object
+      properties:
+        message:
+          type: string
+          example: 'Deleted the profile image of user 1'
+    NicknameCheckRes:
+      type: object
+      properties:
+        message:
+          type: string
+          example: 'Nickname [ ] is available'
+    UpdatePassword:
+      type: object
+      properties:
+        user_id:
+          type: number
+          example: 1
+        password:
+          type: string
+          example: 'newpassword'
+    UpdatePasswordRes:
+      type: object
+      properties:
+        message:
+          type: string
+          example: 'Changed the password of user 1'
+    GetPostRes:
+      type: object
+      properties:
+        postData:
+          type: object
+          example: {
+            "id": 1,
+            "painting_url": 'painting_url',
+            "text": "texts",
+            "user_id": 1,
+            "total_likes": 0,
+            "created_at": "2022-10-01T10:09:27.000Z",
+            "updated_at": "2022-10-01T10:09:27.000Z",
+            "deleted_at": null,
+            "userHasManyPosts": {
+              "id": 3,
+              "nickname": "sampleuser",
+              "profile_image_url": 'image_url'
+            }
+          }
+        message:
+          type: string
+          example: 'Created the post'
+    CreatePost:
+      type: object
+      properties:
+        painting_url:
+          type: string
+          example: 'painting_url'
+        text:
+          type: string
+          example: 'post text'
+        user_id:
+          type: number
+          example: 1
+    CreatePostRes:
+      type: object
+      properties:
+        message:
+          type: string
+          example: 'Changed the password of user 1'
+    UpdatePost:
+      type: object
+      properties:
+        post_id:
+          type: number
+          example: 1
+        painting_url:
+          type: string
+          example: 'painting_url'
+        text:
+          type: string
+          example: 'Modify post text'
+    UpdatePostRes:
+      type: object
+      properties:
+        message:
+          type: string
+          example: 'Modified the post 1'
+    DeletePostRes:
+      type: object
+      properties:
+        message:
+          type: string
+          example: 'Soft deleted the post 1'
+    FeedDateRes:
+      type: object
+      properties:
+        feedData:
+          type: object
+          example: [
+            {
+              "id": 3,
+              "painting_url": "painting_url",
+              "user_id": 3,
+              "total_likes": 0,
+              "created_at": "2022-10-01T10:14:03.000Z",
+              "userHasManyPosts": {
+                "id": 3,
+                "nickname": "sampleuser3",
+                "profile_image_url": 'image_url'
+              }
+            }
+          ]
+        message:
+          type: string
+          example: 'All posts of our service listed by date'
+    FeedLikesRes:
+      type: object
+      properties:
+        feedData:
+          type: object
+          example: [
+            {
+              "id": 3,
+              "painting_url": "painting_url",
+              "user_id": 3,
+              "total_likes": 0,
+              "created_at": "2022-10-01T10:14:03.000Z",
+              "userHasManyPosts": {
+                "id": 3,
+                "nickname": "sampleuser3",
+                "profile_image_url": 'image_url'
+              }
+            }
+          ]
+        message:
+          type: string
+          example: 'All posts of our service listed by likes'
+    FeedUserRes:
+      type: object
+      properties:
+        feedData:
+          type: object
+          example: [
+            {
+              "id": 6,
+              "painting_url": "painting_url_1001_1",
+              "total_likes": 0,
+              "created_at": "2022-10-01T11:38:55.000Z"
+            },
+            {
+              "id": 5,
+              "painting_url": "painting_url_1001_1",
+              "total_likes": 0,
+              "created_at": "2022-10-01T11:38:54.000Z"
+            },
+            {
+              "id": 4,
+              "painting_url": "painting_url_1001_1",
+              "total_likes": 0,
+              "created_at": "2022-10-01T11:38:53.000Z"
+            }
+          ]
+        message:
+          type: string
+          example: 'Feed(posts) of user 1'
+    CreateComment:
+      type: object
+      properties:
+        user_id:
+          type: number
+          example: 1
+        post_id:
+          type: number
+          example: 2
+        text:
+          type: string
+          example: 'sample comment'
+        anonymity_yn:
+          type: string
+          example: 'y'
+        original_comment_id:
+          type: number
+          example: null
+    CreateCommentRes:
+      type: object
+      properties:
+        data:
+          type: object
+          example: {
+            "id": 1,
+            "user_id": 1,
+            "post_id": 1,
+            "anonymity_yn": "y",
+            "text": "comment 저장 테스트 1001 익명",
+            "original_comment_id": null,
+            "updated_at": "2022-10-01T11:24:54.728Z",
+            "created_at": "2022-10-01T11:24:54.728Z"
+          }
+        message:
+          type: string
+          example: 'Created the comment'
+    GetCommentRes:
+      type: object
+      properties:
+        data:
+          type: object
+          example: [
+            {
+              "id": 2,
+              "user_id": 1,
+              "post_id": 1,
+              "original_comment_id": null,
+              "anonymity_yn": "n",
+              "text": "modify comment 1001-2",
+              "created_at": "2022-10-01T12:00:15.000Z",
+              "updated_at": "2022-10-01T12:00:29.000Z",
+              "deleted_at": null,
+              "userHasManyComments": null,
+              "commentHasManyComments": [
+                {
+                  "id": 5,
+                  "text": "comment 저장 테스트 1001 익명",
+                  "updated_at": "2022-10-01T12:13:19.000Z",
+                  "userHasManyComments": {
+                    "id": 3,
+                    "nickname": "test100101",
+                    "profile_image_url": null
+                  }
+                },
+                {
+                  "id": 3,
+                  "text": "comment 저장 테스트 1001 익명",
+                  "updated_at": "2022-10-01T12:10:14.000Z",
+                  "userHasManyComments": null
+                }
+              ]
+            }
+          ]
+        message:
+          type: string
+          example: 'Comments of post 1'
+    UpdateComment:
+      type: object
+      properties:
+        comment_id:
+          type: number
+          example: 1
+        text:
+          type: string
+          example: 'sample modified comment'
+        anonymity_yn:
+          type: string
+          example: 'n'
+    UpdateCommentRes:
+      type: object
+      properties:
+        data:
+          type: object
+          example: {
+            "id": 2,
+            "original_comment_id": null,
+            "anonymity_yn": "n",
+            "updated_at": "2022-10-01T12:00:29.000Z"
+          }
+        message:
+          type: string
+          example: 'Modified the comment'
+    DeleteCommentRes:
+      type: object
+      properties:
+        message:
+          type: string
+          example: 'Soft deleted the comment'
+    LikeOrNot:
+      type: object
+      properties:
+        user_id:
+          type: number
+          example: 1
+        post_id:
+          type: number
+          example: 2
+    LikeOrNotRes:
+      properties:
+        message:
+          type: string
+          example: 'Liked(Canceled the like of) the post 2'

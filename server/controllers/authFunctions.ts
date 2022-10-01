@@ -4,15 +4,7 @@ import * as dotenv from 'dotenv';
 import path from 'path';
 import { smtpTransport } from '../config/emailAuth';
 
-dotenv.config({
-  path: path.resolve(
-    process.env.NODE_ENV === 'production'
-      ? '.prod.env'
-      : process.env.NODE_ENV === 'test'
-      ? '.test.env'
-      : '.dev.env',
-  ),
-});
+dotenv.config();
 
 const SECRET = String(process.env.JWT_SECRET);
 
