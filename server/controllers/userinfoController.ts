@@ -9,13 +9,13 @@ const SALT_ROUND = 4;
 
 const userinfoController = {
   getUserInfo: async (req: Request, res: Response) => {
-    const { id } = req.body;
+    const { id } = req.query;
 
     await User.findOne({
-      where: id,
+      where: { id: Number(id) },
       attributes: ['id', 'nickname', 'profile_image_url', 'status_message'],
     }).then(async (userData) => {
-      const postCount = await Post.count({ where: { user_id: id } });
+      const postCount = await Post.count({ where: { user_id: Number(id) } });
 
       res.status(200).json({
         data: { userData, postCount },
@@ -44,8 +44,10 @@ const userinfoController = {
 
   checkNickname: async (req: Request, res: Response) => {
     const tokenValidity = tokenAuthentication(req);
-    const { nickname } = req.body;
-    const nicknameValidity = await User.findOne({ where: { nickname } });
+    const { nickname } = req.query;
+    const nicknameValidity = await User.findOne({
+      where: { nickname: String(nickname) },
+    });
 
     if (!tokenValidity) {
       res.status(404).json({ message: 'Invalid Token' });
@@ -97,17 +99,19 @@ const userinfoController = {
 
   withdrawal: async (req: Request, res: Response) => {
     const tokenValidity = tokenAuthentication(req);
-    const { id, email, password } = req.body;
+    const { id, email } = req.query;
 
     if (!tokenValidity) {
       res.status(404).json({ message: 'Invalid Token' });
     } else {
-      await User.destroy({ where: { id } }).then(() => {
-        Post.destroy({ where: { user_id: id } });
-        Liking.destroy({ where: { user_id: id } });
-      }).then(() => {
-        res.status(200).json({ message: `Soft deleted the account ${email}` });
-      });
+      await User.destroy({ where: { id: Number(id) } })
+        .then(() => {
+          Post.destroy({ where: { user_id: Number(id) } });
+          Liking.destroy({ where: { user_id: Number(id) } });
+        })
+        .then(() => {
+          res.status(200).json({ message: `Soft deleted the account ${id}` });
+        });
     }
   },
 };

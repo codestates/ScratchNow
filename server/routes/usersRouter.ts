@@ -15,7 +15,7 @@ router.get('/google/callback', SignController.googleCallback);
 
 router.get('/', UserinfoController.getUserInfo);
 router.patch('/profileimagenull', UserinfoController.deleteProfileImage);
-router.post('/nicknamecheck', UserinfoController.checkNickname);
+router.get('/nicknamecheck', UserinfoController.checkNickname);
 router.patch('/', UserinfoController.updateUserInfo);
 router.patch('/password', UserinfoController.updatePassword);
 router.delete('/', UserinfoController.withdrawal);

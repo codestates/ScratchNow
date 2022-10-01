@@ -73,16 +73,15 @@ const signController = {
           })
           .status(200)
           .json({
-            data: { accessToken },
             message: `Login success with email: ${email}`,
           });
       }
     }
   },
 
-  logout: async (res: Response) => {
+  logout: async (req: Request, res: Response) => {
     res
-      .clearCookie('accessToken', {
+      .clearCookie('jwt', {
         httpOnly: true,
         secure: true,
         sameSite: 'none',
