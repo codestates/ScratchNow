@@ -25,7 +25,7 @@ tags:
     description: 좋아요 API
 
 paths:
-  /user:
+  /api/user:
     post:
       tags:
         - user
@@ -38,12 +38,14 @@ paths:
             schema:
               $ref: '#/components/schemas/SignUp'
       responses:
-        default:
+        '201':
           description: successful operation
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/SignUpRes'
+        '403':
+          description: Email already exists
     get:
       tags:
         - user
@@ -56,7 +58,7 @@ paths:
           schema:
             type: string
       responses:
-        default:
+        '200':
           description: get user information success
           content:
             application/json:
@@ -73,12 +75,14 @@ paths:
             schema:
               $ref: '#/components/schemas/UpdateUserInfo'
       responses:
-        default:
+        '200':
           description: Update user information
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/UpdateUserInfoRes'
+        '401':
+          description: Invalid Token
     delete:
       tags:
         - user
@@ -91,13 +95,15 @@ paths:
           schema:
             type: string
       responses:
-        default:
+        '200':
           description: withdrawal success
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/WithdrawRes'
-  /user/login:
+        '401':
+          description: Invalid Token
+  /api/user/login:
     post:
       tags:
         - user
@@ -111,13 +117,19 @@ paths:
             schema:
               $ref: '#/components/schemas/SignIn'
       responses:
-        default:
+        '200':
           description: login success
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/SignInRes'
-  /user/logout:
+        '400':
+          description: Email is registered with OAuth
+        '403':
+          description: Wrong password
+        '404':
+          description: No user data with email
+  /api/user/logout:
     get:
       tags:
         - user
@@ -125,13 +137,13 @@ paths:
       description: 쿠키 삭제
       operationId: logoutUser
       responses:
-        default:
-          description: logout success
+        '200':
+          description: Logout success
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/LogoutRes'
-  /user/emailcheck:
+  /api/user/emailcheck:
     post:
       tags:
         - user
@@ -144,13 +156,13 @@ paths:
             schema:
               $ref: '#/components/schemas/EmailAuthentication'
       responses:
-        default:
-          description: email authenticated
+        '200':
+          description: Email authenticated
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/EmailAuthenticationRes'
-#   /user/kakao/login:
+#   /api//user/kakao/login:
 #     post:
 #       tags:
 #         - user
@@ -164,7 +176,7 @@ paths:
 #             schema:
 # #              $ref: '#/components/schemas/Kakao'
 #       responses:
-#   /user/google/login:
+#   /api//user/google/login:
 #     post:
 #       tags:
 #         - user
@@ -178,7 +190,7 @@ paths:
 #             schema:
 # #              $ref: '#/components/schemas/Google'
 #       responses:
-  /user/profileimagenull:
+  /api/user/profileimagenull:
     patch:
       tags:
         - user
@@ -190,13 +202,15 @@ paths:
             schema:
               $ref: '#/components/schemas/DeleteProfileImage'
       responses:
-        default:
+        '200':
           description: 프로필 이미지 기본으로 변경
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/DeleteProfileImageRes'
-  /user/nicknamecheck:
+        '401':
+          description: Invalid Token
+  /api/user/nicknamecheck:
     get:
       tags:
         - user
@@ -209,13 +223,15 @@ paths:
           schema:
             type: string
       responses:
-        default:
+        '202':
           description: 중복 여부 결과
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/NicknameCheckRes'
-  /user/password:
+        '200':
+          description: Nickname already exists
+  /api/user/password:
     patch:
       tags:
         - user
@@ -227,17 +243,19 @@ paths:
             schema:
               $ref: '#/components/schemas/UpdatePassword'
       responses:
-        default:
+        '200':
           description: 비밀번호 변경 완료
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/UpdatePasswordRes'
-  /post:
+        '401':
+          description: Invalid Token
+  /api/post:
     get:
       tags:
         - post
-      summary: 게시물 조회
+      summary: 게시물 상세 조회
       parameters:
         - name: id
           in: query
@@ -246,12 +264,14 @@ paths:
           schema:
             type: number
       responses:
-        default:
+        '200':
           description: 게시물 상세 조회
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/GetPostRes'
+        '404':
+          description: Invalid Post id
     post:
       tags:
         - post
@@ -263,7 +283,7 @@ paths:
             schema:
               $ref: '#/components/schemas/CreatePost'
       responses:
-        default:
+        '201':
           description: 게시물 생성
           content:
             application/json:
@@ -280,12 +300,16 @@ paths:
             schema:
               $ref: '#/components/schemas/UpdatePost'
       responses:
-        default:
+        '200':
           description: 게시물 수정 완료
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/UpdatePostRes'
+        '401':
+          description: Invalid Token
+        '404':
+          description: Invalid Post id
     delete:
       tags:
         - post
@@ -298,37 +322,39 @@ paths:
           schema:
             type: number
       responses:
-        default:
+        '200':
           description: 게시물 삭제 완료
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/DeletePostRes'
-  /feed/data:
+        '401':
+          description: Invalid Token
+  /api/feed/date:
     get:
       tags:
         - feed
       summary: 최신순 피드 조회
       responses:
-        default:
+        '200':
           description: 최신순 정렬 피드
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/FeedDateRes'
-  /feed/likes:
+  /api/feed/likes:
     get:
       tags:
         - feed
       summary: 인기순 피드 조회
       responses:
-        default:
+        '200':
           description: 인기순 정렬 피드
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/FeedLikesRes'
-  /feed/user:
+  /api/feed/user:
     get:
       tags:
         - feed
@@ -341,19 +367,19 @@ paths:
           schema:
             type: number
       responses:
-        default:
+        '200':
           description: 개별 사용자 피드
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/FeedUserRes'
-  /comment:
+  /api/comment:
     post:
       tags:
         - comment
       summary: 댓글 등록
       requestBody:
-        description: 댓글 등록 요청
+        description: 댓글 등록
         content:
           application/json:
             schema:
@@ -374,7 +400,7 @@ paths:
     get:
       tags:
         - comment
-      summary: 댓글 조회 요청
+      summary: 댓글 조회
       parameters:
         - name: id
           in: query
@@ -415,7 +441,7 @@ paths:
     delete:
       tags:
         - comment
-      summary: 댓글 삭제 요청
+      summary: 댓글 삭제
       parameters:
         - name: id
           in: query
@@ -436,7 +462,7 @@ paths:
           description: Invalid Comment id
         '500':
           description: Failed to delete the comment
-  /like:
+  /api/like:
     post:
       tags:
         - like
@@ -449,7 +475,7 @@ paths:
               $ref: '#/components/schemas/LikeOrNot'
       responses:
         '200':
-          description: 좋아요 추가 완료
+          description: 좋아요 추가 또는 취소 완료
           content:
             application/json:
               schema:
