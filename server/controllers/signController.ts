@@ -18,11 +18,11 @@ const signController = {
       const signType = dataValues.sign_type;
 
       if (signType == 1) {
-        res.status(400).json({ message: 'Email already exists with Kakao' });
+        res.status(403).json({ message: 'Email already exists with Kakao' });
       } else if (signType == 2) {
-        res.status(400).json({ message: 'Email already exists with Google' });
+        res.status(403).json({ message: 'Email already exists with Google' });
       } else {
-        res.status(400).json({ message: 'Email already exists with JWT' });
+        res.status(403).json({ message: 'Email already exists with JWT' });
       }
     } else if (nicknameValidity) {
       res.status(400).json({ message: 'Nickname already exists' });
@@ -54,7 +54,7 @@ const signController = {
       const passwordValidity = bcrypt.compare(password, <string>hashedPassword);
 
       if (signType !== 0) {
-        res.status(404).json({ message: `Email is registered with OAuth` });
+        res.status(400).json({ message: `Email is registered with OAuth` });
       } else if (!passwordValidity) {
         res.status(403).json({ message: `Wrong password` });
       } else {
