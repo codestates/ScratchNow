@@ -29,7 +29,7 @@ const userinfoController = {
     const { user_id } = req.body;
 
     if (!tokenValidity) {
-      res.status(404).json({ message: 'Invalid Token' });
+      res.status(401).json({ message: 'Invalid Token' });
     } else {
       await User.update(
         { profile_image_url: '' },
@@ -43,18 +43,15 @@ const userinfoController = {
   },
 
   checkNickname: async (req: Request, res: Response) => {
-    const tokenValidity = tokenAuthentication(req);
     const { nickname } = req.query;
     const nicknameValidity = await User.findOne({
       where: { nickname: String(nickname) },
     });
 
-    if (!tokenValidity) {
-      res.status(404).json({ message: 'Invalid Token' });
-    } else if (nicknameValidity) {
-      res.status(404).json({ message: 'Nickname already exists' });
+    if (nicknameValidity) {
+      res.status(200).json({ message: 'Nickname already exists' });
     } else {
-      res.status(200).json({ message: `Nickname ${nickname} is available` });
+      res.status(202).json({ message: `Nickname ${nickname} is available` });
     }
   },
 
@@ -63,7 +60,7 @@ const userinfoController = {
     const { id, profile_image_url, nickname, status_message } = req.body;
 
     if (!tokenValidity) {
-      res.status(404).json({ message: 'Invalid Token' });
+      res.status(401).json({ message: 'Invalid Token' });
     } else {
       await User.update(
         { profile_image_url, nickname, status_message },
@@ -81,7 +78,7 @@ const userinfoController = {
     const { user_id, password } = req.body;
 
     if (!tokenValidity) {
-      res.status(404).json({ message: 'Invalid Token' });
+      res.status(401).json({ message: 'Invalid Token' });
     } else {
       const salt = await bcrypt.genSalt(SALT_ROUND);
       const hashedPassword = await bcrypt.hash(password, salt);
@@ -102,7 +99,7 @@ const userinfoController = {
     const { id, email } = req.query;
 
     if (!tokenValidity) {
-      res.status(404).json({ message: 'Invalid Token' });
+      res.status(401).json({ message: 'Invalid Token' });
     } else {
       await User.destroy({ where: { id: Number(id) } })
         .then(() => {
