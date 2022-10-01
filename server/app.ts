@@ -8,16 +8,21 @@ import * as path from 'path';
 import * as ip from 'ip';
 import * as os from 'os';
 import { sequelize } from './models';
+import cookieParser from 'cookie-parser';
+import bodyParser from 'body-parser';
 
 dotenv.config();
 
-const app = express();
 const PROTOCOL = 'http';
 const myIP = ip.address();
 const PORT = process.env.SERVER_PORT;
 
+const app = express();
 app.use(express.json());
 app.use(cors());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cookieParser());
 app.use(routes);
 
 const swaggerSpec = YAML.load(path.join(__dirname, './swagger/swagger.yaml'));
