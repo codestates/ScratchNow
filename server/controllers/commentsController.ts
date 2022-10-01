@@ -15,7 +15,7 @@ const commentsController = {
     if (!tokenValidity) {
       res.status(401).json({ message: 'Invalid Token' });
     } else if (original_comment_id !== null && !commentValidity) {
-      res.status(400).json({
+      res.status(404).json({
         message: `Invalid original comment id ${original_comment_id}`,
       });
     } else {
