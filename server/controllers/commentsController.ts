@@ -69,18 +69,18 @@ const commentsController = {
 
   deleteComment: async (req: Request, res: Response) => {
     const tokenValidity = tokenAuthentication(req);
-    const { comment_id } = req.body;
+    const { id } = req.query;
     const commentValidity = await Comment.findOne({
-      where: { id: comment_id },
+      where: { id: Number(id) },
     });
 
     if (!tokenValidity) {
       res.status(401).json({ message: 'Invalid Token' });
     } else if (!commentValidity) {
-      res.status(404).json({ message: `No comment ${comment_id}` });
+      res.status(404).json({ message: `No comment ${id}` });
     } else {
       try {
-        await Comment.destroy({ where: { id: comment_id } }).then(() => {
+        await Comment.destroy({ where: { id: Number(id) } }).then(() => {
           res.status(200).json({ message: `Soft deleted the comment` });
         });
       } catch (err) {
