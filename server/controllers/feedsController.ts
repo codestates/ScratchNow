@@ -65,8 +65,8 @@ const feedsController = {
       attributes: ['id', 'painting_url', 'total_likes', 'created_at'],
     }).then((data) => {
       res.status(200).json({
-        data: data,
-        message: `Feed and profile of user ${id}`,
+        feedData: data,
+        message: `Feed(posts) of user ${id}`,
       });
     });
   },
