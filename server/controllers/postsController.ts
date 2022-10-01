@@ -40,7 +40,7 @@ const postsController = {
     const { post_id, painting_url, text } = req.body;
 
     if (!tokenValidity) {
-      res.status(404).json({ message: 'Invalid Token' });
+      res.status(401).json({ message: 'Invalid Token' });
     } else {
       try {
         await Post.update(
@@ -60,7 +60,7 @@ const postsController = {
     const { id } = req.query;
 
     if (!tokenValidity) {
-      res.status(404).json({ message: 'Invalid Token' });
+      res.status(401).json({ message: 'Invalid Token' });
     } else {
       await Post.destroy({ where: { id: Number(id) } })
         .then(() => {
