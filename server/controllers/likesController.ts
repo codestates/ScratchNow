@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { Liking } from '../models/liking';
 import { Post } from '../models/post';
+import status from 'http-status';
 
 const likesController = {
   updateLikesCount: async (post_id: number) => {
@@ -21,7 +22,7 @@ const likesController = {
           })
           .then(() => {
             res
-              .status(200)
+              .status(status.OK)
               .json({ message: `Canceled the like of the post ${post_id}` });
           });
       } else {
@@ -30,11 +31,13 @@ const likesController = {
             likesController.updateLikesCount(post_id);
           })
           .then(() => {
-            res.status(201).json({ message: `Liked the post ${post_id}` });
+            res
+              .status(status.CREATED)
+              .json({ message: `Liked the post ${post_id}` });
           });
       }
     } catch (err) {
-      res.status(404).json({ message: 'Wrong id number requested' });
+      res.status(status.NOT_FOUND).json({ message: 'Wrong id number requested' });
     }
   },
 };

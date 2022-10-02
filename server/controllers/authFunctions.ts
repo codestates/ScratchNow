@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { sign, verify } from 'jsonwebtoken';
 import * as dotenv from 'dotenv';
-import path from 'path';
+import status from 'http-status';
 import { smtpTransport } from '../config/emailAuth';
 
 dotenv.config();
@@ -38,11 +38,11 @@ export const sendAuthNumber = async (email: string, res: Response) => {
 
   smtpTransport.sendMail(mailOptions, (error, responses) => {
     if (error) {
-      res.status(500).json({
+      res.status(status.INTERNAL_SERVER_ERROR).json({
         message: `Failed to send authentication email to ${email}`,
       });
     } else {
-      res.status(200).json({
+      res.status(status.OK).json({
         authNumber,
         message: `Authentication mail is sent to ${email}`,
       });

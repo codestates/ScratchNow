@@ -4,6 +4,7 @@ import { generateAccessToken, sendAuthNumber } from './authFunctions';
 import { google } from 'googleapis';
 import * as bcrypt from 'bcrypt';
 import axios from 'axios';
+import status from 'http-status';
 
 const SALT_ROUND = 4;
 
@@ -18,14 +19,22 @@ const signController = {
       const signType = dataValues.sign_type;
 
       if (signType == 1) {
-        res.status(403).json({ message: 'Email already exists with Kakao' });
+        res
+          .status(status.FORBIDDEN)
+          .json({ message: 'Email already exists with Kakao' });
       } else if (signType == 2) {
-        res.status(403).json({ message: 'Email already exists with Google' });
+        res
+          .status(status.FORBIDDEN)
+          .json({ message: 'Email already exists with Google' });
       } else {
-        res.status(403).json({ message: 'Email already exists with JWT' });
+        res
+          .status(status.FORBIDDEN)
+          .json({ message: 'Email already exists with JWT' });
       }
     } else if (nicknameValidity) {
-      res.status(400).json({ message: 'Nickname already exists' });
+      res
+        .status(status.BAD_REQUEST)
+        .json({ message: 'Nickname already exists' });
     } else {
       const salt = await bcrypt.genSalt(SALT_ROUND);
       const hashedPassword = await bcrypt.hash(password, salt);
@@ -36,7 +45,9 @@ const signController = {
         nickname,
         sign_type: 0,
       }).then(() => {
-        res.status(201).json({ message: `Created the user ${nickname}` });
+        res
+          .status(status.CREATED)
+          .json({ message: `Created the user ${nickname}` });
       });
     }
   },
@@ -46,7 +57,9 @@ const signController = {
     const userinfo = await User.findOne({ where: { email } });
 
     if (!userinfo) {
-      res.status(404).json({ message: `No user data with email: ${email}` });
+      res
+        .status(status.NOT_FOUND)
+        .json({ message: `No user data with email: ${email}` });
     } else {
       const dataValues = userinfo.get({ plain: true });
       const signType = dataValues.sign_type;
@@ -54,9 +67,11 @@ const signController = {
       const passwordValidity = bcrypt.compare(password, <string>hashedPassword);
 
       if (signType !== 0) {
-        res.status(400).json({ message: `Email is registered with OAuth` });
+        res
+          .status(status.BAD_REQUEST)
+          .json({ message: `Email is registered with OAuth` });
       } else if (!passwordValidity) {
-        res.status(403).json({ message: `Wrong password` });
+        res.status(status.FORBIDDEN).json({ message: `Wrong password` });
       } else {
         const payload = {
           id: dataValues.id,
@@ -71,7 +86,7 @@ const signController = {
             secure: true,
             sameSite: 'none',
           })
-          .status(200)
+          .status(status.OK)
           .json({
             message: `Login success with email: ${email}`,
           });
@@ -86,7 +101,7 @@ const signController = {
         secure: true,
         sameSite: 'none',
       })
-      .status(200)
+      .status(status.OK)
       .json({ message: 'Logout success' });
   },
 
@@ -135,13 +150,15 @@ const signController = {
             sign_type: 1,
           },
         }).then((data) => {
-          res.status(200).json({
+          res.status(status.OK).json({
             userdata: { data, accessToken },
             message: 'Kakao login result',
           });
         });
       } else {
-        res.status(400).json({ message: 'No access token from Kakao' });
+        res
+          .status(status.BAD_REQUEST)
+          .json({ message: 'No access token from Kakao' });
       }
     } catch (err) {
       res.json(err);
@@ -188,13 +205,15 @@ const signController = {
             sign_type: 2,
           },
         }).then((data) => {
-          res.status(200).json({
+          res.status(status.OK).json({
             userdata: { data, tokens },
             message: 'Google login result',
           });
         });
       } else {
-        res.status(400).json({ message: 'No token from Google' });
+        res
+          .status(status.BAD_REQUEST)
+          .json({ message: 'No token from Google' });
       }
     } catch (err) {
       res.json(err);

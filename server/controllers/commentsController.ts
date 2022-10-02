@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { Comment } from '../models/comment';
 import { User } from '../models/user';
 import { tokenAuthentication } from './authFunctions';
+import status from 'http-status';
 
 const commentsController = {
   createComment: async (req: Request, res: Response) => {
@@ -13,9 +14,9 @@ const commentsController = {
     });
 
     if (!tokenValidity) {
-      res.status(401).json({ message: 'Invalid Token' });
+      res.status(status.UNAUTHORIZED).json({ message: 'Invalid Token' });
     } else if (original_comment_id !== null && !commentValidity) {
-      res.status(404).json({
+      res.status(status.NOT_FOUND).json({
         message: `Invalid original comment id ${original_comment_id}`,
       });
     } else {
@@ -27,10 +28,14 @@ const commentsController = {
           text,
           original_comment_id,
         }).then((data) => {
-          res.status(201).json({ data: data, message: `Created the comment` });
+          res
+            .status(status.CREATED)
+            .json({ data: data, message: `Created the comment` });
         });
       } catch (err) {
-        res.status(500).json({ message: 'Failed to create comment' });
+        res
+          .status(status.INTERNAL_SERVER_ERROR)
+          .json({ message: 'Failed to create comment' });
       }
     }
   },
@@ -40,7 +45,7 @@ const commentsController = {
     const { comment_id, text, anonymity_yn } = req.body;
 
     if (!tokenValidity) {
-      res.status(401).json({ message: 'Invalid Token' });
+      res.status(status.UNAUTHORIZED).json({ message: 'Invalid Token' });
     } else {
       try {
         await Comment.update(
@@ -56,13 +61,15 @@ const commentsController = {
               'updated_at',
             ],
           });
-          res.status(200).json({
+          res.status(status.OK).json({
             data: updatedCommentInfo,
             message: `Modified the comment`,
           });
         });
       } catch (err) {
-        res.status(500).json({ message: 'Failed to modify comment' });
+        res
+          .status(status.INTERNAL_SERVER_ERROR)
+          .json({ message: 'Failed to modify comment' });
       }
     }
   },
@@ -75,16 +82,18 @@ const commentsController = {
     });
 
     if (!tokenValidity) {
-      res.status(401).json({ message: 'Invalid Token' });
+      res.status(status.UNAUTHORIZED).json({ message: 'Invalid Token' });
     } else if (!commentValidity) {
-      res.status(404).json({ message: `No comment ${id}` });
+      res.status(status.NOT_FOUND).json({ message: `No comment ${id}` });
     } else {
       try {
         await Comment.destroy({ where: { id: Number(id) } }).then(() => {
-          res.status(200).json({ message: `Soft deleted the comment` });
+          res.status(status.OK).json({ message: `Soft deleted the comment` });
         });
       } catch (err) {
-        res.status(500).json({ message: 'Failed to delete the comment' });
+        res
+          .status(status.INTERNAL_SERVER_ERROR)
+          .json({ message: 'Failed to delete the comment' });
       }
     }
   },
@@ -123,10 +132,14 @@ const commentsController = {
           },
         ],
       }).then((data) => {
-        res.status(200).json({ data: data, message: `Comments of post ${id}` });
+        res
+          .status(status.OK)
+          .json({ data: data, message: `Comments of post ${id}` });
       });
     } catch (err) {
-      res.status(500).json({ message: 'Failed providing comments' });
+      res
+        .status(status.INTERNAL_SERVER_ERROR)
+        .json({ message: 'Failed providing comments' });
     }
   },
 };

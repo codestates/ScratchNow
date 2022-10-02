@@ -10,6 +10,8 @@ import * as os from 'os';
 import { sequelize } from './models';
 import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
+import compression from 'compression';
+import rateLimit from 'express-rate-limit';
 
 dotenv.config();
 
@@ -20,10 +22,17 @@ const PORT = process.env.SERVER_PORT;
 const app = express();
 app.use(express.json());
 app.use(cors());
+app.use(routes);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.use(routes);
+app.use(compression());
+app.use(
+  rateLimit({
+    windowMs: 10 * 60 * 1000,
+    max: 100,
+  }),
+);
 
 const swaggerSpec = YAML.load(path.join(__dirname, './swagger/swagger.yaml'));
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
