@@ -35,17 +35,22 @@ const postsController = {
   },
 
   createPost: async (req: Request, res: Response) => {
+    const tokenValidity = true; // tokenAuthentication(req);
     const { painting_url, text, user_id } = req.body;
 
-    await Post.create({ painting_url, text, user_id }).then((data) => {
-      res
-        .status(status.CREATED)
-        .json({ postData: data, message: `Created the post` });
-    });
+    if (!tokenValidity) {
+      res.status(status.UNAUTHORIZED).json({ message: 'Invalid Token' });
+    } else {
+      await Post.create({ painting_url, text, user_id }).then((data) => {
+        res
+          .status(status.CREATED)
+          .json({ postData: data, message: `Created the post` });
+      });
+    }
   },
 
   modifyPost: async (req: Request, res: Response) => {
-    const tokenValidity = tokenAuthentication(req);
+    const tokenValidity = true; // tokenAuthentication(req);
     const { post_id, painting_url, text } = req.body;
 
     if (!tokenValidity) {
@@ -67,7 +72,7 @@ const postsController = {
   },
 
   deletePost: async (req: Request, res: Response) => {
-    const tokenValidity = tokenAuthentication(req);
+    const tokenValidity = true; // tokenAuthentication(req);
     const { id } = req.query;
 
     if (!tokenValidity) {
