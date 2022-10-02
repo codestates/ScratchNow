@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { Post } from '../models/post';
 import { User } from '../models/user';
+import status from 'http-status';
 
 const feedsController = {
   getTotalFeedByDate: async (req: Request, res: Response) => {
@@ -21,7 +22,7 @@ const feedsController = {
         },
       ],
     }).then((data) => {
-      res.status(200).json({
+      res.status(status.OK).json({
         feedData: data,
         message: 'All posts of our service listed by date',
       });
@@ -49,7 +50,7 @@ const feedsController = {
         },
       ],
     }).then((data) => {
-      res.status(200).json({
+      res.status(status.OK).json({
         feedData: data,
         message: 'All posts of our service listed by likes',
       });
@@ -64,7 +65,7 @@ const feedsController = {
       order: [['created_at', 'DESC']],
       attributes: ['id', 'painting_url', 'total_likes', 'created_at'],
     }).then((data) => {
-      res.status(200).json({
+      res.status(status.OK).json({
         feedData: data,
         message: `Feed(posts) of user ${id}`,
       });

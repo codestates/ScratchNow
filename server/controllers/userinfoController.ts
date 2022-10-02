@@ -4,6 +4,7 @@ import { Post } from '../models/post';
 import { Liking } from '../models/liking';
 import { tokenAuthentication } from './authFunctions';
 import * as bcrypt from 'bcrypt';
+import status from 'http-status';
 
 const SALT_ROUND = 4;
 
@@ -17,7 +18,7 @@ const userinfoController = {
     }).then(async (userData) => {
       const postCount = await Post.count({ where: { user_id: Number(id) } });
 
-      res.status(200).json({
+      res.status(status.OK).json({
         data: { userData, postCount },
         message: `User information of the user ${id}`,
       });
@@ -29,14 +30,14 @@ const userinfoController = {
     const { user_id } = req.body;
 
     if (!tokenValidity) {
-      res.status(401).json({ message: 'Invalid Token' });
+      res.status(status.UNAUTHORIZED).json({ message: 'Invalid Token' });
     } else {
       await User.update(
         { profile_image_url: '' },
         { where: { id: user_id } },
       ).then(() => {
         res
-          .status(200)
+          .status(status.OK)
           .json({ message: `Deleted the profile image of user ${user_id}` });
       });
     }
@@ -49,9 +50,11 @@ const userinfoController = {
     });
 
     if (nicknameValidity) {
-      res.status(200).json({ message: 'Nickname already exists' });
+      res.status(status.OK).json({ message: 'Nickname already exists' });
     } else {
-      res.status(202).json({ message: `Nickname ${nickname} is available` });
+      res
+        .status(status.ACCEPTED)
+        .json({ message: `Nickname ${nickname} is available` });
     }
   },
 
@@ -60,14 +63,14 @@ const userinfoController = {
     const { id, profile_image_url, nickname, status_message } = req.body;
 
     if (!tokenValidity) {
-      res.status(401).json({ message: 'Invalid Token' });
+      res.status(status.UNAUTHORIZED).json({ message: 'Invalid Token' });
     } else {
       await User.update(
         { profile_image_url, nickname, status_message },
         { where: { id } },
       ).then(() => {
         res
-          .status(200)
+          .status(status.OK)
           .json({ message: `Updated user information of user ${id}` });
       });
     }
@@ -78,7 +81,7 @@ const userinfoController = {
     const { user_id, password } = req.body;
 
     if (!tokenValidity) {
-      res.status(401).json({ message: 'Invalid Token' });
+      res.status(status.UNAUTHORIZED).json({ message: 'Invalid Token' });
     } else {
       const salt = await bcrypt.genSalt(SALT_ROUND);
       const hashedPassword = await bcrypt.hash(password, salt);
@@ -88,7 +91,7 @@ const userinfoController = {
         { where: { id: user_id } },
       ).then(() => {
         res
-          .status(200)
+          .status(status.OK)
           .json({ message: `Changed the password of user ${user_id}` });
       });
     }
@@ -99,7 +102,7 @@ const userinfoController = {
     const { id, email } = req.query;
 
     if (!tokenValidity) {
-      res.status(401).json({ message: 'Invalid Token' });
+      res.status(status.UNAUTHORIZED).json({ message: 'Invalid Token' });
     } else {
       await User.destroy({ where: { id: Number(id) } })
         .then(() => {
@@ -107,7 +110,9 @@ const userinfoController = {
           Liking.destroy({ where: { user_id: Number(id) } });
         })
         .then(() => {
-          res.status(200).json({ message: `Soft deleted the account ${id}` });
+          res
+            .status(status.OK)
+            .json({ message: `Soft deleted the account ${id}` });
         });
     }
   },
