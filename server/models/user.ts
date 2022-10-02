@@ -45,7 +45,7 @@ User.init(
       allowNull: true,
     },
     nickname: {
-      type: DataTypes.STRING(10),
+      type: DataTypes.STRING(15),
       allowNull: true,
     },
     profile_image_url: {
