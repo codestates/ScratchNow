@@ -2,6 +2,6 @@
 package-lock.json
 .idea
 build
-.env
+
 .dev.env
 .prod.env

@@ -13,7 +13,11 @@ import bodyParser from 'body-parser';
 import compression from 'compression';
 import rateLimit from 'express-rate-limit';
 
-dotenv.config();
+dotenv.config({
+  path: path.resolve(
+    process.env.NODE_ENV === 'production' ? '.prod.env' : '.dev.env',
+  ),
+});
 
 const PROTOCOL = 'http';
 const myIP = ip.address();
