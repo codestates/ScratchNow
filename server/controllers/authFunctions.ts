@@ -1,23 +1,20 @@
 import { Request, Response } from 'express';
 import { sign, verify } from 'jsonwebtoken';
 import * as dotenv from 'dotenv';
-import path from 'path';
+import status from 'http-status';
 import { smtpTransport } from '../config/emailAuth';
+import * as path from 'path';
 
 dotenv.config({
   path: path.resolve(
-    process.env.NODE_ENV === 'production'
-      ? '.prod.env'
-      : process.env.NODE_ENV === 'test'
-      ? '.test.env'
-      : '.dev.env',
+    process.env.NODE_ENV === 'production' ? '.prod.env' : '.dev.env',
   ),
 });
 
 const SECRET = String(process.env.JWT_SECRET);
 
 export const generateAccessToken = (data: object) => {
-  return sign(data, SECRET, { expiresIn: '12h' });
+  return sign(data, SECRET, { expiresIn: '6h' });
 };
 
 export const tokenAuthentication = (req: Request) => {
@@ -46,11 +43,11 @@ export const sendAuthNumber = async (email: string, res: Response) => {
 
   smtpTransport.sendMail(mailOptions, (error, responses) => {
     if (error) {
-      res.status(500).json({
+      res.status(status.INTERNAL_SERVER_ERROR).json({
         message: `Failed to send authentication email to ${email}`,
       });
     } else {
-      res.status(200).json({
+      res.status(status.OK).json({
         authNumber,
         message: `Authentication mail is sent to ${email}`,
       });

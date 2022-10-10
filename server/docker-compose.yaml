@@ -1,0 +1,42 @@
+version: '3.9'
+
+networks:
+  scratchnow-api-net:
+    driver: bridge
+
+services:
+  db:
+    image: mysql:latest
+    restart: 'always'
+    ports:
+      - "3306:3306"
+    container_name: ScratchNow-DB
+    environment:
+      MYSQL_ROOT_PASSWORD: scratch
+      MYSQL_DATABASE: scratchnow_dev
+      MYSQL_USER: user
+      MYSQL_PASSWORD: scratch
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "ScratchNow-DB", "-uroot", "-pscratch"]
+      retries: 2
+    networks:
+      - scratchnow-api-net
+
+  scratchnow-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3300:3300"
+    container_name: ScratchNow-API
+    networks:
+      - scratchnow-api-net
+    depends_on:
+      db:
+        condition: service_healthy
+    command:
+      - sh
+      - -c
+      - |
+        npm run migrate
+        pm2-runtime start ecosystem.config.js --env development

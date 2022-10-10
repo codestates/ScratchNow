@@ -1,33 +1,39 @@
-import { DataTypes, Model } from 'sequelize';
+import { CreationOptional, DataTypes, Model } from 'sequelize';
 import { sequelize } from './index';
 
-interface UsersAttributes {
+type UsersAttributes = {
   id?: number;
+  sign_type?: number;
   email?: string;
   password?: string;
   nickname?: string;
   profile_image_url?: string;
   status_message?: string;
+};
+
+export class User extends Model<UsersAttributes> {
+  private declare readonly id: number;
+  private declare sign_type: number;
+  private declare email: string;
+  private declare password: string;
+  private declare nickname: string;
+  private declare profile_image_url: string;
+  private declare status_message: string;
+  private declare readonly created_at: CreationOptional<Date>;
+  private declare readonly updated_at: CreationOptional<Date>;
+  private declare readonly deleted_at: CreationOptional<Date>;
 }
 
-export class Users extends Model<UsersAttributes> {
-  private readonly id!: number;
-  private email!: string;
-  private password!: string;
-  private nickname!: string;
-  private profile_image_url!: string;
-  private status_message!: string;
-  private readonly created_at!: Date;
-  private readonly updated_at!: Date;
-  private readonly deleted_at!: Date;
-}
-
-Users.init(
+User.init(
   {
     id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
+      allowNull: false,
+    },
+    sign_type: {
+      type: DataTypes.INTEGER,
       allowNull: false,
     },
     email: {
@@ -39,7 +45,7 @@ Users.init(
       allowNull: true,
     },
     nickname: {
-      type: DataTypes.STRING(10),
+      type: DataTypes.STRING(15),
       allowNull: true,
     },
     profile_image_url: {
@@ -52,8 +58,8 @@ Users.init(
     },
   },
   {
-    modelName: 'Users',
-    tableName: 'users',
+    modelName: 'User',
+    tableName: 'user',
     sequelize,
     freezeTableName: true,
     paranoid: true,

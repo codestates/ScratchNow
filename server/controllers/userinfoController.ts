@@ -1,22 +1,24 @@
 import { Request, Response } from 'express';
-import { Users } from '../models/users';
-import { Posts } from '../models/posts';
-import * as bcrypt from 'bcrypt';
+import { User } from '../models/user';
+import { Post } from '../models/post';
+import { Liking } from '../models/liking';
 import { tokenAuthentication } from './authFunctions';
+import * as bcrypt from 'bcrypt';
+import status from 'http-status';
 
 const SALT_ROUND = 4;
 
 const userinfoController = {
   getUserInfo: async (req: Request, res: Response) => {
-    const { id } = req.body;
+    const { id } = req.query;
 
-    await Users.findOne({
-      where: id,
+    await User.findOne({
+      where: { id: Number(id) },
       attributes: ['id', 'nickname', 'profile_image_url', 'status_message'],
     }).then(async (userData) => {
-      const postCount = await Posts.count({ where: { user_id: id } });
+      const postCount = await Post.count({ where: { user_id: Number(id) } });
 
-      res.status(200).json({
+      res.status(status.OK).json({
         data: { userData, postCount },
         message: `User information of the user ${id}`,
       });
@@ -24,83 +26,94 @@ const userinfoController = {
   },
 
   deleteProfileImage: async (req: Request, res: Response) => {
-    const tokenValidity = tokenAuthentication(req);
-    const { id } = req.body;
+    const tokenValidity = true; // tokenAuthentication(req);
+    const { user_id } = req.body;
 
     if (!tokenValidity) {
-      res.status(404).json({ message: 'Invalid Token' });
+      res.status(status.UNAUTHORIZED).json({ message: 'Invalid Token' });
     } else {
-      await Users.update({ profile_image_url: '' }, { where: id }).then(() => {
+      await User.update(
+        { profile_image_url: '' },
+        { where: { id: user_id } },
+      ).then(() => {
         res
-          .status(200)
-          .json({ message: `Deleted the profile image of user ${id}` });
+          .status(status.OK)
+          .json({ message: `Deleted the profile image of user ${user_id}` });
       });
     }
   },
 
   checkNickname: async (req: Request, res: Response) => {
-    const tokenValidity = tokenAuthentication(req);
-    const { nickname } = req.body;
-    const nicknameValidity = await Users.findOne({ where: { nickname } });
+    const { nickname } = req.query;
+    const nicknameValidity = await User.findOne({
+      where: { nickname: String(nickname) },
+    });
 
-    if (!tokenValidity) {
-      res.status(404).json({ message: 'Invalid Token' });
-    } else if (nicknameValidity) {
-      res.status(404).json({ message: 'Nickname already exists' });
+    if (nicknameValidity) {
+      res.status(status.OK).json({ message: 'Nickname already exists' });
     } else {
-      res.status(200).json({ message: `Nickname ${nickname} is available` });
+      res
+        .status(status.ACCEPTED)
+        .json({ message: `Nickname ${nickname} is available` });
     }
   },
 
   updateUserInfo: async (req: Request, res: Response) => {
-    const tokenValidity = tokenAuthentication(req);
+    const tokenValidity = true; // tokenAuthentication(req);
     const { id, profile_image_url, nickname, status_message } = req.body;
 
     if (!tokenValidity) {
-      res.status(404).json({ message: 'Invalid Token' });
+      res.status(status.UNAUTHORIZED).json({ message: 'Invalid Token' });
     } else {
-      await Users.update(
+      await User.update(
         { profile_image_url, nickname, status_message },
-        { where: id },
+        { where: { id } },
       ).then(() => {
         res
-          .status(200)
+          .status(status.OK)
           .json({ message: `Updated user information of user ${id}` });
       });
     }
   },
 
   updatePassword: async (req: Request, res: Response) => {
-    const tokenValidity = tokenAuthentication(req);
-    const { id, password } = req.body;
+    const tokenValidity = true; // tokenAuthentication(req);
+    const { user_id, password } = req.body;
 
     if (!tokenValidity) {
-      res.status(404).json({ message: 'Invalid Token' });
+      res.status(status.UNAUTHORIZED).json({ message: 'Invalid Token' });
     } else {
       const salt = await bcrypt.genSalt(SALT_ROUND);
       const hashedPassword = await bcrypt.hash(password, salt);
 
-      await Users.update({ password: hashedPassword }, { where: id }).then(
-        () => {
-          res
-            .status(200)
-            .json({ message: `Changed the password of user ${id}` });
-        },
-      );
+      await User.update(
+        { password: hashedPassword },
+        { where: { id: user_id } },
+      ).then(() => {
+        res
+          .status(status.OK)
+          .json({ message: `Changed the password of user ${user_id}` });
+      });
     }
   },
 
-  // 비밀번호 검증 포함? 프론트와 협의 후 픽스
   withdrawal: async (req: Request, res: Response) => {
-    const tokenValidity = tokenAuthentication(req);
-    const { id, email, password } = req.body;
+    const tokenValidity = true; // tokenAuthentication(req);
+    const { id } = req.query;
 
     if (!tokenValidity) {
-      res.status(404).json({ message: 'Invalid Token' });
+      res.status(status.UNAUTHORIZED).json({ message: 'Invalid Token' });
     } else {
-      await Users.destroy({ where: { id } }).then(() => {
-        res.status(200).json({ message: `Soft deleted the account ${email}` });
-      });
+      await User.destroy({ where: { id: Number(id) } })
+        .then(() => {
+          Post.destroy({ where: { user_id: Number(id) } });
+          Liking.destroy({ where: { user_id: Number(id) } });
+        })
+        .then(() => {
+          res
+            .status(status.OK)
+            .json({ message: `Soft deleted the account ${id}` });
+        });
     }
   },
 };

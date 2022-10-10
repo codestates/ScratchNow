@@ -1,32 +1,51 @@
 import { Request, Response } from 'express';
-import { Likes } from '../models/likes';
-import { Posts } from '../models/posts';
+import { Liking } from '../models/liking';
+import { Post } from '../models/post';
+import status from 'http-status';
 
 const likesController = {
-  addLike: async (req: Request, res: Response) => {
-    const { user_id, post_id } = req.body;
-
-    await Likes.create({ user_id, post_id })
-      .then((data) => {
-        Posts.increment({ total_likes: 1 }, { where: { id: post_id } });
-      })
-      .then(() => {
-        res.status(201).json({ message: `Liked the post ${post_id}` });
-      });
+  updateLikesCount: async (post_id: number) => {
+    await Liking.count({ where: { post_id } }).then((counts) => {
+      Post.update({ total_likes: counts }, { where: { id: post_id } });
+    });
   },
 
-  cancelLike: async (req: Request, res: Response) => {
+  addOrCancelLike: async (req: Request, res: Response) => {
+    const tokenValidity = true; // tokenAuthentication(req);
     const { user_id, post_id } = req.body;
+    const likedOrNot = await Liking.findOne({ where: { user_id, post_id } });
 
-    await Likes.destroy({ where: { user_id, post_id } })
-      .then((data) => {
-        Posts.decrement({ total_likes: 1 }, { where: { id: post_id } });
-      })
-      .then(() => {
+    if (!tokenValidity) {
+      res.status(status.UNAUTHORIZED).json({ message: 'Invalid Token' });
+    } else {
+      try {
+        if (likedOrNot) {
+          await Liking.destroy({ where: { user_id, post_id } })
+            .then(() => {
+              likesController.updateLikesCount(post_id);
+            })
+            .then(() => {
+              res
+                .status(status.OK)
+                .json({ message: `Canceled the like of the post ${post_id}` });
+            });
+        } else {
+          await Liking.create({ user_id, post_id })
+            .then(() => {
+              likesController.updateLikesCount(post_id);
+            })
+            .then(() => {
+              res
+                .status(status.CREATED)
+                .json({ message: `Liked the post ${post_id}` });
+            });
+        }
+      } catch (err) {
         res
-          .status(200)
-          .json({ message: `Canceled the like of the post ${post_id}` });
-      });
+          .status(status.NOT_FOUND)
+          .json({ message: 'Wrong id number requested' });
+      }
+    }
   },
 };
 

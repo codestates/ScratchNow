@@ -6,7 +6,7 @@ const router = Router();
 
 router.post('/', SignController.signup);
 router.post('/login', SignController.login);
-router.post('/logout', SignController.logout);
+router.get('/logout', SignController.logout);
 router.post('/emailcheck', SignController.emailAuthentication);
 router.get('/kakao/login', SignController.kakaoOAuth);
 router.get('/kakao/token', SignController.kakaoToken);
@@ -15,7 +15,7 @@ router.get('/google/callback', SignController.googleCallback);
 
 router.get('/', UserinfoController.getUserInfo);
 router.patch('/profileimagenull', UserinfoController.deleteProfileImage);
-router.post('/nicknamecheck', UserinfoController.checkNickname);
+router.get('/nicknamecheck', UserinfoController.checkNickname);
 router.patch('/', UserinfoController.updateUserInfo);
 router.patch('/password', UserinfoController.updatePassword);
 router.delete('/', UserinfoController.withdrawal);

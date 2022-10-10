@@ -8,25 +8,35 @@ import * as path from 'path';
 import * as ip from 'ip';
 import * as os from 'os';
 import { sequelize } from './models';
+import cookieParser from 'cookie-parser';
+import bodyParser from 'body-parser';
+import compression from 'compression';
+import rateLimit from 'express-rate-limit';
 
 dotenv.config({
   path: path.resolve(
-    process.env.NODE_ENV === 'production'
-      ? '.prod.env'
-      : process.env.NODE_ENV === 'test'
-      ? '.test.env'
-      : '.dev.env',
+    process.env.NODE_ENV === 'production' ? '.prod.env' : '.dev.env',
   ),
 });
 
-const app = express();
 const PROTOCOL = 'http';
 const myIP = ip.address();
 const PORT = process.env.SERVER_PORT;
 
+const app = express();
 app.use(express.json());
 app.use(cors());
 app.use(routes);
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cookieParser());
+app.use(compression());
+app.use(
+  rateLimit({
+    windowMs: 10 * 60 * 1000,
+    max: 100,
+  }),
+);
 
 const swaggerSpec = YAML.load(path.join(__dirname, './swagger/swagger.yaml'));
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
@@ -48,7 +58,7 @@ app.listen(PORT, async () => {
       '                                                                                                                                                                                             ',
   );
   console.log(
-    `===== 🎨️Environment Info 🎨 ======\nUser home: ${
+    `======================= 🎨️Environment Info 🎨 =======================\nUser home: ${
       os.userInfo().username
     }\nNode Version: ${process.version}\nNode ENV: ${process.env.NODE_ENV}`,
   );
@@ -56,13 +66,10 @@ app.listen(PORT, async () => {
     .authenticate()
     .then(async () => {
       console.log(
-        `DB connection success! DB Port: ${process.env.DATABASE_PORT}`,
+        `DB connection success! DB Port: ${process.env.DATABASE_PORT}\nScratchNow Server Running! API Doc: ${PROTOCOL}://${myIP}:${PORT}/api-docs`,
       );
     })
     .catch((err) => {
       console.log('DB connection error: ', err);
     });
-  console.log(
-    `ScratchNow Server Running! API Doc: ${PROTOCOL}://${myIP}:${PORT}/api-docs`,
-  );
 });

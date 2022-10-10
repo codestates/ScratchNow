@@ -1,72 +1,107 @@
 import { Request, Response } from 'express';
-import { Users } from '../models/users';
+import { User } from '../models/user';
 import { generateAccessToken, sendAuthNumber } from './authFunctions';
 import { google } from 'googleapis';
 import * as bcrypt from 'bcrypt';
 import axios from 'axios';
+import status from 'http-status';
 
 const SALT_ROUND = 4;
 
 const signController = {
   signup: async (req: Request, res: Response) => {
     const { email, password, nickname } = req.body;
-    const emailValidity = await Users.findOne({ where: { email } });
-    const nicknameValidity = await Users.findOne({ where: { nickname } });
+    const emailValidity = await User.findOne({ where: { email } });
+    const nicknameValidity = await User.findOne({ where: { nickname } });
 
     if (emailValidity) {
-      res.status(404).json({ message: 'Email already exists' });
+      const dataValues = emailValidity.get({ plain: true });
+      const signType = dataValues.sign_type;
+
+      if (signType == 1) {
+        res
+          .status(status.FORBIDDEN)
+          .json({ message: 'Email already exists with Kakao' });
+      } else if (signType == 2) {
+        res
+          .status(status.FORBIDDEN)
+          .json({ message: 'Email already exists with Google' });
+      } else {
+        res
+          .status(status.FORBIDDEN)
+          .json({ message: 'Email already exists with JWT' });
+      }
     } else if (nicknameValidity) {
-      res.status(404).json({ message: 'Nickname already exists' });
+      res
+        .status(status.BAD_REQUEST)
+        .json({ message: 'Nickname already exists' });
     } else {
       const salt = await bcrypt.genSalt(SALT_ROUND);
       const hashedPassword = await bcrypt.hash(password, salt);
 
-      await Users.create({ email, password: hashedPassword, nickname }).then(
-        () => {
-          res.status(201).json({ message: `Created the user ${nickname}` });
-        },
-      );
+      await User.create({
+        email,
+        password: hashedPassword,
+        nickname,
+        sign_type: 0,
+      }).then(() => {
+        res
+          .status(status.CREATED)
+          .json({ message: `Created the user ${nickname}` });
+      });
     }
   },
 
   login: async (req: Request, res: Response) => {
     const { email, password } = req.body;
-    const userinfo = await Users.findOne({ where: { email } });
+    const userinfo = await User.findOne({ where: { email } });
 
     if (!userinfo) {
-      res.status(404).json({ message: `No user data with email: ${email}` });
+      res
+        .status(status.NOT_FOUND)
+        .json({ message: `No user data with email: ${email}` });
     } else {
       const dataValues = userinfo.get({ plain: true });
+      const signType = dataValues.sign_type;
       const hashedPassword = dataValues.password;
       const passwordValidity = bcrypt.compare(password, <string>hashedPassword);
 
-      if (!passwordValidity) {
-        res.status(404).json({ message: `Wrong password` });
+      if (signType !== 0) {
+        res
+          .status(status.BAD_REQUEST)
+          .json({ message: `Email is registered with OAuth` });
+      } else if (!passwordValidity) {
+        res.status(status.FORBIDDEN).json({ message: `Wrong password` });
       } else {
-        const accessToken = generateAccessToken(dataValues);
+        const payload = {
+          id: dataValues.id,
+          email: dataValues.email,
+          nickname: dataValues.nickname,
+        };
+        const accessToken = generateAccessToken(payload);
+
         res
           .cookie('jwt', accessToken, {
             httpOnly: true,
             secure: true,
             sameSite: 'none',
           })
-          .status(200)
+          .status(status.OK)
           .json({
-            data: { accessToken },
             message: `Login success with email: ${email}`,
           });
       }
     }
   },
 
-  logout: async (res: Response) => {
+  logout: async (req: Request, res: Response) => {
     res
-      .clearCookie('accessToken', {
+      .clearCookie('jwt', {
         httpOnly: true,
         secure: true,
         sameSite: 'none',
       })
-      .status(200)
+      .status(status.OK)
       .json({ message: 'Logout success' });
   },
 
@@ -109,30 +144,40 @@ const signController = {
           },
         });
 
-        await Users.findOrCreate({
+        await User.findOrCreate({
           where: {
             email: userinfo.data.kakao_account.email,
-            profile_image_url:
-              userinfo.data.kakao_account.profile.profile_image_url,
+            sign_type: 1,
           },
         }).then((data) => {
-          res.status(200).json({
+          res.status(status.OK).json({
             userdata: { data, accessToken },
             message: 'Kakao login result',
           });
         });
       } else {
-        res.json({ message: 'No access token from Kakao' });
+        res
+          .status(status.BAD_REQUEST)
+          .json({ message: 'No access token from Kakao' });
       }
     } catch (err) {
-      res.status(500).json(err);
+      res.json(err);
     }
   },
 
   googleOAuth: async (req: Request, res: Response) => {
-    res.redirect(
-      `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.GOOGLE_CLIENT_ID}&redirect_uri=${process.env.GOOGLE_REDIRECT_URI}&response_type=code&scope=https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email&state=google`,
-    );
+    const baseUrl = 'https://accounts.google.com/o/oauth2/v2/auth';
+
+    const config: any = {
+      client_id: process.env.GOOGLE_CLIENT_ID,
+      redirect_uri: process.env.GOOGLE_REDIRECT_URI,
+      response_type: 'code',
+      scope: process.env.GOOGLE_OAUTH_SCOPE,
+      state: 'google',
+    };
+
+    const params = new URLSearchParams(config).toString();
+    res.redirect(`${baseUrl}?${params}`);
   },
 
   googleCallback: async (req: Request, res: Response) => {
@@ -154,22 +199,24 @@ const signController = {
           `https://www.googleapis.com/oauth2/v3/userinfo?access_token=${tokens.access_token}`,
         );
 
-        await Users.findOrCreate({
+        await User.findOrCreate({
           where: {
             email: userinfo.data.email,
-            profile_image_url: userinfo.data.picture,
+            sign_type: 2,
           },
         }).then((data) => {
-          res.status(200).json({
+          res.status(status.OK).json({
             userdata: { data, tokens },
             message: 'Google login result',
           });
         });
       } else {
-        res.json({ message: 'No token from Google' });
+        res
+          .status(status.BAD_REQUEST)
+          .json({ message: 'No token from Google' });
       }
     } catch (err) {
-      res.status(500).json(err);
+      res.json(err);
     }
   },
 

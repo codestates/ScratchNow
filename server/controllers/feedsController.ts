@@ -1,23 +1,28 @@
 import { Request, Response } from 'express';
-import { Posts } from '../models/posts';
-import { Users } from '../models/users';
+import { Post } from '../models/post';
+import { User } from '../models/user';
+import status from 'http-status';
 
 const feedsController = {
   getTotalFeedByDate: async (req: Request, res: Response) => {
-    await Posts.findAll({
+    await Post.findAll({
       order: [['created_at', 'DESC']],
       attributes: [
         'id',
         'painting_url',
         'user_id',
         'total_likes',
-        'updated_at',
+        'created_at',
       ],
       include: [
-        { model: Users, attributes: ['id', 'nickname', 'profile_image_url'] },
+        {
+          model: User,
+          as: 'userHasManyPosts',
+          attributes: ['id', 'nickname', 'profile_image_url'],
+        },
       ],
     }).then((data) => {
-      res.status(200).json({
+      res.status(status.OK).json({
         feedData: data,
         message: 'All posts of our service listed by date',
       });
@@ -25,20 +30,27 @@ const feedsController = {
   },
 
   getTotalFeedByLikes: async (req: Request, res: Response) => {
-    await Posts.findAll({
-      order: [['total_likes', 'DESC']],
+    await Post.findAll({
+      order: [
+        ['total_likes', 'DESC'],
+        ['created_at', 'DESC'],
+      ],
       attributes: [
         'id',
         'painting_url',
         'user_id',
         'total_likes',
-        'updated_at',
+        'created_at',
       ],
       include: [
-        { model: Users, attributes: ['id', 'nickname', 'profile_image_url'] },
+        {
+          model: User,
+          as: 'userHasManyPosts',
+          attributes: ['id', 'nickname', 'profile_image_url'],
+        },
       ],
     }).then((data) => {
-      res.status(200).json({
+      res.status(status.OK).json({
         feedData: data,
         message: 'All posts of our service listed by likes',
       });
@@ -46,22 +58,16 @@ const feedsController = {
   },
 
   getUserFeed: async (req: Request, res: Response) => {
-    const { id } = req.body;
+    const { id } = req.query;
 
-    await Users.findOne({
-      where: { id },
-      attributes: ['id', 'nickname', 'profile_image_url', 'status_message'],
-      include: [
-        {
-          model: Posts,
-          order: ['created_at', 'DESC'],
-          attributes: ['id', 'painting_url', 'total_likes', 'created_at'],
-        },
-      ],
+    await Post.findAll({
+      where: { user_id: Number(id) },
+      order: [['created_at', 'DESC']],
+      attributes: ['id', 'painting_url', 'total_likes', 'created_at'],
     }).then((data) => {
-      res.status(200).json({
-        data: data,
-        message: `Feed and profile of user ${id}`,
+      res.status(status.OK).json({
+        feedData: data,
+        message: `Feed(posts) of user ${id}`,
       });
     });
   },
