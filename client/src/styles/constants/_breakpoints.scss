@@ -1,0 +1,22 @@
+/* breakpoints */
+$MOBILE_SIZE: 360px;
+$TAB_SIZE: 830px;
+
+/* mixins 
+  사용 예: 모바일사이즈 미디어쿼리 사용시 아래와 같이 사용
+  @include mobileSize() {
+    ...
+  }
+*/
+
+@mixin mobileSize() {
+  @media only screen and (max-width: $MOBILE_SIZE) {
+    @content;
+  }
+}
+
+@mixin tabSize {
+  @media only screen and (max-width: $TAB_SIZE) {
+    @content;
+  }
+}
