@@ -1,0 +1,18 @@
+/* reset SCSS */
+@import './reset';
+
+/* constants SCSS */
+@import './constants/breakpoints';
+@import './constants/colors';
+
+/* UI SCSS */
+@import './components/UI/header';
+
+/* pages SCSS */
+@import './pages/joinPage';
+@import './pages/loginPage';
+@import './pages/mainPage';
+@import './pages/myPage';
+@import './pages/otherUserPage';
+
+
