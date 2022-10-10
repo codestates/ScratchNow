@@ -13,7 +13,7 @@ npm run start
 
 ## SASS 실행
 
-터미널에 아래 명령어를 입력시 main.scss에 연결된 scss파일의 내용이 변경될 때마다 style.css 파일로 컴파일됩니다.
+터미널에 아래 명령어를 입력시 scss파일 저장시마다 main.scss 파일이 style.css 파일로 컴파일됩니다.
 
 ```
 npm run sass
