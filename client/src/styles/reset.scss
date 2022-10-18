@@ -42,6 +42,11 @@ table {
 	border-spacing: 0;
 }
 
+input {
+	border: none;
+	outline: none;
+}
+
 button {
   border: none;
   outline: none;
@@ -59,4 +64,6 @@ button {
 #no_header_container {
   @extend #container;
   top: 0px;
+	width:100%;
+	height: 100%;
 }
