@@ -50,6 +50,11 @@ table {
   border-spacing: 0;
 }
 
+input {
+  border: none;
+  outline: none;
+}
+
 button {
   border: none;
   outline: none;
@@ -66,6 +71,8 @@ button {
 
 #no_header_container {
   top: 0px;
+  width: 100%;
+  height: 100%;
 }
 
 /* constants SCSS */
@@ -144,3 +151,155 @@ button {
 }
 
 /* pages SCSS */
+#loginpage_container {
+  position: absolute;
+  display: flex;
+  flex-wrap: wrap;
+  width: 978px;
+  height: 632px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 10px 100px 100px 10px;
+  background-color: rgba(255, 181, 198, 0.1);
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+@media only screen and (max-width: 830px) {
+  #loginpage_container {
+    width: 100%;
+    height: 100%;
+    border-radius: 0;
+  }
+}
+#loginpage_container #img_wrapper {
+  width: 50%;
+  left: 0;
+}
+@media only screen and (max-width: 830px) {
+  #loginpage_container #img_wrapper {
+    width: 100%;
+    height: 25%;
+  }
+}
+#loginpage_container #img_wrapper .desktop_img {
+  width: 100%;
+  height: 100%;
+  border-radius: 12px 0px 0px 12px;
+  object-fit: cover;
+}
+@media only screen and (max-width: 830px) {
+  #loginpage_container #img_wrapper .desktop_img {
+    display: none;
+  }
+}
+#loginpage_container #img_wrapper .mobile_img {
+  display: none;
+  width: 100%;
+  height: 100%;
+  border-radius: 0;
+  object-fit: cover;
+}
+@media only screen and (max-width: 830px) {
+  #loginpage_container #img_wrapper .mobile_img {
+    display: block;
+  }
+}
+#loginpage_container #contents_wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  width: 50%;
+  height: 100%;
+}
+@media only screen and (max-width: 830px) {
+  #loginpage_container #contents_wrapper {
+    width: 100%;
+    height: 75%;
+  }
+}
+#loginpage_container #contents_wrapper #inner {
+  position: relative;
+  max-width: 344px;
+  width: 100%;
+  height: 355px;
+  margin-bottom: 11.5px;
+}
+@media only screen and (max-width: 830px) {
+  #loginpage_container #contents_wrapper #inner {
+    width: 100%;
+    max-width: 60%;
+    top: 0;
+    margin-bottom: 0;
+  }
+}
+#loginpage_container #contents_wrapper #inner input {
+  width: 100%;
+  padding-bottom: 8px;
+  margin-bottom: 54px;
+  background-color: transparent;
+  border-bottom: 1.5px solid #BEBEBE;
+  color: #797979;
+  font-size: 18px;
+  font-weight: 100;
+}
+#loginpage_container #contents_wrapper #inner .login_btn {
+  width: 100%;
+  height: 45px;
+  margin-bottom: 52px;
+  background-color: #FFB5C6;
+  border-radius: 7px;
+  color: #FFFFFF;
+  font-size: 20px;
+  font-weight: 600;
+}
+#loginpage_container #contents_wrapper #inner #or_wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 40px;
+}
+@media only screen and (max-width: 830px) {
+  #loginpage_container #contents_wrapper #inner #or_wrapper {
+    display: none;
+  }
+}
+#loginpage_container #contents_wrapper #inner #or_wrapper .or_line {
+  width: 135px;
+  height: 0;
+  border: 1px solid #FFB5C6;
+}
+#loginpage_container #contents_wrapper #inner #or_wrapper p {
+  color: #FFB5C6;
+  font-size: 15px;
+  font-weight: 100;
+}
+#loginpage_container #contents_wrapper #inner #kakao_login_wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  background-color: #FEE500;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-bottom: 103px;
+}
+#loginpage_container #contents_wrapper #join_btn_wrapper {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  bottom: 0;
+  margin-bottom: 29px;
+}
+#loginpage_container #contents_wrapper #join_btn_wrapper p {
+  font-size: 15px;
+  font-weight: 400;
+}
+#loginpage_container #contents_wrapper #join_btn_wrapper .join_btn {
+  margin-left: 13px;
+  color: #434343;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 600;
+}
