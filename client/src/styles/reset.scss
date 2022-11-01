@@ -51,6 +51,11 @@ button {
   border: none;
   outline: none;
   cursor: pointer;
+	transition: opacity 0.6s;
+
+	&:disabled {
+		opacity: 0.5;
+	}
 }
 
 #container {

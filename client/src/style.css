@@ -59,6 +59,10 @@ button {
   border: none;
   outline: none;
   cursor: pointer;
+  transition: opacity 0.6s;
+}
+button:disabled {
+  opacity: 0.5;
 }
 
 #container, #no_header_container {
@@ -151,7 +155,139 @@ button {
 }
 
 /* pages SCSS */
-#loginpage_container {
+#joinpage_container #contents_wrapper #join_inner {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  width: 100%;
+  height: 472px;
+  max-width: 344px;
+  margin-bottom: 11.5px;
+}
+@media only screen and (max-width: 830px) {
+  #joinpage_container #contents_wrapper #join_inner {
+    width: 100%;
+    max-width: 60%;
+    top: 0;
+    margin-bottom: 0;
+  }
+}
+#joinpage_container #contents_wrapper #join_inner input {
+  position: relative;
+  width: 100%;
+  height: 30px;
+  background-color: transparent;
+  border-bottom: 1.5px solid #BEBEBE;
+  color: #797979;
+  font-size: 18px;
+  font-weight: 100;
+}
+#joinpage_container #contents_wrapper #join_inner .validate_message_email, #joinpage_container #contents_wrapper #join_inner .validate_message_re_password, #joinpage_container #contents_wrapper #join_inner .validate_message_password, #joinpage_container #contents_wrapper #join_inner .validate_message_nickname {
+  position: absolute;
+  display: none;
+  top: 180px;
+  width: 100%;
+  font-size: 13px;
+}
+#joinpage_container #contents_wrapper #join_inner .validate_message_email.error, #joinpage_container #contents_wrapper #join_inner .error.validate_message_re_password, #joinpage_container #contents_wrapper #join_inner .error.validate_message_password, #joinpage_container #contents_wrapper #join_inner .error.validate_message_nickname {
+  display: block;
+  color: #ED7474;
+}
+#joinpage_container #contents_wrapper #join_inner .validate_message_nickname {
+  top: 252px;
+}
+#joinpage_container #contents_wrapper #join_inner .validate_message_nickname.error {
+  display: block;
+  color: #ED7474;
+}
+#joinpage_container #contents_wrapper #join_inner .validate_message_password {
+  position: absolute;
+  top: 325px;
+}
+#joinpage_container #contents_wrapper #join_inner .validate_message_password.error {
+  display: block;
+  color: #ED7474;
+}
+#joinpage_container #contents_wrapper #join_inner .validate_message_re_password {
+  position: absolute;
+  top: 396px;
+}
+#joinpage_container #contents_wrapper #join_inner .validate_message_re_password.error {
+  display: block;
+  color: #ED7474;
+}
+#joinpage_container #contents_wrapper #join_inner .join_btn {
+  position: relative;
+  width: 100%;
+  height: 45px;
+  background-color: #FFB5C6;
+  border-radius: 7px;
+  color: #FFFFFF;
+  font-size: 20px;
+  font-weight: 600;
+}
+#joinpage_container #contents_wrapper #join_inner #or_wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+#joinpage_container #contents_wrapper #join_inner #or_wrapper .or_line {
+  width: 40%;
+  height: 0;
+  border: 1px solid #FFB5C6;
+}
+@media only screen and (max-width: 830px) {
+  #joinpage_container #contents_wrapper #join_inner #or_wrapper .or_line {
+    width: 40%;
+  }
+}
+#joinpage_container #contents_wrapper #join_inner #or_wrapper p {
+  color: #FFB5C6;
+  font-size: 15px;
+  font-weight: 100;
+}
+#joinpage_container #contents_wrapper #join_inner #kakao_login_wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 45px;
+  background-color: #FEE500;
+  border-radius: 8px;
+  cursor: pointer;
+}
+#joinpage_container #contents_wrapper #login_btn_wrapper {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  bottom: 0;
+  margin-bottom: 29px;
+}
+@media only screen and (max-width: 830px) {
+  #joinpage_container #contents_wrapper #login_btn_wrapper {
+    display: none;
+  }
+}
+#joinpage_container #contents_wrapper #login_btn_wrapper p {
+  font-size: 15px;
+  font-weight: 400;
+}
+#joinpage_container #contents_wrapper #login_btn_wrapper .login_btn {
+  margin-left: 13px;
+  color: #434343;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+#loginpage_container, #joinpage_container {
   position: absolute;
   display: flex;
   flex-wrap: wrap;
@@ -165,126 +301,133 @@ button {
   box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
 }
 @media only screen and (max-width: 830px) {
-  #loginpage_container {
+  #loginpage_container, #joinpage_container {
     width: 100%;
     height: 100%;
     border-radius: 0;
   }
 }
-#loginpage_container #img_wrapper {
+#loginpage_container #img_wrapper, #joinpage_container #img_wrapper {
   width: 50%;
   left: 0;
 }
 @media only screen and (max-width: 830px) {
-  #loginpage_container #img_wrapper {
+  #loginpage_container #img_wrapper, #joinpage_container #img_wrapper {
     width: 100%;
     height: 25%;
   }
 }
-#loginpage_container #img_wrapper .desktop_img {
+#loginpage_container #img_wrapper .desktop_img, #joinpage_container #img_wrapper .desktop_img {
   width: 100%;
-  height: 100%;
+  height: 99%;
   border-radius: 12px 0px 0px 12px;
   object-fit: cover;
 }
 @media only screen and (max-width: 830px) {
-  #loginpage_container #img_wrapper .desktop_img {
+  #loginpage_container #img_wrapper .desktop_img, #joinpage_container #img_wrapper .desktop_img {
     display: none;
   }
 }
-#loginpage_container #img_wrapper .mobile_img {
+#loginpage_container #img_wrapper .mobile_img, #joinpage_container #img_wrapper .mobile_img {
   display: none;
   width: 100%;
-  height: 100%;
+  height: 99%;
   border-radius: 0;
   object-fit: cover;
 }
 @media only screen and (max-width: 830px) {
-  #loginpage_container #img_wrapper .mobile_img {
+  #loginpage_container #img_wrapper .mobile_img, #joinpage_container #img_wrapper .mobile_img {
     display: block;
   }
 }
-#loginpage_container #contents_wrapper {
+#loginpage_container #contents_wrapper, #joinpage_container #contents_wrapper {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   align-items: center;
   justify-content: center;
   width: 50%;
   height: 100%;
 }
 @media only screen and (max-width: 830px) {
-  #loginpage_container #contents_wrapper {
+  #loginpage_container #contents_wrapper, #joinpage_container #contents_wrapper {
     width: 100%;
     height: 75%;
   }
 }
-#loginpage_container #contents_wrapper #inner {
+#loginpage_container #contents_wrapper #inner, #joinpage_container #contents_wrapper #inner {
   position: relative;
-  max-width: 344px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: column;
+  flex-wrap: nowrap;
   width: 100%;
-  height: 355px;
+  height: 364px;
+  max-width: 344px;
   margin-bottom: 11.5px;
 }
 @media only screen and (max-width: 830px) {
-  #loginpage_container #contents_wrapper #inner {
+  #loginpage_container #contents_wrapper #inner, #joinpage_container #contents_wrapper #inner {
     width: 100%;
     max-width: 60%;
     top: 0;
     margin-bottom: 0;
   }
 }
-#loginpage_container #contents_wrapper #inner input {
+#loginpage_container #contents_wrapper #inner input, #joinpage_container #contents_wrapper #inner input {
+  position: relative;
   width: 100%;
-  padding-bottom: 8px;
-  margin-bottom: 54px;
+  height: 30px;
   background-color: transparent;
   border-bottom: 1.5px solid #BEBEBE;
   color: #797979;
   font-size: 18px;
   font-weight: 100;
 }
-#loginpage_container #contents_wrapper #inner .login_btn {
+#loginpage_container #contents_wrapper #inner .login_btn, #joinpage_container #contents_wrapper #inner .login_btn {
+  position: relative;
   width: 100%;
   height: 45px;
-  margin-bottom: 52px;
   background-color: #FFB5C6;
   border-radius: 7px;
   color: #FFFFFF;
   font-size: 20px;
   font-weight: 600;
 }
-#loginpage_container #contents_wrapper #inner #or_wrapper {
+#loginpage_container #contents_wrapper #inner #or_wrapper, #joinpage_container #contents_wrapper #inner #or_wrapper {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 40px;
+  width: 100%;
 }
-@media only screen and (max-width: 830px) {
-  #loginpage_container #contents_wrapper #inner #or_wrapper {
-    display: none;
-  }
-}
-#loginpage_container #contents_wrapper #inner #or_wrapper .or_line {
-  width: 135px;
+#loginpage_container #contents_wrapper #inner #or_wrapper .or_line, #joinpage_container #contents_wrapper #inner #or_wrapper .or_line {
+  width: 40%;
   height: 0;
   border: 1px solid #FFB5C6;
 }
-#loginpage_container #contents_wrapper #inner #or_wrapper p {
+@media only screen and (max-width: 830px) {
+  #loginpage_container #contents_wrapper #inner #or_wrapper .or_line, #joinpage_container #contents_wrapper #inner #or_wrapper .or_line {
+    width: 40%;
+  }
+}
+#loginpage_container #contents_wrapper #inner #or_wrapper p, #joinpage_container #contents_wrapper #inner #or_wrapper p {
   color: #FFB5C6;
   font-size: 15px;
   font-weight: 100;
 }
-#loginpage_container #contents_wrapper #inner #kakao_login_wrapper {
+#loginpage_container #contents_wrapper #inner #kakao_login_wrapper, #joinpage_container #contents_wrapper #inner #kakao_login_wrapper {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
   width: 100%;
+  height: 45px;
   background-color: #FEE500;
   border-radius: 8px;
   cursor: pointer;
-  margin-bottom: 103px;
 }
-#loginpage_container #contents_wrapper #join_btn_wrapper {
+#loginpage_container #contents_wrapper #join_btn_wrapper, #joinpage_container #contents_wrapper #join_btn_wrapper {
   position: absolute;
   display: flex;
   justify-content: center;
@@ -292,11 +435,16 @@ button {
   bottom: 0;
   margin-bottom: 29px;
 }
-#loginpage_container #contents_wrapper #join_btn_wrapper p {
+@media only screen and (max-width: 830px) {
+  #loginpage_container #contents_wrapper #join_btn_wrapper, #joinpage_container #contents_wrapper #join_btn_wrapper {
+    display: none;
+  }
+}
+#loginpage_container #contents_wrapper #join_btn_wrapper p, #joinpage_container #contents_wrapper #join_btn_wrapper p {
   font-size: 15px;
   font-weight: 400;
 }
-#loginpage_container #contents_wrapper #join_btn_wrapper .join_btn {
+#loginpage_container #contents_wrapper #join_btn_wrapper .join_btn, #joinpage_container #contents_wrapper #join_btn_wrapper .join_btn {
   margin-left: 13px;
   color: #434343;
   cursor: pointer;
