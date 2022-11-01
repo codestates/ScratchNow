@@ -7,6 +7,10 @@
       "dom.iterable",
       "esnext"
     ],
+    "types": [
+      // ... your other types
+      "node"
+    ],
     "paths": {
       "@components/*": ["./components/*"],
       "@constants/*": ["./constants/*"],
