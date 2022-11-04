@@ -88,6 +88,8 @@ const signController = {
           })
           .status(status.OK)
           .json({
+            userId: dataValues.id,
+            accessToken: accessToken,
             message: `Login success with email: ${email}`,
           });
       }
